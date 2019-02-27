@@ -7,6 +7,7 @@ body {
 	color: #222;
 	white-space: nowrap;
 	background: #99ccdd;
+	text-align: center;
 }
 	
 h1 {
@@ -15,7 +16,7 @@ h1 {
 }
 
 a {
-	color: #22bbdd;
+	color: #117799;
 	text-decoration: none;
 	font-weight: 400;
 }
@@ -25,11 +26,15 @@ a:hover {
 	cursor: pointer;
 }
 
-a.active {
-	color: #222;
+a:active {
+	color: #113355;
 	cursor: default;
 	font-weight: 600;
 	text-decoration: none;
+}
+
+a:visited {
+	color: #664422;
 }
 
 img {
