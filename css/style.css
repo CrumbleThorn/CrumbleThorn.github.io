@@ -1,3 +1,11 @@
+body,h1,h2,h3,h4,h5,h6 {
+	font-family: "Ubuntu", sans-serif
+}
+
+.w3-bar,h1,button {
+	font-family: "Source Sans Pro", sans-serif
+}
+
 body {
 	font-family: 'Ubuntu', sans-serif;
 	font-weight: 300;
