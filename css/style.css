@@ -51,22 +51,92 @@ img {
 	margin-right: auto;
 }
 
-#menu {
-	align-items: center;
-	display: flex;
-	justify-content: space-between;
+.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.divider {
+	padding: 0;
+	margin: 0;
+	max-height: inherit;
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 32pt;
+	font-size: 5vh;
+	margin-bottom: 0.5vh;
 }
 
 .navbar {
 	position: fixed;
+	height: 12vh;
+	max-height: 12vh;
 	top: 0;
 	left: 0;
 	right: 0;
 	background-color: #333;
 	color: white;
-	padding: 15px;
-	text-align: center;
+	padding: 0px;
+	align-content: center;
 	display: none;
+	z-index: 100;
+}
+
+.navbar-content {
+	padding: 5px;
+	padding-left: 3vw;
+	padding-right: 3vw;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-evenly;
+}
+
+.navbar-label {
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 7px;
+}
+
+
+.site-logo {
+	height: 5vh;
+	max-width: 64px;
+}
+
+.site-title {
+	font-size: 24px;
+	font-weight: bold;
+	font-size: 3.5vh;
+	margin-bottom: 0.25vh;
+}
+
+.navbar-menu {
+	padding: 0;
+	max-width: fit-content;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.navbar-current {
+	font-weight: bold;
+	font-size: 24px;
+	font-size: 3vh;
+}
+
+.navbar-link {
+	font-size: 24px;
+	font-size: 3vh;
+}
+
+.progress-bar {
+	height: 2vh;
+	background-color: aliceblue;
 }
 
 .game-section {
