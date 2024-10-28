@@ -6,6 +6,21 @@ body,h1,h2,h3,h4,h5,h6 {
 	font-family: "Source Sans Pro", sans-serif
 }
 
+h1 {
+	font-size: 48px;
+	font-size: 8vh;
+	font-weight: bold;
+	line-height: 120%;
+	margin: 0;
+}
+
+h2 {
+	font-size: 24px;
+	font-size: 4vh;
+	font-weight: normal;
+	margin: 0;
+}
+
 body {
 	font-family: 'Ubuntu', sans-serif;
 	font-weight: 300;
@@ -15,12 +30,6 @@ body {
 	color: #222;
 	white-space: nowrap;
 	background: #99ccdd;
-	text-align: center;
-}
-	
-h1 {
-	font-size: 24px;
-	text-align: center;
 }
 
 a {
