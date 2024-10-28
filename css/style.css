@@ -71,27 +71,27 @@ img {
 
 .navbar {
 	position: fixed;
-	height: 12vh;
+	height: fit-content;
 	max-height: 12vh;
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: #333;
 	color: white;
 	padding: 0px;
-	align-content: center;
 	display: none;
 	z-index: 100;
 }
 
 .navbar-content {
 	padding: 5px;
-	padding-left: 3vw;
-	padding-right: 3vw;
+	padding-left: 10vw;
+	padding-right: 10vw;
+	background-color: #333;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-evenly;
+	gap: 5vw;
+	justify-content: space-between;
 }
 
 .navbar-label {
@@ -135,7 +135,7 @@ img {
 }
 
 .progress-bar {
-	height: 2vh;
+	height: 1vh;
 	background-color: aliceblue;
 }
 
