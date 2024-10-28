@@ -1,3 +1,7 @@
+html {
+	scroll-behavior: smooth;
+}
+
 body,h1,h2,h3,h4,h5,h6 {
 	font-family: "Ubuntu", sans-serif
 }
@@ -242,25 +246,40 @@ img {
 }
 
 .hero {
-	margin-top: 15vh;
+	margin-top: 20vh;
 	margin-bottom: 15vh;
 	padding: 2.5%;
+	padding-left: 15vw;
+	padding-bottom: 10vh;
 	left: 0;
 	width: 100vw;
-	height: 70vh;
+	height: 65vh;
 	background-color: aliceblue;
 	display: flex;
 	flex-direction: row;
-	align-items: center;
-	justify-content: space-evenly;
-	
+	align-items: end;	
+}
+
+.hero-text {
+	padding-bottom: 5vh;
+	width: 30vw;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	z-index: 2;
 }
 
 .hero-nav {
+	margin: 10px;
 	display: flex;
-	align-items: center;
 	flex-direction: row;
 	justify-content: center;
-	gap: 2.5%;
+	gap: 5%;
 }
 
+.hero-image {
+	max-height: 65vh;
+	width: auto;
+	height: auto;
+	z-index: 1;
+}
