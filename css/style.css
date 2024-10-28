@@ -283,3 +283,16 @@ img {
 	height: auto;
 	z-index: 1;
 }
+
+.bottom-bar {
+	position: sticky;
+	height: 5vh;
+	background-color: #113355;
+}
+
+footer {
+	text-align: center;
+	align-content: center;
+	height: 5vh;
+	background-color: #113355;
+}
