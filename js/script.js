@@ -1,7 +1,7 @@
 const navbar = document.querySelector('.navbar');
 navbar.style.display = 'none'
 
-const triggerSection = document.querySelector('.trigger-section');
+const triggerSection = document.querySelector('.game-section');
 
 const animateCSS = (element, animation, prefix = 'animate__') =>
   // We create a Promise and return it
