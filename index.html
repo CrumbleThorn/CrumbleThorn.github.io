@@ -45,30 +45,41 @@
 	</head>
 	<body>
 		<div id="loading-screen">
+			<!--TO DO: Replace loading wheel with custom animation -->
 			<div id="load-animation"></div>
 		</div>
 		
 		<div id="content">
+			<!--TO DO: Show/Hide sidebar on burger menu click AND display ratio flip-->
+			<nav class="sidebar" id="sidebar"></nav>
 			<nav class="navbar" id="navbar">
 				<div class="navbar-content">
-				<div class="navbar-label">
-				<img class="site-logo" src="favicon/favicon-32x32.png">
-				<div unselectable="on" class="unselectable divider">|</div>
-				<div class="site-title">CrumbleThorn</div>
-				</div>
-				<div class="navbar-menu">
-					<div class="navbar-current">Home</div>
+					<div class="navbar-burger">|||</div>
+					<!--TO DO: Show/Hide burger menu based on display ratio-->
+					<div class="navbar-label">
+					<img class="site-logo" src="favicon/favicon-32x32.png">
 					<div unselectable="on" class="unselectable divider">|</div>
-					<a class="navbar-link" href="/about.html">About</a>
-					<div unselectable="on" class="unselectable divider">|</div>
-					<a class="navbar-link">Portfolios</a>
-					<div unselectable="on" class="unselectable divider">|</div>
-					<a class="navbar-link" href="/contact.html">Contact</a>
+					<!--TO DO: Add hover animation to title-->
+					<div class="site-title">CrumbleThorn</div>
+					</div>
+					<div class="navbar-menu">
+						<div class="navbar-current">Home</div>
+						<div unselectable="on" class="unselectable divider">|</div>
+						<!--TO DO: Add hover and click animations to links-->
+						<a class="navbar-link" href="/about.html">About</a>
+						<div unselectable="on" class="unselectable divider">|</div>
+						<a class="navbar-link">Portfolios</a>
+						<div unselectable="on" class="unselectable divider">|</div>
+						<a class="navbar-link" href="/contact.html">Contact</a>
+					</div>
 				</div>
-				</div>
+				<!--TO DO: Show/Hide burger menu based on display ratio-->
 				<div class="progress-bar"></div>
 			</nav>
 
+			<!--TO DO: Animate hero banner-->
+			<!--TO DO: Finalize hero layout-->
+			<!--TO DO: Adjust hero layout based on display ratio-->
 			<div class="hero" id="hero">
 				<div class="hero-text">
 					<h1>Hey! I'm<br>Gabe Tamayo!</h1>
@@ -82,12 +93,16 @@
 				<img class="hero-image" src="img/cil-chibi.png"/>
 			</div>
 
-			<div class="bottom-bar"></div>
-
-			<section class="main-section" id="info">		
+			<section class="main-section" id="info">
+				<!--TO DO: Animate sections and make them sticky-->
+				<!--TO DO: Finalize section layout-->
+				<!--TO DO: Adjust section layout based on display ratio-->
 				<div class="game-section">
+					<!--TO DO: Make functional image slideshow component-->
 					<div>Image Slideshow</div>
+					<!--TO DO: Populate section content-->
 					<div class="section-content">I make videogames!</div>
+
 				</div>
 
 				<div class="section-prog">
@@ -111,12 +126,13 @@
 			<h1>I'm still building my webpage! Please come back soon!</h1>
 			You can check out my <a href="https://github.com/CrumbleThorn">GitHub</a> in the meantime!
 			
-			
+			<!--TO DO: Animate bottom bar similarly to navbar-->
+			<div class="bottom-bar"></div>
 			<footer>Made by CrumbleThorn</footer>
+			<!--TO DO: Finalize background design-->
 			<div class="overlay"></div>
 			<div class="background"></div>
 		</div>
-		
-		<script src="js/script.js"></script>
+		<script type="module" src="js/script.js"></script>
 	</body>
 </html>

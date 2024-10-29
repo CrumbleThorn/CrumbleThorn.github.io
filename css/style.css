@@ -2,6 +2,9 @@ html {
 	scroll-behavior: smooth;
 }
 
+/* TO DO: Finalize common website style */
+/* TO DO: Move site-specific styling to their own .css files */
+
 body,h1,h2,h3,h4,h5,h6 {
 	font-family: "Ubuntu", sans-serif
 }
@@ -64,6 +67,7 @@ img {
 	margin-right: auto;
 }
 
+/* TO DO: Go through and finalize all the class-specific styles */
 .unselectable {
    -moz-user-select: -moz-none;
    -khtml-user-select: none;
@@ -96,7 +100,7 @@ img {
 }
 
 .navbar-content {
-	padding: 5px;
+	padding: 0.5vh;
 	padding-left: 10vw;
 	padding-right: 10vw;
 	background-color: #333;
@@ -128,6 +132,10 @@ img {
 	margin-bottom: 0.25vh;
 }
 
+.navbar-burger {
+	display: none;
+}
+
 .navbar-menu {
 	padding: 0;
 	max-width: fit-content;
@@ -150,6 +158,13 @@ img {
 .progress-bar {
 	height: 1vh;
 	background-color: aliceblue;
+}
+
+.sidebar {
+	left: 0;
+	width: 75%;
+	max-width: 400px;
+	z-index: 101;
 }
 
 .game-section {
@@ -206,10 +221,6 @@ img {
 	align-items: center;
 	z-index: 9999;
 	transition: opacity 0.5s ease-out;
-}
-
-#content {
-	display: none;
 }
 
 .overlay {
@@ -286,13 +297,16 @@ img {
 
 .bottom-bar {
 	position: sticky;
-	height: 5vh;
+	bottom: 0;
+	height: 1vh;
 	background-color: #113355;
 }
 
 footer {
 	text-align: center;
+	color: white;
 	align-content: center;
-	height: 5vh;
+	padding-bottom: 1vh;
+	height: 7vh;
 	background-color: #113355;
 }

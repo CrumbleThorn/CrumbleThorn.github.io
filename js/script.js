@@ -1,67 +1,52 @@
-const navbar = document.querySelector('.navbar');
-navbar.style.display = 'none'
+import * as animate from './modules/animate.js';
+import * as util from './modules/util.js';
+import * as site from './modules/classes.js';
 
-const triggerSection = document.querySelector('.game-section');
+// TO DO: Modify variables using Class Methods instead of direct assignment
+const loadingScreen = new site.LoadingScreen(new animate.AnimatedElement(document.getElementById('loading-screen'), 'flex'), document.getElementById('load-animation'));
+loadingScreen.element.exitAnimation.delay = 'delay-2s';
 
-const animateCSS = (element, animation, prefix = 'animate__') =>
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
+const animatedElements = [];
+const sidebar = new site.SideBar(new animate.AnimatedElement(document.getElementById('sidebar'), 'flex'));
+const navbar = new site.NavBar(new animate.AnimatedScrollElement(document.getElementById('navbar'), 'block', false), sidebar);
+navbar.element.triggerPoint = document.getElementById('info');
+animatedElements.push(navbar);
+// TO DO: add the rest of the animated Elements
 
-    node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
+// TO DO: Change overrides to happen at an animation-level
+// Handles Scroll Animations
+function handleScrollAnimation(item) {
+    if (item.element.hasReachedTrigger()) {
+        item.element.normallyHidden ? item.element.show(true) : item.element.hide(true);
+    } else {
+        item.element.normallyHidden ? item.element.hide(true) : item.element.show(true);
     }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-  });
-
-function checkScroll() {
-  // Get the position of the trigger section
-  var triggerPosition = triggerSection.getBoundingClientRect().top;
-  const windowHeight = window.innerHeight;
-  // If the trigger section is visible in the viewport
-  if (triggerPosition <= windowHeight && (navbar.style.display == 'none' || navbar.classList.contains('animate__slideOutUp'))) {
-    navbar.classList.remove('animate__animated', 'animate__slideOutUp');
-    // Show the navbar
-    navbar.style.display = 'block';
-    animateCSS('.navbar', 'slideInDown');
-  } else if (triggerPosition > windowHeight && navbar.style.display == 'block') {
-    // Hide the navbar
-    animateCSS('.navbar', 'slideOutUp').then((message) => {
-      triggerPosition = triggerSection.getBoundingClientRect().top;
-      if (triggerPosition > windowHeight) {
-        navbar.style.display = 'none';
-      }
-    });
-    
-  }
 }
+function scrollAnimationHelper() {
+    animatedElements.forEach(handleScrollAnimation);
+}
+window.addEventListener('scroll', scrollAnimationHelper);
 
-window.addEventListener('scroll', checkScroll);
+// TO DO: Implement responsive design
+function responsiveDesignChecker() {
+    if (!util.isLandscape() || util.isLowResolution())
+        console.log("TO DO: Toggle Mobile Mode!");
+    else
+        console.log("TO DO: Toggle PC Mode!");
+        
+}
+window.addEventListener('resize', responsiveDesignChecker);
 
-window.addEventListener('load', function() {
-    // Fade out the loading screen
-    setTimeout(function() {
-    document.getElementById('loading-screen').style.opacity = '0';
-
-    // After the fade-out transition, hide the loading screen completely
-    setTimeout(function() {
-      document.getElementById('loading-screen').style.display = 'none';
-      // Show the main content
-      document.getElementById('content').style.display = 'block';
-    }, 500); // Match the duration of the fade transition (0.5s)
-    }, 0);
+// Handles Loading Screen Behavior
+window.addEventListener('load', function() { 
+    loadingScreen.toggleLoadingScreen()
+    // TO DO: Animate hero banner
+    console.log("TO DO: Animate Hero");
 });
-
+// Play Loading Screen Animation
 lottie.loadAnimation({
-  container: document.getElementById('load-animation'), // Target the container
-  loop: true,       // Loop the animation
-  autoplay: true,   // Play the animation automatically
-  path: 'json/loading.json' // Path to your animation JSON file
+    container: loadingScreen.animation, // Target the container
+    loop: true,       // Loop the animation
+    autoplay: true,   // Play the animation automatically
+    path: 'json/loading.json' // Path to your animation JSON file
 });
