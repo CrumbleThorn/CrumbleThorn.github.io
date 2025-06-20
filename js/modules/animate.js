@@ -46,7 +46,10 @@ const animateCSS = (element, animation, override = false) =>
 // Helper Classes
 // TO DO: Add override variable to link overrides based on the animation played
 export class Animation {
-    constructor(name, speed = 'animated', delay = 0) {
+    constructor(name,
+                speed = 'animated',
+                delay = 0,
+                ) {
         this.name = name; // animate.css animation classes
         this.speed = speed; // animate.css animation speed classes OR number in milliseconds
         this.delay = delay; // animate.css animation delay classes OR number in milliseconds
@@ -54,14 +57,20 @@ export class Animation {
 }
 
 export class AnimatedElement {
-    constructor(obj, display = 'block', active = true) {
+    constructor(obj,
+                display = 'block',
+                active = true,
+                entry = new Animation('fadeIn', 'faster'),
+                highlight = new Animation('pulse', 'faster'),
+                exit = new Animation('fadeOut', 'faster'),
+                ) {
         this.obj = obj;
         this.display = display;
         this.active = active;
         this.isAnimating = false;
-        this.entryAnimation = new Animation('fadeIn', 'faster');
-        this.highlightAnimation = new Animation('pulse', 'faster');
-        this.exitAnimation = new Animation('fadeOut', 'faster');
+        this.entryAnimation = entry;
+        this.highlightAnimation = highlight;
+        this.exitAnimation = exit;
         if (active)
             this.obj.style.display = display;
         else
@@ -82,26 +91,26 @@ export class AnimatedElement {
 
     show(override = false) {
         if (!this.active) {
-            util.log("Show");
+            util.log("Showing " + this.obj.id + "...");
             this.obj.style.display = this.display;
             this.active = true;
             this.isAnimating = true;
             animateCSS(this, this.entryAnimation, override).then((value) => {
-                util.log("Done Showing!");
+                util.log("Done Showing " + this.obj.id + "!");
                 this.obj.style.display = this.display;
                 this.isAnimating = false;
             });
         } else {
-            util.warn("WARNING: Object is already active, skipping animation");
+            util.warn("WARNING: Object " + this.obj.id + " is already active, skipping animation");
         }
     }
 
     highlight(override = false) {
         if (this.active){
-            util.log("Highlight");
+            util.log("Highlighting " + this.obj.id + "...");
             animateCSS(this, this.highlightAnimation, override);
         } else {
-            util.warn("WARNING: Object is not active, skipping animation");
+            util.warn("WARNING: Object " + this.obj.id + " is not active, skipping animation");
         }
     }
 
@@ -109,14 +118,14 @@ export class AnimatedElement {
         if (this.active) {
             this.active = false;
             this.isAnimating = true;
-            util.log("Hide");
+            util.log("Hiding " + this.obj.id + "...");
             animateCSS(this, this.exitAnimation, override).then((value) => {
-                util.log("Done Hiding!");
+                util.log("Done Hiding" + this.obj.id + "!");
                 this.obj.style.display = 'none';
                 this.isAnimating = false;
             });
         } else {
-            util.warn("WARNING: Object is not active, skipping animation");
+            util.warn("WARNING: Object " + this.obj.id + " is already inactive, skipping animation");
         }
     }
 
@@ -156,18 +165,18 @@ export class AnimatedLoadingScreenElement extends AnimatedElement {
 
     show(override = false) {
         if (!this.active) {
-            util.log("Show");
+            util.log("Showing Loading Screen...");
             this.obj.style.display = this.display;
             this.body.classList.add("no-scroll");
             this.active = true;
             this.isAnimating = true;
             animateCSS(this, this.entryAnimation, override).then((value) => {
-                util.log("Done Showing!");
+                util.log("Done Showing Loading Screen!");
                 this.obj.style.display = this.display;
                 this.isAnimating = false;
             });
         } else {
-            util.warn("WARNING: Object is already active, skipping animation");
+            util.warn("WARNING: Loading Screen is already active, skipping animation");
         }
     }
     
@@ -176,14 +185,14 @@ export class AnimatedLoadingScreenElement extends AnimatedElement {
             this.active = false;
             this.body.classList.remove("no-scroll");
             this.isAnimating = true;
-            util.log("Hide");
+            util.log("Hiding Loading Screen...");
             animateCSS(this, this.exitAnimation, override).then((value) => {
-                util.log("Done Hiding!");
+                util.log("Done Hiding Loading Sreen!");
                 this.obj.style.display = 'none';
                 this.isAnimating = false;
             });
         } else {
-            util.warn("WARNING: Object is not active, skipping animation");
+            util.warn("WARNING: Loading Screen is already inactive, skipping animation");
         }
     }
 
