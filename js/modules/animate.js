@@ -58,6 +58,7 @@ export class AnimatedElement {
         this.obj = obj;
         this.display = display;
         this.active = active;
+        this.isAnimating = false;
         this.entryAnimation = new Animation('fadeIn', 'faster');
         this.highlightAnimation = new Animation('pulse', 'faster');
         this.exitAnimation = new Animation('fadeOut', 'faster');
@@ -72,7 +73,12 @@ export class AnimatedElement {
             console.log("Show");
             this.obj.style.display = this.display;
             this.active = true;
-            animateCSS(this, this.entryAnimation, override);
+            this.isAnimating = true;
+            animateCSS(this, this.entryAnimation, override).then((value) => {
+                console.log("Done Showing!");
+                this.obj.style.display = this.display;
+                this.isAnimating = false;
+            });
         } else {
             console.warn("WARNING: Object is already active, skipping animation");
         }
@@ -90,20 +96,25 @@ export class AnimatedElement {
     hide(override = false) {
         if (this.active) {
             this.active = false;
+            this.isAnimating = true;
             console.log("Hide");
             animateCSS(this, this.exitAnimation, override).then((value) => {
+                console.log("Done Hiding!");
                 this.obj.style.display = 'none';
+                this.isAnimating = false;
             });
         } else {
             console.warn("WARNING: Object is not active, skipping animation");
         }
     }
 
-    toggle() {
-        if (this.active) {
-            this.hide()
-        } else {
-            this.show();
+    toggle(override = false) {
+        if (this.isAnimating == false || override == true) {
+            if (this.active) {
+                this.hide(override)
+            } else {
+                this.show(override);
+            }
         }
     }
 }
@@ -114,7 +125,7 @@ export class AnimatedScrollElement extends AnimatedElement {
         this.triggerPoint = triggerPoint;
         this.normallyHidden = !active; // Determines if element should be visible by default
     }
-
+    
     hasReachedTrigger() {
         if (this.triggerPoint.getBoundingClientRect().top <= window.innerHeight) {
             return true;
