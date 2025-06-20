@@ -61,16 +61,16 @@ export class AnimatedElement {
                 display = 'block',
                 active = true,
                 entry = new Animation('fadeIn', 'faster'),
-                highlight = new Animation('pulse', 'faster'),
                 exit = new Animation('fadeOut', 'faster'),
+                highlight = new Animation('pulse', 'faster'),
                 ) {
         this.obj = obj;
         this.display = display;
         this.active = active;
         this.isAnimating = false;
         this.entryAnimation = entry;
-        this.highlightAnimation = highlight;
         this.exitAnimation = exit;
+        this.highlightAnimation = highlight;
         if (active)
             this.obj.style.display = display;
         else
@@ -141,24 +141,50 @@ export class AnimatedElement {
 }
 
 export class AnimatedScrollElement extends AnimatedElement {
-    constructor(obj, display = 'block', active = true, triggerPoint = window) {
-        super(obj, display, active);
+    constructor(obj,
+                display = 'block',
+                active = true,
+                trigger = obj,
+                triggerPoint = window.innerHeight,
+                entry = new Animation('fadeIn', 'faster'),
+                exit = new Animation('fadeOut', 'faster'),
+                highlight = new Animation('pulse', 'faster'),
+                ) {
+        super(obj, display, active, entry, exit, highlight);
+        this.trigger = trigger;
         this.triggerPoint = triggerPoint;
         this.normallyHidden = !active; // Determines if element should be visible by default
     }
     
     hasReachedTrigger() {
-        if (this.triggerPoint.getBoundingClientRect().top <= window.innerHeight) {
+        //util.log(this.trigger);
+        //util.log(this.triggerPoint);
+        if (this.trigger.getBoundingClientRect().top <= this.triggerPoint) {
             return true;
         }
         else
         return false;
     }
+
+    handleScroll() {
+        if (this.hasReachedTrigger()) {
+            this.normallyHidden ? this.show(true) : this.hide(true);
+        } else {
+            this.normallyHidden ? this.hide(true) : this.show(true);
+        }
+    }
 }
 
 export class AnimatedLoadingScreenElement extends AnimatedElement {
-    constructor(obj, display = 'block', active = true, body = document.body) {
-        super(obj, display, active);
+    constructor(obj,
+                display = 'block',
+                active = true,
+                body = document.body,
+                entry = new Animation('fadeIn', 'faster'),
+                exit = new Animation('fadeOut', 'faster'),
+                highlight = new Animation('pulse', 'faster'),
+                ) {
+        super(obj, display, active, entry, exit, highlight);
         this.body = body;
         this.normallyHidden = !active; // Determines if element should be visible by default
     }

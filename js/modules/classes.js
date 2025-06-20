@@ -1,3 +1,5 @@
+import * as util from './util.js';
+
 export class LoadingScreen {
     constructor(element, animation) {
         this.element = element;
@@ -5,6 +7,7 @@ export class LoadingScreen {
     }
 
     toggleLoadingScreen() {
+        util.log("Toggling Loading Screen...");
         this.element.toggle();
     }
 }
@@ -42,31 +45,35 @@ export class NavBar {
 }
 
 export class ProgressBar {
-    constructor(element) {
+    constructor(element,
+                start = 0,
+                end = document.documentElement.scrollHeight,
+                ) {
         this.element = element;
-        this.start = 0;
-        this.end = document.documentElement.scrollHeight;
+        this.start = start;
+        this.end = end;
+    }
+
+    setStart(start) {
+        this.start = start;
+        util.log("Progress Bar Start set to " + start + ".");
+    }
+
+    setEnd(end) {
+        this.end = end;
+        util.log("Progress Bar End set to " + end + ".");
     }
 
     updateProgress() {
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-
-        const progress = (scrollPosition / (documentHeight - windowHeight)) * 100;
+        const progress = ((window.scrollY - this.start) / (this.end - window.innerHeight - this.start)) * 100;
         this.element.style.width = `${progress}%`;
 
         // If the user has reached the end, fill the progress bar
         if (progress >= 100) {
             this.element.style.width = "100%";
+        } else if (progress <= 0) {
+            this.element.style.width = "0%";
         }
-    }
-}
-
-export class NavButton {
-    constructor(element, target) {
-        this.element = element;
-        this.target = target;
     }
 }
 
@@ -80,5 +87,12 @@ export class SideCard {
 export class BottomBar {
     constructor(element) {
         this.element = element;
+    }
+}
+
+export class NavButton {
+    constructor(element, target) {
+        this.element = element;
+        this.target = target;
     }
 }
