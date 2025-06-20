@@ -56,6 +56,17 @@ body {
 	color: var(--cilly-black);
 }
 
+main {
+	background-color: transparent;
+}
+
+img {
+	margin-left: auto;
+	margin-right: auto;
+
+	display: block;
+}
+
 a {
 	font-weight: 400;
 	color: var(--cilly-darkblue);
@@ -79,13 +90,6 @@ a:active {
 
 a:visited {
 	color: var(--cilly-royalpurple);
-}
-
-img {
-	margin-left: auto;
-	margin-right: auto;
-
-	display: block;
 }
 
 /* TO DO: Go through and finalize all the class-specific styles */
