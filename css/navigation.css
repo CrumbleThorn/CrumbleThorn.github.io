@@ -20,10 +20,23 @@
     z-index: 100;
 
 	height: fit-content;
-	max-height: 12vh;
+	max-height: 10vh;
 	padding: 0px;
 
 	background-color: var(--cilly-white);
+}
+
+.site-logo {
+	height: 5vh;
+	max-width: 64px;
+}
+
+.site-title {
+	margin-bottom: 0.25vh;
+
+	font-size: 24px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
+	font-size: 3.5vh;
+	font-weight: bold;
 }
 
 .navbar-content {
@@ -45,20 +58,6 @@
 	gap: 7px;
 
 	padding: 0;
-}
-
-
-.site-logo {
-	height: 5vh;
-	max-width: 64px;
-}
-
-.site-title {
-	margin-bottom: 0.25vh;
-
-	font-size: 24px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
-	font-size: 3.5vh;
-	font-weight: bold;
 }
 
 .navbar-burger {
