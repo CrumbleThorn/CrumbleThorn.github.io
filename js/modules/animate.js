@@ -68,6 +68,18 @@ export class AnimatedElement {
             this.obj.style.display = 'none';
     }
 
+    setEntry(animation) {
+        this.entryAnimation = animation;
+    }
+
+    setHighlight(animation) {
+        this.highlightAnimation = animation;
+    }
+
+    setExit(animation) {
+        this.exitAnimation = animation;
+    }
+
     show(override = false) {
         if (!this.active) {
             util.log("Show");
