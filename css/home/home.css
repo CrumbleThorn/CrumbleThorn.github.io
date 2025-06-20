@@ -1,3 +1,7 @@
+main {
+	background-color: transparent;
+}
+
 .hero {
 	margin-top: 20vh;
 	margin-bottom: 15vh;
@@ -35,10 +39,6 @@
 	height: auto;
 	max-height: 65vh;
 	z-index: 1;
-}
-
-.main-section {
-	background-color: transparent;
 }
 
 .game-section {

@@ -4,10 +4,10 @@ import * as site from './modules/classes.js';
 
 const animatedElements = [];
 const hero = document.getElementById('hero');
+const main = document.getElementById('main');
 const sidebar = new site.SideBar(new animate.AnimatedElement(document.getElementById('sidebar'), 'flex'));
-const navbar = new site.NavBar(new animate.AnimatedScrollElement(document.getElementById('navbar'), 'block', false), hero);
+const navbar = new site.NavBar(new animate.AnimatedScrollElement(document.getElementById('navbar'), 'block', false, main), sidebar);
 const progressbar = new site.ProgressBar(document.getElementById('progressbar'));
-navbar.element.triggerPoint = document.getElementById('info');
 animatedElements.push(navbar);
 // TO DO: add the rest of the animated Elements
 
