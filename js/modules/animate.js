@@ -18,7 +18,7 @@ const animateCSS = (element, animation, override = false) =>
         }
         // BUG: numeric delays currently do not work
         if (typeof(animation.delay) == 'number'){
-            console.log("Set Delay to " + animation.delay);
+            util.log("Set Delay to " + animation.delay);
             node.style.setProperty('--animate-delay', `${animation.delay / 1000}s`);
         }
         else {
@@ -34,7 +34,7 @@ const animateCSS = (element, animation, override = false) =>
     
         // When the animation ends, we clean the classes and resolve the Promise
         function handleAnimationEnd(event) {
-            console.log(event);
+            util.log(event);
             event.stopPropagation();
             node.classList.remove(...animationClasses);
             resolve('Animation ended');
@@ -70,26 +70,26 @@ export class AnimatedElement {
 
     show(override = false) {
         if (!this.active) {
-            console.log("Show");
+            util.log("Show");
             this.obj.style.display = this.display;
             this.active = true;
             this.isAnimating = true;
             animateCSS(this, this.entryAnimation, override).then((value) => {
-                console.log("Done Showing!");
+                util.log("Done Showing!");
                 this.obj.style.display = this.display;
                 this.isAnimating = false;
             });
         } else {
-            console.warn("WARNING: Object is already active, skipping animation");
+            util.warn("WARNING: Object is already active, skipping animation");
         }
     }
 
     highlight(override = false) {
         if (this.active){
-            console.log("Highlight");
+            util.log("Highlight");
             animateCSS(this, this.highlightAnimation, override);
         } else {
-            console.warn("WARNING: Object is not active, skipping animation");
+            util.warn("WARNING: Object is not active, skipping animation");
         }
     }
 
@@ -97,14 +97,14 @@ export class AnimatedElement {
         if (this.active) {
             this.active = false;
             this.isAnimating = true;
-            console.log("Hide");
+            util.log("Hide");
             animateCSS(this, this.exitAnimation, override).then((value) => {
-                console.log("Done Hiding!");
+                util.log("Done Hiding!");
                 this.obj.style.display = 'none';
                 this.isAnimating = false;
             });
         } else {
-            console.warn("WARNING: Object is not active, skipping animation");
+            util.warn("WARNING: Object is not active, skipping animation");
         }
     }
 

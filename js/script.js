@@ -37,9 +37,9 @@ window.addEventListener('scroll', scrollAnimationHelper);
 // TO DO: Implement responsive design
 function responsiveDesignChecker() {
     if (!util.isLandscape() || util.isLowResolution())
-        console.log("TO DO: Toggle Mobile Mode!");
+        util.log("TO DO: Toggle Mobile Mode!");
     else
-        console.log("TO DO: Toggle PC Mode!");
+        util.log("TO DO: Toggle PC Mode!");
         
 }
 window.addEventListener('resize', responsiveDesignChecker);
@@ -52,8 +52,9 @@ function scrollToTop() {
 // Handles Loading Screen Behavior
 window.addEventListener('load', function() { 
     loadingScreen.toggleLoadingScreen();
+
     // TO DO: Animate hero banner
-    console.log("TO DO: Animate Hero");
+    util.log("TO DO: Animate Hero");
 });
 // Play Loading Screen Animation
 lottie.loadAnimation({
