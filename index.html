@@ -42,6 +42,7 @@
 		<meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
 		<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
 		<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+		<!--TO DO: Add noscript fallback-->
 	</head>
 	<body>
 		<div id="loading-screen">
@@ -74,7 +75,9 @@
 					</div>
 				</div>
 				<!--TO DO: Show/Hide burger menu based on display ratio-->
-				<div class="progress-bar"></div>
+				<div class="progressbar-container">
+					<div class="progressbar" id="progressbar"></div>
+				</div>
 			</nav>
 
 			<!--TO DO: Animate hero banner-->

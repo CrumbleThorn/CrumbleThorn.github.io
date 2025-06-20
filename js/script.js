@@ -9,6 +9,7 @@ loadingScreen.element.exitAnimation.delay = 'delay-2s';
 const animatedElements = [];
 const sidebar = new site.SideBar(new animate.AnimatedElement(document.getElementById('sidebar'), 'flex'));
 const navbar = new site.NavBar(new animate.AnimatedScrollElement(document.getElementById('navbar'), 'block', false), sidebar);
+const progressbar = new site.ProgressBar(document.getElementById('progressbar'));
 navbar.element.triggerPoint = document.getElementById('info');
 animatedElements.push(navbar);
 // TO DO: add the rest of the animated Elements
@@ -23,7 +24,9 @@ function handleScrollAnimation(item) {
     }
 }
 function scrollAnimationHelper() {
+    progressbar.updateProgress();
     animatedElements.forEach(handleScrollAnimation);
+
 }
 window.addEventListener('scroll', scrollAnimationHelper);
 

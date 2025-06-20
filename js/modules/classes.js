@@ -45,12 +45,21 @@ export class ProgressBar {
     constructor(element) {
         this.element = element;
         this.start = 0;
-        this.current = 0;
         this.end = document.documentElement.scrollHeight;
     }
 
-    updateProgress(current) {
-        // TO DO: Add
+    updateProgress() {
+        const scrollPosition = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+
+        const progress = (scrollPosition / (documentHeight - windowHeight)) * 100;
+        this.element.style.width = `${progress}%`;
+
+        // If the user has reached the end, fill the progress bar
+        if (progress >= 100) {
+            this.element.style.width = "100%";
+        }
     }
 }
 
