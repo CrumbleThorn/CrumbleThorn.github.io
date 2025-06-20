@@ -16,6 +16,7 @@ const loadingScreen = new site.LoadingScreen(new animate.AnimatedElement(documen
 loadingScreen.element.exitAnimation.delay = 'delay-1s';
 
 // Reset scroll progress on reload
+scrollToTop();
 
 // TO DO: Change overrides to happen at an animation-level
 // Handles Scroll Animations
@@ -42,6 +43,11 @@ function responsiveDesignChecker() {
         
 }
 window.addEventListener('resize', responsiveDesignChecker);
+
+function scrollToTop() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0;
+}
 
 // Handles Loading Screen Behavior
 window.addEventListener('load', function() { 
