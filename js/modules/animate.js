@@ -134,3 +134,54 @@ export class AnimatedScrollElement extends AnimatedElement {
         return false;
     }
 }
+
+export class AnimatedLoadingScreenElement extends AnimatedElement {
+    constructor(obj, display = 'block', active = true, body = document.body) {
+        super(obj, display, active);
+        this.body = body;
+        this.normallyHidden = !active; // Determines if element should be visible by default
+    }
+
+    show(override = false) {
+        if (!this.active) {
+            util.log("Show");
+            this.obj.style.display = this.display;
+            this.body.classList.add("no-scroll");
+            this.active = true;
+            this.isAnimating = true;
+            animateCSS(this, this.entryAnimation, override).then((value) => {
+                util.log("Done Showing!");
+                this.obj.style.display = this.display;
+                this.isAnimating = false;
+            });
+        } else {
+            util.warn("WARNING: Object is already active, skipping animation");
+        }
+    }
+    
+    hide(override = false) {
+        if (this.active) {
+            this.active = false;
+            this.body.classList.remove("no-scroll");
+            this.isAnimating = true;
+            util.log("Hide");
+            animateCSS(this, this.exitAnimation, override).then((value) => {
+                util.log("Done Hiding!");
+                this.obj.style.display = 'none';
+                this.isAnimating = false;
+            });
+        } else {
+            util.warn("WARNING: Object is not active, skipping animation");
+        }
+    }
+
+    toggle(override = false) {
+        if (this.isAnimating == false || override == true) {
+            if (this.active) {
+                this.hide(override)
+            } else {
+                this.show(override);
+            }
+        }
+    }
+}

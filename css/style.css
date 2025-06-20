@@ -117,6 +117,12 @@ a:visited {
 	user-select: none;
 }
 
+.no-scroll {
+	overflow: hidden;
+
+	max-height: 100vh;
+}
+
 .bottom-bar {
 	position: sticky;
 	bottom: 0;
