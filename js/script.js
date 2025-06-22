@@ -1,4 +1,5 @@
 import * as animate from './modules/animate.js';
+import * as anim from './modules/animations.js';
 import * as site from './modules/classes.js';
 import * as util from './modules/util.js';
 
@@ -6,9 +7,9 @@ import * as util from './modules/util.js';
 const scrollElements = [];
 const hero = document.getElementById('hero');
 const start = document.getElementById('game-section');
-const sidebar = new site.SideBar(new animate.AnimatedElement(document.getElementById('sidebar'),
+const sidebar = new site.SideBar(new anim.AnimatedElement(document.getElementById('sidebar'),
                                                              'flex'));
-const navbar = new site.NavBar(new animate.AnimatedScrollElement(document.getElementById('navbar'),
+const navbar = new site.NavBar(new anim.AnimatedScrollElement(document.getElementById('navbar'),
                                                                  'block',
                                                                  false,
                                                                  start,
@@ -21,7 +22,7 @@ scrollElements.push(navbar);
 const progressbar = new site.ProgressBar(document.getElementById('progressbar'));
 // TO DO: add the rest of the animated Elements
 
-const loadingScreen = new site.LoadingScreen(new animate.AnimatedLoadingScreenElement(document.getElementById('loading-screen'), 'flex'),
+const loadingScreen = new site.LoadingScreen(new anim.AnimatedLoadingScreenElement(document.getElementById('loading-screen'), 'flex'),
                                              document.getElementById('load-animation'));
 
 // Handles Scroll Animations
