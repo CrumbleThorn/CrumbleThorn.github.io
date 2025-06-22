@@ -354,11 +354,11 @@ export class Animation {
 }
 
 // Animation Call Wrapper
-export const css = (element, animation, override = false) =>
+export const css = (obj, animation, override = false) =>
     // We create a Promise and return it
     new Promise((resolve, reject) => {
         const animationClasses = [`${prefix}animated`, `${prefix}${animation.name}`];
-        const node = element.obj;
+        const node = obj;
 
         // BUG: numeric durations currently do not work
         if (typeof(animation.speed) == 'number') {
@@ -389,7 +389,7 @@ export const css = (element, animation, override = false) =>
 
         // Remove existing animations if an override is requested
         if (override)
-            util.removeClassesByPrefix(element.obj, prefix);
+            util.removeClassesByPrefix(obj, prefix);
 
         node.classList.add(...animationClasses);
     

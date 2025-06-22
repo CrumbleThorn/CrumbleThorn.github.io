@@ -40,7 +40,7 @@ export class AnimatedElement {
             this.obj.style.display = this.display;
             this.active = true;
             this.isAnimating = true;
-            animate.css(this, this.entryAnimation, override).then((value) => {
+            animate.css(this.obj, this.entryAnimation, override).then((value) => {
                 util.log("Done Showing " + this.obj.id + "!");
                 this.obj.style.display = this.display;
                 this.isAnimating = false;
@@ -53,7 +53,7 @@ export class AnimatedElement {
     highlight(override = false) {
         if (this.active){
             util.log("Highlighting " + this.obj.id + "...");
-            animate.css(this, this.highlightAnimation, override);
+            animate.css(this.obj, this.highlightAnimation, override);
         } else {
             util.warn("WARNING: Object " + this.obj.id + " is not active, skipping animation");
         }
@@ -64,7 +64,7 @@ export class AnimatedElement {
             this.active = false;
             this.isAnimating = true;
             util.log("Hiding " + this.obj.id + "...");
-            animate.css(this, this.exitAnimation, override).then((value) => {
+            animate.css(this.obj, this.exitAnimation, override).then((value) => {
                 util.log("Done Hiding" + this.obj.id + "!");
                 this.obj.style.display = 'none';
                 this.isAnimating = false;
@@ -141,7 +141,7 @@ export class AnimatedLoadingScreenElement extends AnimatedElement {
             this.body.classList.add("no-scroll");
             this.active = true;
             this.isAnimating = true;
-            animate.css(this, this.entryAnimation, override).then((value) => {
+            animate.css(this.obj, this.entryAnimation, override).then((value) => {
                 util.log("Done Showing Loading Screen!");
                 this.obj.style.display = this.display;
                 this.isAnimating = false;
@@ -157,7 +157,7 @@ export class AnimatedLoadingScreenElement extends AnimatedElement {
             this.body.classList.remove("no-scroll");
             this.isAnimating = true;
             util.log("Hiding Loading Screen...");
-            animate.css(this, this.exitAnimation, override).then((value) => {
+            animate.css(this.obj, this.exitAnimation, override).then((value) => {
                 util.log("Done Hiding Loading Sreen!");
                 this.obj.style.display = 'none';
                 this.isAnimating = false;
