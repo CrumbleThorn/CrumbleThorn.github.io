@@ -59,13 +59,17 @@
 		
 		<div id="content">
 			<!--TO DO: Show/Hide sidebar on burger menu click AND display ratio flip-->
-			<nav class="sidebar" id="sidebar"></nav>
+			<nav class="sidebar" id="sidebar">
+				<div class="sidebar-link"></div>
+			</nav>
+			<!--TO DO: Move reusable components into their own component HTML files-->
+			<!--<div data-include="/components/navbar.html" id="navbar"></div>-->
 			<nav class="navbar" id="navbar">
 				<div class="navbar-content">
 					<div class="navbar-burger">|||</div>
 					<!--TO DO: Show/Hide burger menu based on display ratio-->
 					<div class="navbar-label">
-					<img class="site-logo" src="favicon/favicon-96x96.png">
+					<img class="site-logo" src="/favicon/favicon-96x96.png">
 					<div unselectable="on" class="unselectable divider">|</div>
 					<!--TO DO: Add hover animation to title-->
 					<div class="site-title">CrumbleThorn</div>
@@ -74,11 +78,11 @@
 						<div class="navbar-current">Home</div>
 						<div unselectable="on" class="unselectable divider">|</div>
 						<!--TO DO: Add hover and click animations to links-->
-						<a class="navbar-link" href="/about.html">About</a>
+						<a class="navbar-link" href="/about">About</a>
 						<div unselectable="on" class="unselectable divider">|</div>
 						<a class="navbar-link">Portfolios</a>
 						<div unselectable="on" class="unselectable divider">|</div>
-						<a class="navbar-link" href="/contact.html">Contact</a>
+						<a class="navbar-link" href="/contact">Contact</a>
 					</div>
 				</div>
 				<!--TO DO: Show/Hide burger menu based on display ratio-->
