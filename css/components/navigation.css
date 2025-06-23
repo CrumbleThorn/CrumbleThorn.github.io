@@ -10,6 +10,19 @@
 	color: var(--cilly-accentgray);
 }
 
+.site-logo {
+	height: 5vh;
+	max-width: 64px;
+}
+
+.site-title {
+	margin-bottom: 0.25vh;
+
+	font-size: 24px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
+	font-size: 3.5vh;
+	font-weight: bold;
+}
+
 .navbar {
     display: none; /*Hidden by default, navbar is shown through scripting*/
 
@@ -24,19 +37,6 @@
 	padding: 0px;
 
 	background-color: var(--cilly-white);
-}
-
-.site-logo {
-	height: 5vh;
-	max-width: 64px;
-}
-
-.site-title {
-	margin-bottom: 0.25vh;
-
-	font-size: 24px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
-	font-size: 3.5vh;
-	font-weight: bold;
 }
 
 .navbar-content {
@@ -108,6 +108,10 @@
 	max-width: 400px;
 }
 
+.sidebar-link {
+	
+}
+
 .return-button {
 	display: flex;
 	flex-direction: row-reverse;
@@ -127,4 +131,15 @@
 
 	background-color: var(--cilly-darkblue);
 }
+
+.menu-overlay {
+	position:fixed;
+	bottom: 0;
+	right: 0;
+	z-index: 100;
+
+	width: 100vw;
+	height: 100vh;
+
+	background-color: rgba(0, 0, 0, 200);
 }
