@@ -71,6 +71,17 @@ export function scrollToTop() {
     document.documentElement.scrollTop = 0;
 }
 
+export function getResource(uri) {
+    return fetch(uri)
+        .then(response => {
+            if (response.status === 200) {
+                return response.text();
+            } else {
+                return Promise.reject(new Error(`Failed to load ${uri} with status ${response.status}`));
+            }
+        });
+}
+
 export function removeClassesByPrefix (obj, prefix) {
     const classes = obj.className.split(' ').filter(c => !c.startsWith(prefix));
     obj.className = classes.join(' ').trim();
