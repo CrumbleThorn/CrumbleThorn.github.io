@@ -15,7 +15,7 @@ export class LoadingScreen {
 export class SideBar {
     constructor(element) {
         this.element = element;
-        this.links = element.obj.querySelectorAll('.navbar-link');
+        this.links = element.obj.querySelectorAll('.sidebar-link');
     }
 }
 
@@ -94,5 +94,26 @@ export class NavButton {
     constructor(element, target) {
         this.element = element;
         this.target = target;
+    }
+}
+
+export class Slideshow {
+    constructor(element, images, behavior) {
+        this.element = element;
+        this.images = images;
+        this.behavior = behavior;
+    }
+}
+
+class HeaderBar {
+    constructor(element, content, textbox) {
+        this.element = element;
+        this.content = content;
+        this.textbox = textbox;
+    }
+
+    modifyText(newText) {
+
+        this.textbox.innerHTML = newText;
     }
 }

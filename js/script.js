@@ -1,6 +1,6 @@
 import * as animate from './modules/animate.js';
 import * as anim from './modules/animations.js';
-import * as site from './modules/classes.js';
+import * as ui from './modules/ui.js';
 import * as util from './modules/util.js';
 
 
