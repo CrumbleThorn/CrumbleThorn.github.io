@@ -1,5 +1,6 @@
 import * as animate from './modules/animate.js';
 import * as anim from './modules/animations.js';
+import * as responsive from './modules/responsive.js';
 import * as ui from './modules/ui.js';
 import * as util from './modules/util.js';
 
@@ -35,23 +36,10 @@ function scrollAnimationHelper() {
     scrollElements.forEach((elem) => elem.element.handleScroll());
 }
 
-function scrollToTop() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0;
-}
 
-// TO DO: Implement responsive design
-function responsiveDesignChecker() {
-    if (!util.isLandscape() || util.isLowResolution())
-        util.log("TO DO: Toggle Mobile Mode!");
-    else
-        util.log("TO DO: Toggle PC Mode!");
-        
-}
 
 function documentLoaded() {
     // Reset scroll progress on reload
-    scrollToTop();
     document.body.classList.add('no-scroll');
     // Play Loading Screen Animation
     lottie.loadAnimation({
@@ -60,6 +48,7 @@ function documentLoaded() {
         autoplay: true,   // Play the animation automatically
         path: 'data/json/loading.json' // Path to your animation JSON file
     });
+    util.scrollToTop();
 }
 
 function onLoadComplete() {
@@ -73,4 +62,4 @@ function onLoadComplete() {
 window.addEventListener('DOMContentLoaded', documentLoaded)
 window.addEventListener('load', onLoadComplete);
 window.addEventListener('scroll', scrollAnimationHelper);
-window.addEventListener('resize', responsiveDesignChecker);
+window.addEventListener('resize', responsive.responsiveDesignChecker);

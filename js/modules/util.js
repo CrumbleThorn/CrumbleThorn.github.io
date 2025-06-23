@@ -1,8 +1,19 @@
+// Modify this to toggle certain logs on or off!
+export const verbose = false;
+
 export const isDev = window.location.hostname === 'localhost' || 
               window.location.hostname === '127.0.0.1' || 
               window.location.hostname.startsWith('192.168.') || 
               window.location.protocol === 'file:';
+
 export const css = {
+    global: {
+        inherit: 'inherit',
+        initial: 'initial',
+        revert: 'revert',
+        revertLayer: 'revert-layer',
+        unset: 'unset',
+        },
     display: {
         block: 'block',
         inline: 'inline',
@@ -17,16 +28,21 @@ export const css = {
         table: 'table',
         tableRow: 'table-row',
         listItem: 'list-item',
-        inherit: 'inherit',
-        revert: 'revert',
-        revertLayer: 'revert-layer',
-        unset: 'unset',
-    }
+        },
+    scrollBehavior: {
+        auto: 'auto',
+        smooth: 'smooth',
+        },
+    siteClasses: {
+        noScroll: 'no-scroll',
+        },
 };
 
-export function log(message) {
+export function log(message, verboseOnly = false) {
     if (isDev) {
-        console.log(message);
+        if (!verboseOnly && !verbose) {
+            console.log(message);
+        }
     }
 }
 
@@ -48,6 +64,11 @@ export function isLowResolution() {
         return true;
     else
         return false;
+}
+
+export function scrollToTop() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0;
 }
 
 export function removeClassesByPrefix (obj, prefix) {

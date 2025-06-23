@@ -204,7 +204,7 @@ export class Animation {
             return speed;
         } else if (typeof(speed) == 'number') {
             if (Math.trunc(speed) != speed) {
-                console.warn('WARNING: Speed has been truncated to ' + speed + 'ms.');
+                util.warn('WARNING: Speed has been truncated to ' + speed + 'ms.');
             }
             return speed;
         } else {
@@ -217,7 +217,7 @@ export class Animation {
             return delay;
         } else if (typeof(delay) == 'number') {
             if (Math.trunc(delay) != delay) {
-                console.warn('WARNING: Delay has been truncated to ' + delay + 'ms.');
+                util.warn('WARNING: Delay has been truncated to ' + delay + 'ms.');
             }
             return delay;
         } else {
@@ -230,7 +230,7 @@ export class Animation {
             return repeat;
         } else if (typeof(repeat) == 'number') {
             if (Math.trunc(repeat) != repeat) {
-                console.warn('WARNING: Repeat has been truncated to ' + repeat + ' times.');
+                util.warn('WARNING: Repeat has been truncated to ' + repeat + ' times.');
             }
             return repeat;
         } else {
@@ -248,7 +248,7 @@ export const css = (obj, animation, override = false) =>
         
         // BUG: numeric durations currently do not work
         if (typeof(animation.speed) == 'number') {
-            util.log('Set Animation Speed to ' + animation.speed);
+            util.log('Set Animation Speed to ' + animation.speed, true);
             node.style.setProperty('--animate-duration', `${animation.speed / 1000}s`);
         } else {
             node.style.removeProperty('--animate-duration'); // Remove property if it exists
@@ -256,14 +256,14 @@ export const css = (obj, animation, override = false) =>
         }
         // BUG: numeric delays currently do not work
         if (typeof(animation.delay) == 'number') {
-            util.log('Set Animation Delay to ' + animation.delay);
+            util.log('Set Animation Delay to ' + animation.delay, true);
             node.style.setProperty('--animate-delay', `${animation.delay / 1000}s`);
         } else {
             node.style.removeProperty('--animate-delay'); // Remove property if it exists
             animationClasses.push(`${prefix}${animation.delay}`);
         }
         if (typeof(animation.repeat) == 'number') {
-            util.log('Set Animation Repeat to ' + animation.repeat);
+            util.log('Set Animation Repeat to ' + animation.repeat, true);
             node.style.setProperty('--animate-repeat', animation.repeat);
         } else {
             node.style.removeProperty('--animate-repeat'); // Remove property if it exists
@@ -274,11 +274,12 @@ export const css = (obj, animation, override = false) =>
         if (override)
             util.removeClassesByPrefix(obj, prefix);
 
+        util.log("Playing animation for " + obj.id);
         node.classList.add(...animationClasses);
     
         // When the animation ends, we clean the classes and resolve the Promise
         function handleAnimationEnd(event) {
-            util.log(event);
+            util.log(event, true);
             event.stopPropagation();
             node.classList.remove(...animationClasses);
             resolve('Animation ended');
