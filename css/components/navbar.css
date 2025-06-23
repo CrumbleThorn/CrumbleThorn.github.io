@@ -11,7 +11,7 @@
 }
 
 .navbar {
-    display: none; /*Hidden by default, navbar is shown through scripting*/
+    display: block;
 
 	position: fixed;
 	top: 0;
@@ -61,7 +61,7 @@
 }
 
 .navbar-burger {
-	display: none; /*Hidden by default, button is only shown on mobile*/
+	display: block;
 }
 
 .navbar-menu {
