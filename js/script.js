@@ -54,7 +54,7 @@ function documentLoaded() {
         container: loadingScreen.animation, // Target the container
         loop: true,       // Loop the animation
         autoplay: true,   // Play the animation automatically
-        path: 'json/loading.json' // Path to your animation JSON file
+        path: 'data/json/loading.json' // Path to your animation JSON file
     });
 }
 
