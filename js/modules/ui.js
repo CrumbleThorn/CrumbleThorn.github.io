@@ -39,6 +39,23 @@ export class LoadingScreen {
     }
 }
 
+export class Content {
+    #obj;
+    #display;
+    constructor(obj) {
+        this.#obj = obj;
+        this.#display = obj.style.display;
+    }
+
+    hideContent() {
+        this.#obj.style.display = util.css.display.none;
+    }
+
+    showContent() {
+        this.#obj.style.display = this.#display;
+    }
+}
+
 export class SideBar {
     constructor(elem) {
         this.elem = elem;

@@ -4,6 +4,8 @@ import * as responsive from './modules/responsive.js';
 import * as ui from './modules/ui.js';
 import * as util from './modules/util.js';
 
+const content = new ui.Content(document.getElementById('content'));
+
 const hero = new ui.Hero(new anim.AnimatedElement(document.getElementById('hero')));
 
 const gameSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('game-section'),
@@ -103,14 +105,19 @@ const loadingScreen = new ui.LoadingScreen(new anim.AnimatedElement(document.get
 function documentLoaded() {
     // Reset scroll progress on reload
     util.scrollToTop();
+    // Hide the content while page is loading
+    content.hideContent();
 }
 
 function onLoadComplete() {
-    setTimeout(() => loadingScreen.toggle(), 200);
-    // Initialize the correct starting point for the progress bar
-    progressbar.start = gameSection.elem.obj.getBoundingClientRect().top - window.innerHeight;
-    // TO DO: Animate hero banner
-    util.log("TO DO: Animate Hero");
+    setTimeout(() => {
+        loadingScreen.toggle()
+        // Initialize the correct starting point for the progress bar
+        content.showContent();
+        progressbar.start = gameSection.elem.obj.getBoundingClientRect().top - window.innerHeight;
+        // TO DO: Animate hero banner
+        util.log("TO DO: Animate Hero");
+    }, 200);
 }
 
 window.addEventListener('DOMContentLoaded', documentLoaded)
