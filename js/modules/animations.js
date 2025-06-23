@@ -12,8 +12,13 @@ const animationTypes = Object.freeze(new Array(show, hide, highlight, toggle));
 // Scroll Trigger Type Constants
 export const onScrollDown = 'onScrollDown';
 export const onScrollUp = 'onScrollUp';
-export const onScrollTo = 'onScrollTo';
-const scrollTriggerTypes = Object.freeze(new Array(onScrollDown, onScrollUp, onScrollTo));
+const scrollTriggerTypes = Object.freeze(new Array(onScrollDown, onScrollUp));
+
+// Scroll Trigger Anchor Constants
+export const anchorLeft = 'left';
+export const anchorRight = 'right';
+export const anchorTop = 'top';
+export const anchorBottom = 'bottom';
 
 // Mouse Event Trigger Type Constants
 export const onMouseDown = 'onmousedown';
@@ -153,14 +158,32 @@ export class AnimatedElement {
 export class AnimationTrigger {
     #elem;
     #animationType;
-    #isTriggered;
+    #triggerLimit;
+    #override;
+    #timesTriggered;
 
     constructor(elem,
                 animationType = toggle,
+                triggerLimit = 1,
+                override = false,
                 ) {
         this.#elem = elem;
         this.#animationType = this.#checkAnimationType(animationType);
-        this.#isTriggered = false;
+        if (typeof(triggerLimit) == 'number') {
+            if (triggerLimit >= 0) {
+                this.#triggerLimit = triggerLimit;
+            } else {
+                throw new RangeError("Trigger Limit must be 0 or higher!");
+            }
+        } else {
+            throw new TypeError(triggerLimit + ' is not a valid number!');
+        }
+        if (typeof(override) == 'boolean') {
+            this.#override = override;
+        } else {
+            throw new TypeError(override + ' is not a boolean value!');
+        }
+        this.#timesTriggered = 0;
     }
 
     get elem() {
@@ -171,8 +194,8 @@ export class AnimationTrigger {
         return this.#animationType;
     }
 
-    get isTriggered() {
-        return this.#isTriggered;
+    get triggerLimit() {
+        return this.#triggerLimit;
     }
 
     #checkAnimationType(animationType) {
@@ -184,48 +207,98 @@ export class AnimationTrigger {
     }
 
     trigger() {
-        switch(this.#animationType) {
-            case show:
-                this.elem.show();
-                break;
-            case hide:
-                this.elem.hide();
-                break;
-            case highlight:
-                this.elem.highlight();
-                break;
-            case toggle:
-                this.elem.toggle();
-                break;
-            //TO DO: Add reset function for removing looping animations
+        if(this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
+            switch(this.#animationType) {
+                case show:
+                    this.elem.show();
+                    break;
+                case hide:
+                    this.elem.hide();
+                    break;
+                case highlight:
+                    this.elem.highlight();
+                    break;
+                case toggle:
+                    this.elem.toggle();
+                    break;
+                //TO DO: Add reset function for removing looping animations
+            }
+            this.#timesTriggered += 1;
+        } else {
+            util.warn(this.#animationType + " Trigger for " + this.#elem.obj.id + " has already been triggered the maximum times, skipping...");
         }
-        this.#isTriggered = true;
     }
 }
 
+export class ScrollTriggerElement {
+    obj;
+    constructor (obj,
+                 anchorY = anchorTop,
+                 offsetY = 0,
+                 anchorX = anchorLeft,
+                 offsetX = 0,
+                 ) {
+        this.obj = obj;
+        if ([anchorTop, anchorBottom].includes(anchorY)) {
+            this.anchorY = anchorY;
+        } else {
+            throw new TypeError(anchorY + " is not a valid Vertical Anchor!")
+        }
+        this.offsetY = offsetY;
+        if ([anchorLeft, anchorRight].includes(anchorX)) {
+            this.anchorX = anchorX;
+        } else {
+            throw new TypeError(anchorX + " is not a valid Horizontal Anchor!")
+        }
+        this.offsetX = offsetX;
+    }
+
+    computeX() {
+        if (this.obj instanceof Window) {
+            return this.anchorX == 'left' ? this.offsetX : this.obj.innerWidth + this.offsetX;
+        } else {
+            return this.anchorX == 'left' ? this.obj.getBoundingClientRect().left + offsetX : this.obj.getBoundingClientRect().right + offsetX;
+        }
+    }
+
+    computeY() {
+        if (this.obj instanceof Window) {
+            return this.anchorY == 'top' ? this.offsetY : this.obj.innerHeight + this.offsetY;
+        } else {
+            return this.anchorY == 'left' ? this.obj.getBoundingClientRect().top + offsetY : this.obj.getBoundingClientRect().bottom + offsetY;
+        }
+    }
+}
+
+// TO DO: Expand to handle horizontal scrolling
 export class AnimationScrollTrigger extends AnimationTrigger {
     #triggerElem;
     #triggerPoint;
     #triggerType;
     #reversible;
+    #triggered;
 
-    // TO DO: Add ability to change where trigger anchor point is located
     constructor(elem,
                 animationType = toggle,
-                triggerElem = elem,
-                triggerPoint = window,
+                triggerElem = new ScrollTriggerElement(elem),
+                triggerPoint = new ScrollTriggerElement(window),
                 triggerType = onScrollDown,
-                reversible = true
+                triggerLimit = 1,
+                reversible = false, // Use this flag if you want the Trigger to check for the reverse value once triggered
+                override = false,
                 ) {
-        super(elem, animationType);
+        super(elem, animationType, triggerLimit, override);
         this.#triggerElem = triggerElem;
         this.#triggerPoint = triggerPoint;
         this.#triggerType = this.#checkTriggerType(triggerType);
 
-        if (typeof(reversible) == 'boolean')
+        if (typeof(reversible) == 'boolean') {
             this.#reversible = reversible;
-        else
-            throw new TypeError(reversible + " is not a boolean value!");
+        } else {
+            throw new TypeError(reversible + ' is not a boolean value!');
+        }
+        this.#triggered = false;
+        window.addEventListener('scroll', this.handle);
     }
 
     #checkTriggerType(triggerType) {
@@ -236,6 +309,29 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         }
     }
 
+    handle() {
+        point1;
+        point2;
+        switch (this.#triggerType) {
+            case onScrollDown:
+                point1 = this.#triggerElem.computeY();
+                point2 = this.#triggerPoint.computeY();
+                break;
+            case onScrollUp:
+                point1 = this.#triggerPoint.computeY();
+                point2 = this.#triggerElem.computeY;
+                break;
+        }
+        if (point1 >= point2) {
+            this.trigger();
+            this.#triggered = true;
+        } else if (this.reversible && this.#triggered) {
+            this.trigger();
+            this.#triggered = false;
+        }
+        util.log(point1);
+        util.log(point2);
+    }
 }
 
 export class AnimatedScrollElement extends AnimatedElement {
