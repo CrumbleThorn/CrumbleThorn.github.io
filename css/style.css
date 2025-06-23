@@ -171,3 +171,23 @@
 
     font-size: 24px;
 }
+
+.return-button {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-start;
+	align-items: center;
+
+	position: sticky;
+	top: 86vh;
+	left: 87vw;
+	z-index: 100;
+
+	height: 7vh;
+	width: 15vw;
+	border-radius: 20px;
+	margin-bottom: 10vh;
+	padding-right: calc(2vw + 20px);
+
+	background-color: var(--cilly-darkblue);
+}
