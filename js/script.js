@@ -18,6 +18,10 @@ const navbar = new ui.NavBar(new anim.AnimatedScrollElement(document.getElementB
                                                                  new animate.Animation(animate.slideOutUp, animate.fast)),
                                sidebar);
 scrollElements.push(navbar);
+const gameSection = new ui.SideCard();
+const devSection = new ui.SideCard();
+const artSection = new ui.SideCard();
+const musicSection = new ui.SideCard();
 
 const progressbar = new ui.ProgressBar(document.getElementById('progressbar'));
 // TO DO: add the rest of the animated Elements
