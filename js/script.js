@@ -4,62 +4,94 @@ import * as responsive from './modules/responsive.js';
 import * as ui from './modules/ui.js';
 import * as util from './modules/util.js';
 
+const hero = new ui.Hero(new anim.AnimatedElement(document.getElementById('hero')));
 
-const scrollElements = [];
-const hero = document.getElementById('hero');
-const start = document.getElementById('game-section');
+const gameSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('game-section'),
+                                                             undefined,
+                                                             false,
+                                                             new animate.Animation(animate.animationClass.slideInUp,
+                                                                                   animate.speedClass.fast,
+                                                                                   ),
+                                                             new animate.Animation(animate.animationClass.slideOutUp,
+                                                                                   animate.speedClass.fast,
+                                                                                   ),
+                                                             ),
+                                    anim.anchor.left);
+
+const devSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('dev-section'),
+                                                            ),
+                                   anim.anchor.right);
+const artSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('art-section'),
+                                                            ),
+                                   anim.anchor.left);
+const musicSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('music-section'),
+                                                              ),
+                                     anim.anchor.right);
+
 const sidebar = new ui.SideBar(new anim.AnimatedElement(document.getElementById('sidebar'),
-                                                             'flex'));
-const navbar = new ui.NavBar(new anim.AnimatedScrollElement(document.getElementById('navbar'),
-                                                                 'block',
-                                                                 false,
-                                                                 start,
-                                                                 window.innerHeight,
-                                                                 new animate.Animation(animate.slideInDown, animate.fast),
-                                                                 new animate.Animation(animate.slideOutUp, animate.fast)),
-                               sidebar);
-scrollElements.push(navbar);
-const gameSection = new ui.SideCard();
-const devSection = new ui.SideCard();
-const artSection = new ui.SideCard();
-const musicSection = new ui.SideCard();
+                                                        undefined,
+                                                        false,
+                                                        new animate.Animation(animate.animationClass.slideInLeft,
+                                                                              animate.speedClass.fast,
+                                                                              ),
+                                                        new animate.Animation(animate.animationClass.slideOutRight,
+                                                                              animate.speedClass.fast,
+                                                                              ),
+                                                        ));
+const navbar = new ui.NavBar(new anim.AnimatedElement(document.getElementById('navbar'),
+                                                      undefined,
+                                                      false,
+                                                      new animate.Animation(animate.animationClass.slideInDown,
+                                                                            animate.speedClass.fast,
+                                                                            ),
+                                                      new animate.Animation(animate.animationClass.slideOutUp,
+                                                                            animate.speedClass.fast,
+                                                                            ),
+                                                      ),
+                             sidebar);
+const navbarTrigger = new anim.AnimationScrollTrigger(navbar.elem,
+                                                      anim.animationType.toggle,
+                                                      new anim.ScrollTriggerElement(gameSection.elem.obj),
+                                                      new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                      anim.scrollTriggerType.onScrollDown,
+                                                      0,
+                                                      true,
+                                                      true);
 
-const progressbar = new ui.ProgressBar(document.getElementById('progressbar'));
+const progressbar = new ui.ProgressBar(new anim.AnimatedElement(document.getElementById('progressbar'),
+                                                                undefined,
+                                                                ),
+                                       );
 // TO DO: add the rest of the animated Elements
 
-const loadingScreen = new ui.LoadingScreen(new anim.AnimatedLoadingScreenElement(document.getElementById('loading-screen'), 'flex'),
-                                             document.getElementById('load-animation'));
-
-// Handles Scroll Animations
-function scrollAnimationHelper() {
-    progressbar.updateProgress();
-    scrollElements.forEach((elem) => elem.element.handleScroll());
-}
-
-
+const loadingScreen = new ui.LoadingScreen(new anim.AnimatedElement(document.getElementById('loading-screen'),
+                                                                    undefined,
+                                                                    true,
+                                                                    new animate.Animation(animate.animationClass.fadeIn,
+                                                                                          animate.speedClass.faster,
+                                                                                          ),
+                                                                    new animate.Animation(animate.animationClass.fadeOut,
+                                                                                          animate.speedClass.faster,
+                                                                                          )
+                                                                    ),
+                                           new anim.LottieContainer(document.getElementById('load-animation'),
+                                                                    'data/json/loading.json',
+                                                                    ),
+                                           );
 
 function documentLoaded() {
     // Reset scroll progress on reload
-    document.body.classList.add('no-scroll');
-    // Play Loading Screen Animation
-    lottie.loadAnimation({
-        container: loadingScreen.animation, // Target the container
-        loop: true,       // Loop the animation
-        autoplay: true,   // Play the animation automatically
-        path: 'data/json/loading.json' // Path to your animation JSON file
-    });
     util.scrollToTop();
 }
 
 function onLoadComplete() {
-    setTimeout(() => loadingScreen.toggleLoadingScreen(), 200);
+    setTimeout(() => loadingScreen.toggle(), 200);
     // Initialize the correct starting point for the progress bar
-    progressbar.setStart(start.getBoundingClientRect().top - window.innerHeight);
+    progressbar.start = gameSection.elem.obj.getBoundingClientRect().top - window.innerHeight;
     // TO DO: Animate hero banner
     util.log("TO DO: Animate Hero");
 }
 
 window.addEventListener('DOMContentLoaded', documentLoaded)
 window.addEventListener('load', onLoadComplete);
-window.addEventListener('scroll', scrollAnimationHelper);
 window.addEventListener('resize', responsive.responsiveDesignChecker);

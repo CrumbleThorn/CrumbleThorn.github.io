@@ -19,14 +19,18 @@ export const scrollTriggerType = {
 }
 
 // Scroll Trigger Anchor Constants
-export const scrollTriggerAnchor = {
-    horizontal: {
-        anchorLeft: 'left',
-        anchorRight: 'right',
-        },
+export const anchor = {
+    top: 'top',
+    bottom: 'bottom',
+    left: 'left',
+    right: 'right',
     vertical: {
-        anchorTop: 'top',
-        anchorBottom: 'bottom',
+        top: 'top',
+        bottom: 'bottom',
+        },
+    horizontal: {
+        left: 'left',
+        right: 'right',
         },
 };
 
@@ -42,6 +46,30 @@ export const mouseEventTriggerType = {
     onMouseEnter: 'onmouseenter',
     onMouseExit: 'onmouseleave',
 };
+
+// Wrapper class for Objects containing DotLottie animation instances
+export class LottieContainer {
+    #obj;
+    #lottieInstance;
+    constructor (obj,
+                 animationData = 'data/json/loading.json',
+                 loop = true,
+                 autoplay = true,
+                 ) {
+        this.#obj = obj;
+        // Plays the Lottie animation
+        this.#lottieInstance = lottie.loadAnimation({
+                                    container: this.#obj, // Target the container
+                                    loop: loop,       // Loop the animation
+                                    autoplay: autoplay,   // Play the animation automatically
+                                    path: animationData // Path to your animation JSON file
+                                });
+    }
+
+    get lottieInstance() {
+        return this.#lottieInstance;
+    }
+}
 
 export class AnimatedElement {
     #obj;
@@ -60,7 +88,7 @@ export class AnimatedElement {
                 highlight,
                 ) {
         this.#obj = obj;
-        if (display != util.css.display.none){
+        if (display != util.css.display.none) {
             this.#display = display;
         } else {
             throw RangeError("Default Display cannot be set to \'none\'!")
@@ -118,42 +146,54 @@ export class AnimatedElement {
     }
 
     show(override = false) {
-        if (!this.#active) {
-            util.log('Showing ' + this.#obj.id + '...');
-            this.#obj.style.display = this.#display;
-            this.#active = true;
-            this.#isAnimating = true;
-            animate.css(this.#obj, this.#entryAnimation, override).then((value) => {
-                util.log('Done Showing ' + this.#obj.id + '!');
+        if (this.#entryAnimation != undefined) {
+            if (!this.#active) {
+                util.log('Showing ' + this.#obj.id + '...');
                 this.#obj.style.display = this.#display;
-                this.#isAnimating = false;
-            });
+                this.#active = true;
+                this.#isAnimating = true;
+                animate.css(this.#obj, this.#entryAnimation, override).then((value) => {
+                    util.log('Done Showing ' + this.#obj.id + '!');
+                    this.#obj.style.display = this.#display;
+                    this.#isAnimating = false;
+                });
+            } else {
+                util.warn('WARNING: Object ' + this.#obj.id + ' is already active, skipping animation');
+            }
         } else {
-            util.warn('WARNING: Object ' + this.#obj.id + ' is already active, skipping animation');
+            throw new ReferenceError("entryAnimation is undefined!");
         }
     }
 
     highlight(override = false) {
-        if (this.#active){
-            util.log('Highlighting ' + this.#obj.id + '...');
-            animate.css(this.#obj, this.#highlightAnimation, override);
+        if (this.#highlightAnimation != undefined) {
+            if (this.#active) {
+                util.log('Highlighting ' + this.#obj.id + '...');
+                animate.css(this.#obj, this.#highlightAnimation, override);
+            } else {
+                util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation');
+            }
         } else {
-            util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation');
+            throw new ReferenceError("highlightAnimation is undefined!");
         }
     }
 
     hide(override = false) {
-        if (this.#active) {
-            this.#active = false;
-            this.#isAnimating = true;
-            util.log('Hiding ' + this.#obj.id + '...');
-            animate.css(this.#obj, this.#exitAnimation, override).then((value) => {
-                util.log('Done Hiding ' + this.#obj.id + '!');
-                this.#obj.style.display = 'none';
-                this.#isAnimating = false;
-            });
+        if (this.#exitAnimation != undefined) {
+            if (this.#active) {
+                this.#active = false;
+                this.#isAnimating = true;
+                util.log('Hiding ' + this.#obj.id + '...');
+                animate.css(this.#obj, this.#exitAnimation, override).then((value) => {
+                    util.log('Done Hiding ' + this.#obj.id + '!');
+                    this.#obj.style.display = 'none';
+                    this.#isAnimating = false;
+                });
+            } else {
+                util.warn('WARNING: Object ' + this.#obj.id + ' is already inactive, skipping animation');
+            }
         } else {
-            util.warn('WARNING: Object ' + this.#obj.id + ' is already inactive, skipping animation');
+            throw new ReferenceError("exitAnimation is undefined!");
         }
     }
 
@@ -219,7 +259,7 @@ export class AnimationTrigger {
     }
 
     #checkAnimationType(typeOfAnimation) {
-        if(typeOfAnimation in animationType) {
+        if (typeOfAnimation in animationType) {
             return typeOfAnimation;
         } else {
             throw new TypeError(typeOfAnimation +  ' is not a valid Animation type!');
@@ -227,19 +267,19 @@ export class AnimationTrigger {
     }
 
     trigger() {
-        if(this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
+        if (this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
             switch(this.#typeOfAnimation) {
-                case show:
-                    this.elem.show();
+                case animationType.show:
+                    this.#elem.show(this.#override);
                     break;
-                case hide:
-                    this.elem.hide();
+                case animationType.hide:
+                    this.#elem.hide(this.#override);
                     break;
-                case highlight:
-                    this.elem.highlight();
+                case animationType.highlight:
+                    this.#elem.highlight(this.#override);
                     break;
-                case toggle:
-                    this.elem.toggle();
+                case animationType.toggle:
+                    this.#elem.toggle(this.#override);
                     break;
                 //TO DO: Add reset function for removing looping animations
             }
@@ -251,21 +291,21 @@ export class AnimationTrigger {
 }
 
 export class ScrollTriggerElement {
-    obj;
+    #obj;
     constructor (obj,
-                 anchorY = anchorTop,
+                 anchorY = anchor.top,
                  offsetY = 0,
-                 anchorX = anchorLeft,
+                 anchorX = anchor.left,
                  offsetX = 0,
                  ) {
-        this.obj = obj;
-        if (anchorY in scrollTriggerAnchor.vertical) {
+        this.#obj = obj;
+        if (anchorY in anchor.vertical) {
             this.anchorY = anchorY;
         } else {
             throw new TypeError(anchorY + " is not a valid Vertical Anchor!")
         }
         this.offsetY = offsetY;
-        if (anchorX in scrollTriggerAnchor.horizontal) {
+        if (anchorX in anchor.horizontal) {
             this.anchorX = anchorX;
         } else {
             throw new TypeError(anchorX + " is not a valid Horizontal Anchor!")
@@ -273,19 +313,23 @@ export class ScrollTriggerElement {
         this.offsetX = offsetX;
     }
 
+    get obj() {
+        return this.#obj;
+    }
+
     computeX() {
-        if (this.obj instanceof Window) {
-            return this.anchorX == 'left' ? this.offsetX : this.obj.innerWidth + this.offsetX;
+        if (this.#obj instanceof Window) {
+            return this.anchorX == 'left' ? this.offsetX : this.#obj.innerWidth + this.offsetX;
         } else {
-            return this.anchorX == 'left' ? this.obj.getBoundingClientRect().left + offsetX : this.obj.getBoundingClientRect().right + offsetX;
+            return this.anchorX == 'left' ? this.#obj.getBoundingClientRect().left + this.offsetX : this.#obj.getBoundingClientRect().right + this.offsetX;
         }
     }
 
     computeY() {
-        if (this.obj instanceof Window) {
-            return this.anchorY == 'top' ? this.offsetY : this.obj.innerHeight + this.offsetY;
+        if (this.#obj instanceof Window) {
+            return this.anchorY == 'top' ? this.offsetY : this.#obj.innerHeight + this.offsetY;
         } else {
-            return this.anchorY == 'left' ? this.obj.getBoundingClientRect().top + offsetY : this.obj.getBoundingClientRect().bottom + offsetY;
+            return this.anchorY == 'top' ? this.#obj.getBoundingClientRect().top + this.offsetY : this.#obj.getBoundingClientRect().bottom + this.offsetY;
         }
     }
 }
@@ -300,9 +344,9 @@ export class AnimationScrollTrigger extends AnimationTrigger {
 
     constructor(elem,
                 animationType = toggle,
-                triggerElem = new ScrollTriggerElement(elem),
+                triggerElem = new ScrollTriggerElement(elem.obj),
                 triggerPoint = new ScrollTriggerElement(window),
-                triggerType = onScrollDown,
+                triggerType = scrollTriggerType.onScrollDown,
                 triggerLimit = 1,
                 reversible = false, // Use this flag if you want the Trigger to check for the reverse value once triggered
                 override = false,
@@ -318,11 +362,11 @@ export class AnimationScrollTrigger extends AnimationTrigger {
             throw new TypeError(reversible + ' is not a boolean value!');
         }
         this.#triggered = false;
-        window.addEventListener('scroll', this.handle);
+        window.addEventListener('scroll', () => {this.handle()});
     }
 
     #checkTriggerType(triggerType) {
-        if(triggerType in scrollTriggerType) {
+        if (triggerType in scrollTriggerType) {
             return triggerType;
         } else {
             throw new TypeError(triggerType + ' is not a valid Scroll Trigger type!');
@@ -330,70 +374,35 @@ export class AnimationScrollTrigger extends AnimationTrigger {
     }
 
     handle() {
-        point1;
-        point2;
+        let point1;
+        let point2;
         switch (this.#triggerType) {
-            case onScrollDown:
+            case scrollTriggerType.onScrollDown:
                 point1 = this.#triggerElem.computeY();
                 point2 = this.#triggerPoint.computeY();
                 break;
-            case onScrollUp:
+            case scrollTriggerType.onScrollUp:
                 point1 = this.#triggerPoint.computeY();
                 point2 = this.#triggerElem.computeY;
                 break;
         }
-        if (point1 >= point2) {
-            this.trigger();
-            this.#triggered = true;
-            // Remove listener once trigger limit has been reached for efficiency
-            if(this.timesTriggered == this.triggerLimit) {
-                window.removeEventListener('scroll', this.handle);
+        if (point1 <= point2) {
+            if(!this.#triggered) {
+                this.trigger();
+                this.#triggered = true;
+                
+                // Remove listener once trigger limit has been reached for efficiency
+                if (this.timesTriggered == this.triggerLimit) {
+                    window.removeEventListener('scroll', this.handle);
+                }
             }
-        } else if (this.reversible && this.#triggered) {
+        } else if (this.#reversible && this.#triggered) {
             this.trigger();
             this.#triggered = false;
             // Remove listener once trigger limit has been reached for efficiency
-            if(this.timesTriggered == this.triggerLimit){
+            if (this.timesTriggered == this.triggerLimit) {
                 window.removeEventListener('scroll', this.handle);
             }
-        }
-        util.log(point1);
-        util.log(point2);
-    }
-}
-
-export class AnimatedScrollElement extends AnimatedElement {
-
-    constructor(obj,
-                display = 'block',
-                active = true,
-                trigger = obj,
-                triggerPoint = window.innerHeight,
-                entry = new animate.Animation('fadeIn', 'faster'),
-                exit = new animate.Animation('fadeOut', 'faster'),
-                highlight = new animate.Animation('pulse', 'faster'),
-                ) {
-        super(obj, display, active, entry, exit, highlight);
-        this.trigger = trigger;
-        this.triggerPoint = triggerPoint;
-        this.normallyHidden = !active; // Determines if element should be visible by default
-    }
-    
-    hasReachedTrigger() {
-        //util.log(this.trigger);
-        //util.log(this.triggerPoint);
-        if (this.trigger.getBoundingClientRect().top <= this.triggerPoint) {
-            return true;
-        }
-        else
-        return false;
-    }
-
-    handleScroll() {
-        if (this.hasReachedTrigger()) {
-            this.normallyHidden ? this.show(true) : this.hide(true);
-        } else {
-            this.normallyHidden ? this.hide(true) : this.show(true);
         }
     }
 }
@@ -404,8 +413,8 @@ export class AnimatedLoadingScreenElement extends AnimatedElement {
                 display = 'block',
                 active = true,
                 body = document.body,
-                entry = new animate.Animation(animate.fadeIn, animate.faster),
-                exit = new animate.Animation(animate.fadeOut, animate.faster),
+                entry = new animate.Animation(animate.animationClass.fadeIn, animate.speedClass.faster),
+                exit = new animate.Animation(animate.animationClass.fadeOut, animate.speedClass.faster),
                 highlight,
                 ) {
         super(obj, display, active, entry, exit, highlight);
@@ -414,7 +423,7 @@ export class AnimatedLoadingScreenElement extends AnimatedElement {
     }
 
     showLoadingScreen(override = false) {
-        if(!this.active) {
+        if (!this.active) {
             this.body.classList.add('no-scroll');
             this.show();
         } else {
