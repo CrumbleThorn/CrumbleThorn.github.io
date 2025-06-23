@@ -17,26 +17,12 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
 		<link rel="stylesheet" type="text/css" href="css/defaults.css">
-		<!--TO DO: Move reusable components into their own component HTML files-->
-		<link rel="stylesheet" type="text/css" href="css/components/background.css">
-		<link rel="stylesheet" type="text/css" href="css/components/button.css">
-		<link rel="stylesheet" type="text/css" href="css/components/centercard.css">
-		<link rel="stylesheet" type="text/css" href="css/components/dropdown.css">
-		<link rel="stylesheet" type="text/css" href="css/components/hero.css">
-		<link rel="stylesheet" type="text/css" href="css/components/horizontalbar.css">
-		<link rel="stylesheet" type="text/css" href="css/components/loading.css">
-		<link rel="stylesheet" type="text/css" href="css/components/maincard.css">
-		<link rel="stylesheet" type="text/css" href="css/components/menu.css">
-		<link rel="stylesheet" type="text/css" href="css/components/modal.css">
-		<link rel="stylesheet" type="text/css" href="css/components/navbar.css">
-		<link rel="stylesheet" type="text/css" href="css/components/progressbar.css">
-		<link rel="stylesheet" type="text/css" href="css/components/sidebar.css">
-		<link rel="stylesheet" type="text/css" href="css/components/sidecard.css">
-		<link rel="stylesheet" type="text/css" href="css/components/slideshow.css">
-		<link rel="stylesheet" type="text/css" href="css/components/verticalbar.css">
-
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<link rel="stylesheet" type="text/css" href="css/animate.css">
+		<!--TO DO: Add noscript fallback styles-->
+		<noscript>
+			
+		</noscript>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
 		<!--Preload the Loading Screen Animation-->
@@ -66,132 +52,177 @@
 		<meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
 		<meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
 		<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
-		<!--TO DO: Add noscript fallback-->
 	</head>
-	
 	<body>
-		<div id="loading-screen">
-			<!--TO DO: Replace loading wheel with custom animation -->
-			<div id="load-animation"></div>
-		</div>
-		
+		<!--TO DO: Replace loading wheel with custom animation -->
+		<loadingscreen-template></loadingscreen-template>
 		<div class="content" id="content">
 			<!--TO DO: Show/Hide sidebar on burger menu click AND display ratio flip-->
-			<nav class="sidebar" id="sidebar">
-				<div class="sidebar-link"></div>
-			</nav>
-			<!--TO DO: Move reusable components into their own component HTML files-->
-			<!--<div data-include="/components/navbar.html" id="navbar"></div>-->
-			<nav class="navbar" id="navbar">
-				<div class="navbar-content">
-					<div class="navbar-burger">|||</div>
-					<!--TO DO: Show/Hide burger menu based on display ratio-->
-					<div class="navbar-label">
-					<img class="navbar-logo" src="/favicon/favicon-96x96.png">
-					<div unselectable="on" class="unselectable divider">|</div>
-					<!--TO DO: Add hover animation to title-->
-					<div class="navbar-title">CrumbleThorn</div>
-					</div>
-					<div class="navbar-menu">
-						<div class="navbar-current">Home</div>
-						<div unselectable="on" class="unselectable divider">|</div>
-						<!--TO DO: Add hover and click animations to links-->
-						<a class="navbar-link" href="/about">About</a>
-						<div unselectable="on" class="unselectable divider">|</div>
-						<a class="navbar-link">Portfolios</a>
-						<div unselectable="on" class="unselectable divider">|</div>
-						<a class="navbar-link" href="/contact">Contact</a>
-					</div>
-				</div>
-				<!--TO DO: Show/Hide burger menu based on display ratio-->
-				<div class="progressbar-container">
-					<div class="progressbar" id="progressbar"></div>
-				</div>
-			</nav>
-
+			<sidebar-template></sidebar-template>
+			<navbar-template>
+				<progressbar-template></progressbar-template>
+			</navbar-template>
 			<!--TO DO: Animate hero banner-->
-			<!--TO DO: Finalize hero layout-->
-			<!--TO DO: Adjust hero layout based on display ratio-->
-			<div class="hero" id="hero">
-				<div class="hero-text">
-					<h1>Hey! I'm<br>Gabe Tamayo!</h1>
-					<h2>I make stuff!</h2>
-					<div class="hero-nav">
-						<a href="#main"><button class="hero-button">Learn More</button></a>
-						<h4>or</h4>
-						<h3>scroll down!</h3>
-					</div>
-				</div>
-				<img class="hero-image" src="img/cil-chibi.png"/>
-			</div>
-
-			<div class="return-button">
-				<div>Back to top</div>
-				<div>^</div>
-			</div>
-
-			<main id="main">
+			<hero-template></hero-template>
+			<button-template class="return-button"></button-template>
+			<main>
 				<!--TO DO: Animate sections and make them sticky-->
 				<!--TO DO: Finalize section layout-->
 				<!--TO DO: Adjust section layout based on display ratio-->
 				<div class="main-title-bar">
-					<div class="main-title-content">
-						<div class="main-title">I'm a&nbsp;</div>
-						<div class="main-label">Game Developer</div>
-						<div class="main-title">!</div>
+						<div class="main-title-content">
+							<div class="main-title">I'm a&nbsp;</div>
+							<div class="main-label">Game Developer</div>
+							<div class="main-title">!</div>
+						</div>
+				</div>
+				<div class="main-section">
+					<div class="main-sticky-section">
+						<sidecard-template class="side-card-left" id="game-section"></sidecard-template>
 					</div>
 				</div>
 				<div class="main-section">
 					<div class="main-sticky-section">
-						<div class="main-card-left" id="game-section">
-							<!--TO DO: Make functional image slideshow component-->
-							<div>Image Slideshow</div>
-							<!--TO DO: Populate section content-->
-							<section class="section-content">I make videogames!</section>
-						</div>
+						<sidecard-template class="side-card-left" id="dev-section"></sidecard-template>
 					</div>
 				</div>
-
 				<div class="main-section">
 					<div class="main-sticky-section">
-						<div class="main-card-right" id="dev-section">
-							<div>Image Slideshow</div>
-							<section class="section-content">I write programs!</section>
-						</div>
+						<sidecard-template class="side-card-left" id="art-section"></sidecard-template>
 					</div>
 				</div>
-
 				<div class="main-section">
 					<div class="main-sticky-section">
-						<div class="main-card-left" id="art-section">
-							<div>Image Slideshow</div>
-							<section class="section-content">I create illustrations!</section>
-						</div>
-					</div>
-				</div>
-
-				<div class="main-section">
-					<div class="main-sticky-section">
-						<div class="main-card-right" id="music-section">
-							<div>Image Slideshow</div>
-							<section class="section-content">I compose music!</section>
-						</div>
+						<sidecard-template class="side-card-left" id="music-section"></sidecard-template>
 					</div>
 				</div>
 			</main>
 			<div class="end-section" id="end-section">
-				<div class="end-card">
-					<section class="end-card-content"> </section>
-					<div class="end-card-content"> </div>
-				</div>
+					<centercard-template class="end-card"></centercard-template>
 			</div>
 			<!--TO DO: Animate bottom bar similarly to navbar-->
-			<div class="bottombar" id="bottombar"></div>
-			<footer>Made by CrumbleThorn</footer>
+			<horizontalbar-template></horizontalbar-template>
+			<footer-template></footer-template>
 			<!--TO DO: Finalize background design-->
-			<div class="overlay"></div>
-			<div class="background"></div>
+			<background-template></background-template>
 		</div>
-		<script type="module" src="js/script.js"></script>
+		<script type="module" src="js/global.js"></script>
+		<!-- <script type="module" src="js/script.js"></script> -->
 	</body>
+	<!--TO DO: Add noscript fallback-->
+	<noscript>
+		<body>
+			<div class="content" id="content">
+				<!--TO DO: Move reusable components into their own component HTML files-->
+				<nav class="navbar" id="navbar">
+					<div class="navbar-content">
+						<div class="navbar-burger">|||</div>
+						<!--TO DO: Show/Hide burger menu based on display ratio-->
+						<div class="navbar-label">
+						<img class="navbar-logo" src="/favicon/favicon-96x96.png">
+						<div unselectable="on" class="unselectable divider">|</div>
+						<!--TO DO: Add hover animation to title-->
+						<div class="navbar-title">CrumbleThorn</div>
+						</div>
+						<div class="navbar-menu">
+							<div class="navbar-current">Home</div>
+							<div unselectable="on" class="unselectable divider">|</div>
+							<!--TO DO: Add hover and click animations to links-->
+							<a class="navbar-link" href="/about">About</a>
+							<div unselectable="on" class="unselectable divider">|</div>
+							<a class="navbar-link">Portfolios</a>
+							<div unselectable="on" class="unselectable divider">|</div>
+							<a class="navbar-link" href="/contact">Contact</a>
+						</div>
+					</div>
+					<!--TO DO: Show/Hide burger menu based on display ratio-->
+					<div class="progressbar-container">
+						<div class="progressbar" id="progressbar"></div>
+					</div>
+				</nav>
+
+				
+				<div class="hero" id="hero">
+					<div class="hero-text">
+						<h1>Hey! I'm<br>Gabe Tamayo!</h1>
+						<h2>I make stuff!</h2>
+						<div class="hero-nav">
+							<a href="#main"><button class="hero-button">Learn More</button></a>
+							<h4>or</h4>
+							<h3>scroll down!</h3>
+						</div>
+					</div>
+					<img class="hero-image" src="img/cil-chibi.png"/>
+				</div>
+
+				<div class="return-button">
+					<div>Back to top</div>
+					<div>^</div>
+				</div>
+
+				<main id="main">
+					<!--TO DO: Animate sections and make them sticky-->
+					<!--TO DO: Finalize section layout-->
+					<!--TO DO: Adjust section layout based on display ratio-->
+					<div class="main-title-bar">
+						<div class="main-title-content">
+							<div class="main-title">I'm a&nbsp;</div>
+							<div class="main-label">Game Developer</div>
+							<div class="main-title">!</div>
+						</div>
+					</div>
+					<div class="main-section">
+						<div class="main-sticky-section">
+							<div class="main-card-left" id="game-section">
+								<!--TO DO: Make functional image slideshow component-->
+								<div>Image Slideshow</div>
+								<!--TO DO: Populate section content-->
+								<section class="section-content">I make videogames!</section>
+							</div>
+						</div>
+					</div>
+
+					<div class="main-section">
+						<div class="main-sticky-section">
+							<div class="main-card-right" id="dev-section">
+								<div>Image Slideshow</div>
+								<section class="section-content">I write programs!</section>
+							</div>
+						</div>
+					</div>
+
+					<div class="main-section">
+						<div class="main-sticky-section">
+							<div class="main-card-left" id="art-section">
+								<div>Image Slideshow</div>
+								<section class="section-content">I create illustrations!</section>
+							</div>
+						</div>
+					</div>
+
+					<div class="main-section">
+						<div class="main-sticky-section">
+							<div class="main-card-right" id="music-section">
+								<div>Image Slideshow</div>
+								<section class="section-content">I compose music!</section>
+							</div>
+						</div>
+					</div>
+				</main>
+				<div class="end-section" id="end-section">
+					<div class="end-card">
+						<section class="end-card-content"> </section>
+						<div class="end-card-content"> </div>
+					</div>
+				</div>
+				<!--TO DO: Animate bottom bar similarly to navbar-->
+				<div class="bottombar" id="bottombar"></div>
+				<footer>Made by CrumbleThorn</footer>
+				<!--TO DO: Finalize background design-->
+				<div class="overlay"></div>
+				<div class="background"></div>
+			</div>
+			
+		</body>
+	</noscript>
 </html>
