@@ -1,33 +1,29 @@
 import * as util from './util.js';
 
 export class LoadingScreen {
-    constructor(element, animation) {
-        this.element = element;
+    constructor(elem, animation) {
+        this.elem = elem;
         this.animation = animation;
-    }
-
-    toggleLoadingScreen() {
-        util.log('Toggling Loading Screen...');
-        this.element.toggle();
     }
 }
 
 export class SideBar {
-    constructor(element) {
-        this.element = element;
-        this.links = element.obj.querySelectorAll('.sidebar-link');
+    constructor(elem) {
+        this.elem = elem;
+        this.links = elem.obj.querySelectorAll('.sidebar-link');
     }
 }
 
+// TO DO: Use util.css instead of direct string assignments
 export class NavBar {
-    constructor(element, sidebar) {
-        this.element = element;
-        this.content = element.obj.querySelector('.navbar-content');
-        this.menu = element.obj.querySelector('.navbar-menu');
-        this.burger = element.obj.querySelector('.navbar-burger');
-        this.logo = element.obj.querySelector('.site-logo');
-        this.title = element.obj.querySelector('.site-title');
-        this.links = element.obj.querySelectorAll('.navbar-link');
+    constructor(elem, sidebar) {
+        this.elem = elem;
+        this.content = elem.obj.querySelector('.navbar-content');
+        this.menu = elem.obj.querySelector('.navbar-menu');
+        this.burger = elem.obj.querySelector('.navbar-burger');
+        this.logo = elem.obj.querySelector('.site-logo');
+        this.title = elem.obj.querySelector('.site-title');
+        this.links = elem.obj.querySelectorAll('.navbar-link');
         this.sidebar = sidebar;
     }
 
@@ -45,11 +41,11 @@ export class NavBar {
 }
 
 export class ProgressBar {
-    constructor(element,
+    constructor(elem,
                 start = 0,
                 end = document.documentElement.scrollHeight,
                 ) {
-        this.element = element;
+        this.elem = elem;
         this.start = start;
         this.end = end;
     }
@@ -77,43 +73,49 @@ export class ProgressBar {
     }
 }
 
+export class Hero {
+    constructor(elem) {
+        this.elem = elem;
+    }
+}
+
 export class SideCard {
-    constructor(element, side) {
-        this.element = element;
+    constructor(elem, side) {
+        this.elem = elem;
         this.side = side;
     }
 }
 
 export class BottomBar {
-    constructor(element) {
-        this.element = element;
+    constructor(elem) {
+        this.elem = elem;
     }
 }
 
 export class NavButton {
-    constructor(element, target) {
-        this.element = element;
+    constructor(elem, target) {
+        this.elem = elem;
         this.target = target;
     }
 }
 
 export class Slideshow {
-    constructor(element, images, behavior) {
-        this.element = element;
+    constructor(elem, images, behavior) {
+        this.elem = elem;
         this.images = images;
         this.behavior = behavior;
     }
 }
 
 class HeaderBar {
-    constructor(element, content, textbox) {
-        this.element = element;
+    constructor(elem, content, textbox) {
+        this.element = elem;
         this.content = content;
         this.textbox = textbox;
     }
 
     modifyText(newText) {
-
+        // TO DO: Logic
         this.textbox.innerHTML = newText;
     }
 }
