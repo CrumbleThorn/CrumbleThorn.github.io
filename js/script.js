@@ -7,22 +7,22 @@ import * as util from './modules/util.js';
 const scrollElements = [];
 const hero = document.getElementById('hero');
 const start = document.getElementById('game-section');
-const sidebar = new site.SideBar(new anim.AnimatedElement(document.getElementById('sidebar'),
+const sidebar = new ui.SideBar(new anim.AnimatedElement(document.getElementById('sidebar'),
                                                              'flex'));
-const navbar = new site.NavBar(new anim.AnimatedScrollElement(document.getElementById('navbar'),
+const navbar = new ui.NavBar(new anim.AnimatedScrollElement(document.getElementById('navbar'),
                                                                  'block',
                                                                  false,
                                                                  start,
                                                                  window.innerHeight,
-                                                                 new animate.Animation('slideInDown', 'fast'),
-                                                                 new animate.Animation('slideOutUp', 'fast')),
+                                                                 new animate.Animation(animate.slideInDown, animate.fast),
+                                                                 new animate.Animation(animate.slideOutUp, animate.fast)),
                                sidebar);
 scrollElements.push(navbar);
 
-const progressbar = new site.ProgressBar(document.getElementById('progressbar'));
+const progressbar = new ui.ProgressBar(document.getElementById('progressbar'));
 // TO DO: add the rest of the animated Elements
 
-const loadingScreen = new site.LoadingScreen(new anim.AnimatedLoadingScreenElement(document.getElementById('loading-screen'), 'flex'),
+const loadingScreen = new ui.LoadingScreen(new anim.AnimatedLoadingScreenElement(document.getElementById('loading-screen'), 'flex'),
                                              document.getElementById('load-animation'));
 
 // Handles Scroll Animations
