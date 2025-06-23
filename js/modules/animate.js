@@ -359,7 +359,7 @@ export const css = (obj, animation, override = false) =>
     new Promise((resolve, reject) => {
         const animationClasses = [`${prefix}animated`, `${prefix}${animation.name}`];
         const node = obj;
-
+        
         // BUG: numeric durations currently do not work
         if (typeof(animation.speed) == 'number') {
             util.log("Set Animation Speed to " + animation.speed);
