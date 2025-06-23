@@ -2,35 +2,46 @@ import * as util from './util.js';
 import * as animate from './animate.js';
 
 // Animation Type Constants
-export const show = 'show';
-export const hide = 'hide';
-export const highlight = 'highlight';
-export const toggle = 'toggle';
 //TO DO: Add reset function for removing looping animations
-const animationTypes = Object.freeze(new Array(show, hide, highlight, toggle));
+export const animationType = {
+    show: 'show',
+    hide: 'hide',
+    highlight: 'highlight',
+    toggle: 'toggle',
+};
 
 // Scroll Trigger Type Constants
-export const onScrollDown = 'onScrollDown';
-export const onScrollUp = 'onScrollUp';
-const scrollTriggerTypes = Object.freeze(new Array(onScrollDown, onScrollUp));
+export const scrollTriggerType = {
+    onScrollDown: 'onScrollDown',
+    onScrollUp: 'onScrollUp',
+    onScrollLeft: 'onScrollLeft',
+    onScrollRight: 'onScrollRight',
+}
 
 // Scroll Trigger Anchor Constants
-export const anchorLeft = 'left';
-export const anchorRight = 'right';
-export const anchorTop = 'top';
-export const anchorBottom = 'bottom';
+export const scrollTriggerAnchor = {
+    horizontal: {
+        anchorLeft: 'left',
+        anchorRight: 'right',
+        },
+    vertical: {
+        anchorTop: 'top',
+        anchorBottom: 'bottom',
+        },
+};
 
 // Mouse Event Trigger Type Constants
-export const onMouseDown = 'onmousedown';
-export const onMouseUp = 'onmouseup';
-export const onMouseClick = 'onclick';
-export const onMouseDoubleClick = 'ondblclick'; 
-export const onMouseAuxClick = 'onauxclick';
-export const onMouseOver = 'onmouseover';
-export const onMouseOut = 'onmouseout';
-export const onMouseEnter = 'onmouseenter';
-export const onMouseExit = 'onmouseleave';
-const mouseEventTriggerTypes = Object.freeze(new Array(onMouseDown, onMouseUp, onMouseClick, onMouseDoubleClick, onMouseOver, onMouseOut, onMouseEnter, onMouseExit))
+export const mouseEventTriggerType = {
+    onMouseDown: 'onmousedown',
+    onMouseUp: 'onmouseup',
+    onMouseClick: 'onclick',
+    onMouseDoubleClick: 'ondblclick', 
+    onMouseAuxClick: 'onauxclick',
+    onMouseOver: 'onmouseover',
+    onMouseOut: 'onmouseout',
+    onMouseEnter: 'onmouseenter',
+    onMouseExit: 'onmouseleave',
+};
 
 export class AnimatedElement {
     #obj;
@@ -42,23 +53,28 @@ export class AnimatedElement {
     #isAnimating;
 
     constructor(obj,
-                display = 'block',
+                display = obj.style.display,
                 active = true,
                 entry,
                 exit,
                 highlight,
                 ) {
         this.#obj = obj;
-        this.#display = display;
+        if (display != util.css.display.none){
+            this.#display = display;
+        } else {
+            throw RangeError("Default Display cannot be set to \'none\'!")
+        }
         this.#active = active;
         this.#entryAnimation = entry;
         this.#exitAnimation = exit;
         this.#highlightAnimation = highlight;
         this.#isAnimating = false;
-        if (active)
-            this.#obj.style.display = display;
-        else
-            this.#obj.style.display = 'none';
+        if (this.#active) {
+            this.#obj.style.display = this.#display;
+        } else {
+            this.#obj.style.display = util.css.display.none;
+        }
     }
 
     get obj() {
@@ -157,18 +173,18 @@ export class AnimatedElement {
 // TO DO: Send Trigger Events so Triggers can listen to other Triggers 
 export class AnimationTrigger {
     #elem;
-    #animationType;
+    #typeOfAnimation;
     #triggerLimit;
     #override;
     #timesTriggered;
 
     constructor(elem,
-                animationType = toggle,
+                typeOfAnimation = toggle,
                 triggerLimit = 1,
                 override = false,
                 ) {
         this.#elem = elem;
-        this.#animationType = this.#checkAnimationType(animationType);
+        this.#typeOfAnimation = this.#checkAnimationType(typeOfAnimation);
         if (typeof(triggerLimit) == 'number') {
             if (triggerLimit >= 0) {
                 this.#triggerLimit = triggerLimit;
@@ -190,8 +206,8 @@ export class AnimationTrigger {
         return this.#elem;
     }
 
-    get animationType() {
-        return this.#animationType;
+    get typeOfAnimation() {
+        return this.#typeOfAnimation;
     }
 
     get triggerLimit() {
@@ -202,17 +218,17 @@ export class AnimationTrigger {
         return this.#timesTriggered;
     }
 
-    #checkAnimationType(animationType) {
-        if(animationTypes.includes(animationType)) {
-            return animationType;
+    #checkAnimationType(typeOfAnimation) {
+        if(typeOfAnimation in animationType) {
+            return typeOfAnimation;
         } else {
-            throw new TypeError(animationType +  ' is not a valid Animation type!');
+            throw new TypeError(typeOfAnimation +  ' is not a valid Animation type!');
         }
     }
 
     trigger() {
         if(this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
-            switch(this.#animationType) {
+            switch(this.#typeOfAnimation) {
                 case show:
                     this.elem.show();
                     break;
@@ -229,7 +245,7 @@ export class AnimationTrigger {
             }
             this.#timesTriggered += 1;
         } else {
-            util.warn(this.#animationType + " Trigger for " + this.#elem.obj.id + " has already been triggered the maximum times, skipping...");
+            util.warn(this.#typeOfAnimation + " Trigger for " + this.#elem.obj.id + " has already been triggered the maximum times, skipping...");
         }
     }
 }
@@ -243,13 +259,13 @@ export class ScrollTriggerElement {
                  offsetX = 0,
                  ) {
         this.obj = obj;
-        if ([anchorTop, anchorBottom].includes(anchorY)) {
+        if (anchorY in scrollTriggerAnchor.vertical) {
             this.anchorY = anchorY;
         } else {
             throw new TypeError(anchorY + " is not a valid Vertical Anchor!")
         }
         this.offsetY = offsetY;
-        if ([anchorLeft, anchorRight].includes(anchorX)) {
+        if (anchorX in scrollTriggerAnchor.horizontal) {
             this.anchorX = anchorX;
         } else {
             throw new TypeError(anchorX + " is not a valid Horizontal Anchor!")
@@ -306,7 +322,7 @@ export class AnimationScrollTrigger extends AnimationTrigger {
     }
 
     #checkTriggerType(triggerType) {
-        if(scrollTriggerTypes.includes(triggerType)) {
+        if(triggerType in scrollTriggerType) {
             return triggerType;
         } else {
             throw new TypeError(triggerType + ' is not a valid Scroll Trigger type!');
@@ -329,9 +345,17 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         if (point1 >= point2) {
             this.trigger();
             this.#triggered = true;
+            // Remove listener once trigger limit has been reached for efficiency
+            if(this.timesTriggered == this.triggerLimit) {
+                window.removeEventListener('scroll', this.handle);
+            }
         } else if (this.reversible && this.#triggered) {
             this.trigger();
             this.#triggered = false;
+            // Remove listener once trigger limit has been reached for efficiency
+            if(this.timesTriggered == this.triggerLimit){
+                window.removeEventListener('scroll', this.handle);
+            }
         }
         util.log(point1);
         util.log(point2);

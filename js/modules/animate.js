@@ -4,260 +4,146 @@ import * as util from './util.js';
 const prefix = 'animate__';
 
 // Animation Constants
-// Attention Seekers
-export const bounce = 'bounce';
-export const flash = 'flash';
-export const pulse = 'pulse';
-export const rubberBand = 'rubberBand';
-export const shakeX = 'shakeX';
-export const shakeY = 'shakeY';
-export const headShake = 'headShake';
-export const swing = 'swing';
-export const tada = 'tada';
-export const wobble = 'wobble';
-export const jello = 'jello';
-export const heartBeat = 'heartBeat';
-// Back Entrances
-export const backInDown = 'backInDown';
-export const backInLeft = 'backInLeft';
-export const backInRight = 'backInRight';
-export const backInUp = 'backInUp';
-// Back Exits
-export const backOutDown = 'backOutDown';
-export const backOutLeft = 'backOutLeft';
-export const backOutRight = 'backOutRight';
-export const backOutUp = 'backOutUp';
-// Bouncing Entrances
-export const bounceIn = 'bounceIn';
-export const bounceInDown = 'bounceInDown';
-export const bounceInLeft = 'bounceInLeft';
-export const bounceInRight = 'bounceInRight';
-export const bounceInUp = 'bounceInUp';
-// Bouncing Exits
-export const bounceOut = 'bounceOut';
-export const bounceOutDown = 'bounceOutDown';
-export const bounceOutLeft = 'bounceOutLeft';
-export const bounceOutRight = 'bounceOutRight';
-export const bounceOutUp = 'bounceOutUp';
-// Fading Entrances
-export const fadeIn = 'fadeIn';
-export const fadeInDown = 'fadeInDown';
-export const fadeInDownBig = 'fadeInDownBig';
-export const fadeInLeft = 'fadeInLeft';
-export const fadeInLeftBig = 'fadeInLeftBig';
-export const fadeInRight = 'fadeInRight';
-export const fadeInRightBig = 'fadeInRightBig';
-export const fadeInUp = 'fadeInUp';
-export const fadeInUpBig = 'fadeInUpBig';
-export const fadeInTopLeft = 'fadeInTopLeft';
-export const fadeInTopRight = 'fadeInTopRight';
-export const fadeInBottomLeft = 'fadeInBottomLeft';
-export const fadeInBottomRight = 'fadeInBottomRight';
-// Fading Exits
-export const fadeOut = 'fadeOut';
-export const fadeOutDown = 'fadeOutDown';
-export const fadeOutDownBig = 'fadeOutDownBig';
-export const fadeOutLeft = 'fadeOutLeft';
-export const fadeOutLeftBig = 'fadeOutLeftBig';
-export const fadeOutRight = 'fadeOutRight';
-export const fadeOutRightBig = 'fadeOutRightBig';
-export const fadeOutUp = 'fadeOutUp';
-export const fadeOutUpBig = 'fadeOutUpBig';
-export const fadeOutTopLeft = 'fadeOutTopLeft';
-export const fadeOutTopRight = 'fadeOutTopRight';
-export const fadeOutBottomRight = 'fadeOutBottomRight';
-export const fadeOutBottomLeft = 'fadeOutBottomLeft';
-// Flippers
-export const flip = 'flip';
-export const flipInX = 'flipInX';
-export const flipInY = 'flipInY';
-export const flipOutX = 'flipOutX';
-export const flipOutY = 'flipOutY';
-// Lightspeed
-export const lightSpeedInRight = 'lightSpeedInRight';
-export const lightSpeedInLeft = 'lightSpeedInLeft';
-export const lightSpeedOutRight = 'lightSpeedOutRight';
-export const lightSpeedOutLeft = 'lightSpeedOutLeft';
-// Rotating Entrances
-export const rotateIn = 'rotateIn';
-export const rotateInDownLeft = 'rotateInDownLeft';
-export const rotateInDownRight = 'rotateInDownRight';
-export const rotateInUpLeft = 'rotateInUpLeft';
-export const rotateInUpRight = 'rotateInUpRight';
-// Rotating Exits
-export const rotateOut = 'rotateOut';
-export const rotateOutDownLeft = 'rotateOutDownLeft';
-export const rotateOutDownRight = 'rotateOutDownRight';
-export const rotateOutUpLeft = 'rotateOutUpLeft';
-export const rotateOutUpRight = 'rotateOutUpRight';
-// Specials
-export const hinge =-'hinge';
-export const jackInTheBox = 'jackInTheBox';
-export const rollIn = 'rollIn';
-export const rollOut = 'rollOut';
-// Zooming Entrances
-export const zoomIn = 'zoomIn';
-export const zoomInDown = 'zoomInDown';
-export const zoomInLeft = 'zoomInLeft';
-export const zoomInRight = 'zoomInRight';
-export const zoomInUp = 'zoomInUp';
-// Zooming Exits
-export const zoomOut = 'zoomOut';
-export const zoomOutDown = 'zoomOutDown';
-export const zoomOutLeft = 'zoomOutLeft';
-export const zoomOutRight = 'zoomOutRight';
-export const zoomOutUp = 'zoomOutUp';
-// Sliding Entrances
-export const slideInDown = 'slideInDown';
-export const slideInLeft = 'slideInLeft';
-export const slideInRight = 'slideInRight';
-export const slideInUp = 'slideInUp';
-// Sliding Exits
-export const slideOutDown = 'slideOutDown';
-export const slideOutLeft = 'slideOutLeft';
-export const slideOutRight = 'slideOutRight';
-export const slideOutUp = 'slideOutUp'
-
-const animationClasses = Object.freeze(new Array(
-bounce,
-flash,
-pulse,
-rubberBand,
-shakeX,
-shakeY,
-headShake,
-swing,
-tada,
-wobble,
-jello,
-heartBeat,
-backInDown,
-backInLeft,
-backInRight,
-backInUp,
-backOutDown,
-backOutLeft,
-backOutRight,
-backOutUp,
-bounceIn,
-bounceInDown,
-bounceInLeft,
-bounceInRight,
-bounceInUp,
-bounceOut,
-bounceOutDown,
-bounceOutLeft,
-bounceOutRight,
-bounceOutUp,
-fadeIn,
-fadeInDown,
-fadeInDownBig,
-fadeInLeft,
-fadeInLeftBig,
-fadeInRight,
-fadeInRightBig,
-fadeInUp,
-fadeInUpBig,
-fadeInTopLeft,
-fadeInTopRight,
-fadeInBottomLeft,
-fadeInBottomRight,
-fadeOut,
-fadeOutDown,
-fadeOutDownBig,
-fadeOutLeft,
-fadeOutLeftBig,
-fadeOutRight,
-fadeOutRightBig,
-fadeOutUp,
-fadeOutUpBig,
-fadeOutTopLeft,
-fadeOutTopRight,
-fadeOutBottomRight,
-fadeOutBottomLeft,
-flip,
-flipInX,
-flipInY,
-flipOutX,
-flipOutY,
-lightSpeedInRight,
-lightSpeedInLeft,
-lightSpeedOutRight,
-lightSpeedOutLeft,
-rotateIn,
-rotateInDownLeft,
-rotateInDownRight,
-rotateInUpLeft,
-rotateInUpRight,
-rotateOut,
-rotateOutDownLeft,
-rotateOutDownRight,
-rotateOutUpLeft,
-rotateOutUpRight,
-hinge,
-jackInTheBox,
-rollIn,
-rollOut,
-zoomIn,
-zoomInDown,
-zoomInLeft,
-zoomInRight,
-zoomInUp,
-zoomOut,
-zoomOutDown,
-zoomOutLeft,
-zoomOutRight,
-zoomOutUp,
-slideInDown,
-slideInLeft,
-slideInRight,
-slideInUp,
-slideOutDown,
-slideOutLeft,
-slideOutRight,
-slideOutUp,
-));
+export const animationClass = {
+    // Attention Seekers
+    bounce: 'bounce',
+    flash: 'flash',
+    pulse: 'pulse',
+    rubberBand: 'rubberBand',
+    shakeX: 'shakeX',
+    shakeY: 'shakeY',
+    headShake: 'headShake',
+    swing: 'swing',
+    tada: 'tada',
+    wobble: 'wobble',
+    jello: 'jello',
+    heartBeat: 'heartBeat',
+    // Back Entrances
+    backInDown: 'backInDown',
+    backInLeft: 'backInLeft',
+    backInRight: 'backInRight',
+    backInUp: 'backInUp',
+    // Back Exits
+    backOutDown: 'backOutDown',
+    backOutLeft: 'backOutLeft',
+    backOutRight: 'backOutRight',
+    backOutUp: 'backOutUp',
+    // Bouncing Entrances
+    bounceIn: 'bounceIn',
+    bounceInDown: 'bounceInDown',
+    bounceInLeft: 'bounceInLeft',
+    bounceInRight: 'bounceInRight',
+    bounceInUp: 'bounceInUp',
+    // Bouncing Exits
+    bounceOut: 'bounceOut',
+    bounceOutDown: 'bounceOutDown',
+    bounceOutLeft: 'bounceOutLeft',
+    bounceOutRight: 'bounceOutRight',
+    bounceOutUp: 'bounceOutUp',
+    // Fading Entrances
+    fadeIn: 'fadeIn',
+    fadeInDown: 'fadeInDown',
+    fadeInDownBig: 'fadeInDownBig',
+    fadeInLeft: 'fadeInLeft',
+    fadeInLeftBig: 'fadeInLeftBig',
+    fadeInRight: 'fadeInRight',
+    fadeInRightBig: 'fadeInRightBig',
+    fadeInUp: 'fadeInUp',
+    fadeInUpBig: 'fadeInUpBig',
+    fadeInTopLeft: 'fadeInTopLeft',
+    fadeInTopRight: 'fadeInTopRight',
+    fadeInBottomLeft: 'fadeInBottomLeft',
+    fadeInBottomRight: 'fadeInBottomRight',
+    // Fading Exits
+    fadeOut: 'fadeOut',
+    fadeOutDown: 'fadeOutDown',
+    fadeOutDownBig: 'fadeOutDownBig',
+    fadeOutLeft: 'fadeOutLeft',
+    fadeOutLeftBig: 'fadeOutLeftBig',
+    fadeOutRight: 'fadeOutRight',
+    fadeOutRightBig: 'fadeOutRightBig',
+    fadeOutUp: 'fadeOutUp',
+    fadeOutUpBig: 'fadeOutUpBig',
+    fadeOutTopLeft: 'fadeOutTopLeft',
+    fadeOutTopRight: 'fadeOutTopRight',
+    fadeOutBottomRight: 'fadeOutBottomRight',
+    fadeOutBottomLeft: 'fadeOutBottomLeft',
+    // Flippers
+    flip: 'flip',
+    flipInX: 'flipInX',
+    flipInY: 'flipInY',
+    flipOutX: 'flipOutX',
+    flipOutY: 'flipOutY',
+    // Lightspeed
+    lightSpeedInRight: 'lightSpeedInRight',
+    lightSpeedInLeft: 'lightSpeedInLeft',
+    lightSpeedOutRight: 'lightSpeedOutRight',
+    lightSpeedOutLeft: 'lightSpeedOutLeft',
+    // Rotating Entrances
+    rotateIn: 'rotateIn',
+    rotateInDownLeft: 'rotateInDownLeft',
+    rotateInDownRight: 'rotateInDownRight',
+    rotateInUpLeft: 'rotateInUpLeft',
+    rotateInUpRight: 'rotateInUpRight',
+    // Rotating Exits
+    rotateOut: 'rotateOut',
+    rotateOutDownLeft: 'rotateOutDownLeft',
+    rotateOutDownRight: 'rotateOutDownRight',
+    rotateOutUpLeft: 'rotateOutUpLeft',
+    rotateOutUpRight: 'rotateOutUpRight',
+    // Specials
+    hinge:-'hinge',
+    jackInTheBox: 'jackInTheBox',
+    rollIn: 'rollIn',
+    rollOut: 'rollOut',
+    // Zooming Entrances
+    zoomIn: 'zoomIn',
+    zoomInDown: 'zoomInDown',
+    zoomInLeft: 'zoomInLeft',
+    zoomInRight: 'zoomInRight',
+    zoomInUp: 'zoomInUp',
+    // Zooming Exits
+    zoomOut: 'zoomOut',
+    zoomOutDown: 'zoomOutDown',
+    zoomOutLeft: 'zoomOutLeft',
+    zoomOutRight: 'zoomOutRight',
+    zoomOutUp: 'zoomOutUp',
+    // Sliding Entrances
+    slideInDown: 'slideInDown',
+    slideInLeft: 'slideInLeft',
+    slideInRight: 'slideInRight',
+    slideInUp: 'slideInUp',
+    // Sliding Exits
+    slideOutDown: 'slideOutDown',
+    slideOutLeft: 'slideOutLeft',
+    slideOutRight: 'slideOutRight',
+    slideOutUp: 'slideOutUp',
+};
 
 // Animation Delay Constants
-export const delay_2s = 'delay-2s';
-export const delay_3s = 'delay-3s';
-export const delay_4s = 'delay-4s';
-export const delay_5s = 'delay-5s';
-
-const delayClasses = Object.freeze(new Array(
-delay_2s,
-delay_3s,
-delay_4s,
-delay_5s
-));
+export const delayClass = {
+    delay_2s: 'delay-2s',
+    delay_3s: 'delay-3s',
+    delay_4s: 'delay-4s',
+    delay_5s: 'delay-5s',
+};
 
 // Animation Speed Constants
-export const animated = 'animated';
-export const slow = 'slow';
-export const slower = 'slower';
-export const fast = 'fast';
-export const faster = 'faster';
-
-const speedClasses = Object.freeze(new Array(
-animated,
-slow,
-slower,
-fast,
-faster
-))
+export const speedClass = {
+    animated: 'animated',
+    slow: 'slow',
+    slower: 'slower',
+    fast: 'fast',
+    faster: 'faster',
+};
 
 // Animation Repeat Constants
-export const repeat_1 = 'repeat-1';
-export const repeat_2 = 'repeat-2';
-export const repeat_3 = 'repeat-3';
-export const infinite = 'infinite';
-
-const repeatClasses = Object.freeze(new Array(
-repeat_1,
-repeat_2,
-repeat_3,
-infinite
-))
+export const repeatClass = {
+    repeat_1: 'repeat-1',
+    repeat_2: 'repeat-2',
+    repeat_3: 'repeat-3',
+    infinite: 'infinite',
+};
 
 // Helper Classes
 export class Animation {
@@ -306,7 +192,7 @@ export class Animation {
     }
 
     #checkAnimationName(name) {
-        if (animationClasses.includes(name)) {
+        if (name in animationClass) {
             return name;
         } else {
             throw new TypeError(name + ' is not a valid animate.css Animation Class!');
@@ -314,7 +200,7 @@ export class Animation {
     }
 
     #checkAnimationSpeed(speed) {
-        if (speedClasses.includes(speed)) {
+        if (speed in speedClass) {
             return speed;
         } else if (typeof(speed) == 'number') {
             if (Math.trunc(speed) != speed) {
@@ -327,7 +213,7 @@ export class Animation {
     }
 
     #checkAnimationDelay(delay) {
-        if (delayClasses.includes(delay)) {
+        if (delay in delayClass) {
             return delay;
         } else if (typeof(delay) == 'number') {
             if (Math.trunc(delay) != delay) {
@@ -340,7 +226,7 @@ export class Animation {
     }
 
     #checkAnimationRepeat(repeat) {
-        if (repeatClasses.includes(repeat)) {
+        if (repeat in repeatClass) {
             return repeat;
         } else if (typeof(repeat) == 'number') {
             if (Math.trunc(repeat) != repeat) {
