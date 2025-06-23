@@ -316,7 +316,7 @@ export class Animation {
     #checkAnimationSpeed(speed) {
         if (speedClasses.includes(speed)) {
             return speed;
-        } else if(typeof(speed) == 'number') {
+        } else if (typeof(speed) == 'number') {
             if (Math.trunc(speed) != speed) {
                 console.warn('WARNING: Speed has been truncated to ' + speed + 'ms.');
             }
@@ -329,7 +329,7 @@ export class Animation {
     #checkAnimationDelay(delay) {
         if (delayClasses.includes(delay)) {
             return delay;
-        } else if(typeof(delay) == 'number') {
+        } else if (typeof(delay) == 'number') {
             if (Math.trunc(delay) != delay) {
                 console.warn('WARNING: Delay has been truncated to ' + delay + 'ms.');
             }
@@ -342,7 +342,7 @@ export class Animation {
     #checkAnimationRepeat(repeat) {
         if (repeatClasses.includes(repeat)) {
             return repeat;
-        } else if(typeof(repeat) == 'number') {
+        } else if (typeof(repeat) == 'number') {
             if (Math.trunc(repeat) != repeat) {
                 console.warn('WARNING: Repeat has been truncated to ' + repeat + ' times.');
             }
@@ -364,8 +364,7 @@ export const css = (obj, animation, override = false) =>
         if (typeof(animation.speed) == 'number') {
             util.log('Set Animation Speed to ' + animation.speed);
             node.style.setProperty('--animate-duration', `${animation.speed / 1000}s`);
-        }
-        else {
+        } else {
             node.style.removeProperty('--animate-duration'); // Remove property if it exists
             animationClasses.push(`${prefix}${animation.speed}`);
         }
@@ -373,16 +372,14 @@ export const css = (obj, animation, override = false) =>
         if (typeof(animation.delay) == 'number') {
             util.log('Set Animation Delay to ' + animation.delay);
             node.style.setProperty('--animate-delay', `${animation.delay / 1000}s`);
-        }
-        else {
+        } else {
             node.style.removeProperty('--animate-delay'); // Remove property if it exists
             animationClasses.push(`${prefix}${animation.delay}`);
         }
         if (typeof(animation.repeat) == 'number') {
             util.log('Set Animation Repeat to ' + animation.repeat);
             node.style.setProperty('--animate-repeat', animation.repeat);
-        }
-        else {
+        } else {
             node.style.removeProperty('--animate-repeat'); // Remove property if it exists
             animationClasses.push(`${prefix}${animation.repeat}`);
         }
