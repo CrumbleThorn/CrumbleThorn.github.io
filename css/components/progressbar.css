@@ -1,0 +1,15 @@
+.progressbar-container {
+	left: 0;
+	width: 100%;
+	height: 1vh;
+
+	background-color: var(--cilly-blue);
+}
+
+.progressbar {
+	height: 100%;
+	width: 0;
+	
+	background-color: var(--cilly-accentblue);
+	transition: width 0.2s ease-out;
+}

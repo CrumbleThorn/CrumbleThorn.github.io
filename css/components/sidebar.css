@@ -1,0 +1,11 @@
+.sidebar {
+	left: 0;
+    z-index: 101;
+
+	width: 75%;
+	max-width: 400px;
+}
+
+.sidebar-link {
+	
+}
