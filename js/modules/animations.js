@@ -14,6 +14,19 @@ export const onScrollDown = 'onScrollDown';
 export const onScrollUp = 'onScrollUp';
 export const onScrollTo = 'onScrollTo';
 const scrollTriggerTypes = Object.freeze(new Array(onScrollDown, onScrollUp, onScrollTo));
+
+// Mouse Event Trigger Type Constants
+export const onMouseDown = 'onmousedown';
+export const onMouseUp = 'onmouseup';
+export const onMouseClick = 'onclick';
+export const onMouseDoubleClick = 'ondblclick'; 
+export const onMouseAuxClick = 'onauxclick';
+export const onMouseOver = 'onmouseover';
+export const onMouseOut = 'onmouseout';
+export const onMouseEnter = 'onmouseenter';
+export const onMouseExit = 'onmouseleave';
+const mouseEventTriggerTypes = Object.freeze(new Array(onMouseDown, onMouseUp, onMouseClick, onMouseDoubleClick, onMouseOver, onMouseOut, onMouseEnter, onMouseExit))
+
 export class AnimatedElement {
     #obj;
     #display;
