@@ -8,7 +8,7 @@ const hero = new ui.Hero(new anim.AnimatedElement(document.getElementById('hero'
 
 const gameSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('game-section'),
                                                              undefined,
-                                                             false,
+                                                             true,
                                                              new animate.Animation(animate.animationClass.slideInUp,
                                                                                    animate.speedClass.fast,
                                                                                    ),
@@ -17,6 +17,8 @@ const gameSection = new ui.SideCard(new anim.AnimatedElement(document.getElement
                                                                                    ),
                                                              ),
                                     anim.anchor.left);
+
+//const gameSectionTrigger = new anim.AnimationScrollTrigger(gameSection.elem,);
 
 const devSection = new ui.SideCard(new anim.AnimatedElement(document.getElementById('dev-section'),
                                                             ),
@@ -62,6 +64,25 @@ const progressbar = new ui.ProgressBar(new anim.AnimatedElement(document.getElem
                                                                 undefined,
                                                                 ),
                                        );
+
+const bottomBar = new ui.BottomBar(new anim.AnimatedElement(document.getElementById('bottombar'),
+                                                            undefined,
+                                                            false,
+                                                            new animate.Animation(animate.animationClass.slideInUp,
+                                                                                  animate.speedClass.faster,
+                                                                                  ),
+                                                            new animate.Animation(animate.animationClass.slideOutDown,
+                                                                                  animate.speedClass.faster,
+                                                                                  ),
+                                                            ));
+const bottombarTrigger = new anim.AnimationScrollTrigger(bottomBar.elem,
+                                                         anim.animationType.toggle,
+                                                         new anim.ScrollTriggerElement(gameSection.elem.obj),
+                                                         new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                         anim.scrollTriggerType.onScrollDown,
+                                                         0,
+                                                         true,
+                                                         true);
 // TO DO: add the rest of the animated Elements
 
 const loadingScreen = new ui.LoadingScreen(new anim.AnimatedElement(document.getElementById('loading-screen'),
