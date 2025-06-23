@@ -7,7 +7,7 @@ export class LoadingScreen {
     }
 
     toggleLoadingScreen() {
-        util.log("Toggling Loading Screen...");
+        util.log('Toggling Loading Screen...');
         this.element.toggle();
     }
 }
@@ -56,12 +56,12 @@ export class ProgressBar {
 
     setStart(start) {
         this.start = start;
-        util.log("Progress Bar Start set to " + start + ".");
+        util.log('Progress Bar Start set to ' + start + '.');
     }
 
     setEnd(end) {
         this.end = end;
-        util.log("Progress Bar End set to " + end + ".");
+        util.log('Progress Bar End set to ' + end + '.');
     }
 
     updateProgress() {
@@ -70,9 +70,9 @@ export class ProgressBar {
 
         // If the user has reached the end, fill the progress bar
         if (progress >= 100) {
-            this.element.style.width = "100%";
+            this.element.style.width = '100%';
         } else if (progress <= 0) {
-            this.element.style.width = "0%";
+            this.element.style.width = '0%';
         }
     }
 }

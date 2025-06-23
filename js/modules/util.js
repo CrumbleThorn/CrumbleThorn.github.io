@@ -30,6 +30,6 @@ export function isLowResolution() {
 }
 
 export function removeClassesByPrefix (obj, prefix) {
-    const classes = obj.className.split(" ").filter(c => !c.startsWith(prefix));
-    obj.className = classes.join(" ").trim();
+    const classes = obj.className.split(' ').filter(c => !c.startsWith(prefix));
+    obj.className = classes.join(' ').trim();
 }
