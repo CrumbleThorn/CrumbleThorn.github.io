@@ -198,6 +198,10 @@ export class AnimationTrigger {
         return this.#triggerLimit;
     }
 
+    get timesTriggered() {
+        return this.#timesTriggered;
+    }
+
     #checkAnimationType(animationType) {
         if(animationTypes.includes(animationType)) {
             return animationType;
