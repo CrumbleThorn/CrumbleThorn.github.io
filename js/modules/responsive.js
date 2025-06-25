@@ -1,3 +1,5 @@
+import * as util from './util.js';
+
 // TO DO: Implement responsive design
 export function responsiveDesignChecker() {
     if (!util.isLandscape() || util.isLowResolution())
