@@ -1,4 +1,4 @@
-footer {
+.footer {
 	position: relative;
     align-content: center;
 
@@ -13,4 +13,8 @@ footer {
 	font-size: 18px;
     color: var(--cilly-white);
 	text-align: center;
+}
+
+.footer-content {
+
 }

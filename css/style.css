@@ -41,4 +41,15 @@
 
     position: sticky;
     top: 22vh;
+
+    height: 60vh;
+}
+
+.end-section {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+
+    height: 100vh;
+    padding-top: 30vh;
 }

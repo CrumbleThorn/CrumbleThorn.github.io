@@ -22,7 +22,7 @@ body,h1,h2,h3,h4,h5,h6 {
 	font-family: "Ubuntu", sans-serif;
 }
 
-.w3-bar,h1,button {
+h1,button {
 	font-family: "Source Sans Pro", sans-serif;
 }
 
@@ -111,20 +111,6 @@ a:visited {
 	color: var(--cilly-royalpurple);
 }
 
-.unselectable {
-	-moz-user-select: -moz-none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.no-scroll {
-	overflow: hidden;
-
-	max-height: 100vh;
-}
-
 .content {
 	display: flex;
 	flex-direction: column;
@@ -133,12 +119,16 @@ a:visited {
 	width: 100vw;
 }
 
-.bottombar {
-	position: sticky;
-	bottom: 0;
-	z-index: 99;
+.no-scroll {
+	overflow: hidden;
 
-	height: 2vh;
+	max-height: 100vh;
+}
 
-	background-color: var(--cilly-accentgray);
+.unselectable {
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }

@@ -5,7 +5,8 @@
     position: relative;
     
 
-    height: 60vh;
+    height: 100%;
+    max-height: 60vh;
     min-width: 80vw;
     max-width: 90vw;
     border-radius: 20px;
@@ -18,14 +19,14 @@
 	text-align: center;
 }
 
-.side-card-left {
+.sidecard-left {
     justify-content: right;
 
     left: -20px;
     align-self: flex-start;
 }
 
-.side-card-right {
+.sidecard-right {
     flex-direction: row-reverse;
     justify-content: left;
 

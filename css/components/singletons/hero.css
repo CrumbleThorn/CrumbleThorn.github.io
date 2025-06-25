@@ -16,7 +16,11 @@
 	background-color: var(--cilly-white);
 }
 
-.hero-text {
+.hero-background {
+	
+}
+
+.hero-title {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -27,7 +31,7 @@
 	padding-bottom: 5vh;
 }
 
-.hero-nav {
+.hero-content {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;

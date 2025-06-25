@@ -1,3 +1,15 @@
+.button {
+
+}
+
+.button-text {
+	
+}
+
+.button-image {
+
+}
+
 .return-button {
 	display: flex;
 	flex-direction: row-reverse;
