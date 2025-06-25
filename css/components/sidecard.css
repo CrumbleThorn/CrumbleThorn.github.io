@@ -1,4 +1,4 @@
-.side-card {
+.sidecard {
     display: flex;
     align-items: center;
 
@@ -33,6 +33,6 @@
     align-self: flex-end;
 }
 
-.section-content {
+.sidecard-content {
 	font-size: 24px;
 }
