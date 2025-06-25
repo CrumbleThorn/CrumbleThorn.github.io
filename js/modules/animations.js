@@ -126,6 +126,10 @@ export class AnimatedElement {
                 animate.css(this.#obj, this.#entryAnimation, override).then((value) => {
                     util.log('Done Showing ' + this.#obj.id + '!');
                     this.#isAnimating = false;
+                    this.#obj.dispatchEvent(new Event('showAnimationComplete', {
+                        bubbles: true,
+                        composed: true,
+                    }));
                 });
             } else {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is already active, skipping animation');
@@ -140,6 +144,10 @@ export class AnimatedElement {
             if (this.#active) {
                 util.log('Highlighting ' + this.#obj.id + '...');
                 animate.css(this.#obj, this.#highlightAnimation, override);
+                this.#obj.dispatchEvent(new Event('highlightAnimationComplete', {
+                    bubbles: true,
+                    composed: true,
+                }));
             } else {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation');
             }
@@ -158,6 +166,10 @@ export class AnimatedElement {
                     util.log('Done Hiding ' + this.#obj.id + '!');
                     this.#obj.classList.add(util.css.siteClasses.hidden);
                     this.#isAnimating = false;
+                    this.#obj.dispatchEvent(new Event('hideAnimationComplete', {
+                        bubbles: true,
+                        composed: true,
+                    }));
                 });
             } else {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is already inactive, skipping animation');
@@ -253,6 +265,10 @@ export class AnimationTrigger {
                     break;
                 //TO DO: Add reset function for removing looping animations
             }
+            this.#elem.obj.dispatchEvent(new Event('animationTriggered', {
+                    bubbles: true,
+                    composed: true,
+                }));
             this.#timesTriggered += 1;
         } else {
             util.warn(this.#typeOfAnimation + " Trigger for " + this.#elem.obj.id + " has already been triggered the maximum times, skipping...");
