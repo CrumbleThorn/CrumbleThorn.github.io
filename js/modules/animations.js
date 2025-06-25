@@ -229,7 +229,7 @@ export class AnimationTrigger {
     }
 
     #checkAnimationType(typeOfAnimation) {
-        if (typeOfAnimation in animationType) {
+        if (Object.values(animationType).includes(typeOfAnimation)) {
             return typeOfAnimation;
         } else {
             throw new TypeError(typeOfAnimation +  ' is not a valid Animation type!');
@@ -269,13 +269,13 @@ export class ScrollTriggerElement {
                  offsetX = 0,
                  ) {
         this.#obj = obj;
-        if (anchorY in anchor.vertical) {
+        if (Object.values(anchor.vertical).includes(anchorY)) {
             this.anchorY = anchorY;
         } else {
             throw new TypeError(anchorY + " is not a valid Vertical Anchor!")
         }
         this.offsetY = offsetY;
-        if (anchorX in anchor.horizontal) {
+        if (Object.values(anchor.horizontal).includes(anchorX)) {
             this.anchorX = anchorX;
         } else {
             throw new TypeError(anchorX + " is not a valid Horizontal Anchor!")
@@ -336,7 +336,7 @@ export class AnimationScrollTrigger extends AnimationTrigger {
     }
 
     #checkTriggerType(triggerType) {
-        if (triggerType in scrollTriggerType) {
+        if (Object.values(scrollTriggerType).includes(triggerType)) {
             return triggerType;
         } else {
             throw new TypeError(triggerType + ' is not a valid Scroll Trigger type!');

@@ -193,7 +193,7 @@ export class Animation {
     }
 
     #checkAnimationName(name) {
-        if (name in animationClass) {
+        if (Object.values(animationClass).includes(name)) {
             return name;
         } else {
             throw new TypeError(name + ' is not a valid animate.css Animation Class!');
@@ -201,7 +201,7 @@ export class Animation {
     }
 
     #checkAnimationSpeed(speed) {
-        if (speed in speedClass) {
+        if (Object.values(speedClass).includes(speed)) {
             return speed;
         } else if (typeof(speed) == 'number') {
             if (Math.trunc(speed) != speed) {
@@ -214,7 +214,7 @@ export class Animation {
     }
 
     #checkAnimationDelay(delay) {
-        if (delay in delayClass) {
+        if (Object.values(delayClass).includes(delay)) {
             return delay;
         } else if (typeof(delay) == 'number') {
             if (Math.trunc(delay) != delay) {
@@ -227,7 +227,7 @@ export class Animation {
     }
 
     #checkAnimationRepeat(repeat) {
-        if (repeat in repeatClass) {
+        if (Object.values(repeatClass).includes(repeat)) {
             return repeat;
         } else if (typeof(repeat) == 'number') {
             if (Math.trunc(repeat) != repeat) {
