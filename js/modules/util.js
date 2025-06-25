@@ -33,8 +33,93 @@ export const css = {
         auto: 'auto',
         smooth: 'smooth',
         },
+    siteColors: { 
+        cillyBlue: 'var(--cilly-blue)',
+        cillyDarkBlue: 'var(--cilly-darkblue)',
+        cillyAccentBlue: 'var(--cilly-accentblue)',
+        cillyAccentGray: 'var(--cilly-accentgray)',
+        cillyWhite: 'var(--cilly-white)',
+        cillyJetBlack: 'var(--cilly-jetblack)',
+        cillyBlack: 'var(--cilly-black)',
+        cillyRoyalPurple: 'var(--cilly-royalpurple)',
+        },
     siteClasses: {
+        // Global classes
+        content: 'content',
         noScroll: 'no-scroll',
+        unselectable: 'unselectable',
+        // Background classes
+        overlay: 'overlay',
+        background: 'background',
+        // Button classes
+        button: 'button',
+        buttonText: 'button-text',
+        buttonImage: 'button-image',
+        returnButton: 'return-button',
+        // Center Card Classes
+        centercard: 'centercard',
+        centercardContent: 'centercard-content',
+        endcard: 'endcard',
+        endcardContent: 'endcard-content',
+        // Dropdown Classes
+        dropdown: 'dropdown',
+        dropdownItem: 'dropdown-item',
+        navbarDropdown: 'navbar-dropdown',
+        // Footer Classes
+        footer: 'footer',
+        footerContent: 'footer-content',
+        // Hero Classes
+        hero: 'hero',
+        heroBackground: 'hero-background',
+        heroText: 'hero-title',
+        heroContent: 'hero-content',
+        heroImage: 'hero-image',
+        // Horizontal Bar Classes
+        horizontalSpacer: 'horizontal-spacer',
+        topbar: 'topbar',
+        bottombar: 'bottombar',
+        // Loading Screen Classes
+        loadingscreen: 'loadingscreen',
+        loadingAnimation: 'loading-animation',
+        // Modal Classes
+        modal: 'modal',
+        modalContent: 'modal-content',
+        // Navbar Classes
+        navbar: 'navbar',
+        navbarContent: 'navbar-content',
+        navbarLogo: 'navbar-logo',
+        navbarTitle: 'navbar-title',
+        navbarLabel: 'navbar-label',
+        navbarBurger: 'navbar-burger',
+        navbarMenu: 'navbar-menu',
+        navbarMenuItem: 'navbar-menu-item',
+        navbarCurrent: 'navbar-current',
+        navbarLink: 'navbar-link',
+        // Progress Bar Classes
+        progressbarContainer: 'progressbar-container',
+        progressbar: 'progressbar',
+        // Sidebar Classes
+        sidebar: 'sidebar',
+        sidebarTitle: 'sidebar-title',
+        sidebarContent: 'sidebar-content',
+        sidebarSection: 'sidebar-section',
+        sidebarDrawer: 'sidebar-drawer',
+        sidebarLabel: 'sidebar-label',
+        sidebarItem: 'sidebar-item',
+        sidebarLink: 'sidebar-link',
+        // Side Card Classes
+        sidecard: 'sidecard',
+        sidecardLeft: 'sidecard-left',
+        sidecardRight: 'sidecard-right',
+        sidecardContent: 'sidecard-content',
+        // Slideshow Classes
+        slideshow: 'slideshow',
+        slideshowWindow: 'slideshow-window',
+        slideshowControls: 'slideshow-controls',
+        // Vertical Bar Classes
+        verticalSpacer: 'vertical-spacer',
+        leftbar: 'leftbar',
+        rightbar: 'rightbar',
         },
 };
 
