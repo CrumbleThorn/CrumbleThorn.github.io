@@ -247,22 +247,24 @@ export const css = (obj, animation, override = false) =>
         const animationClasses = [`${prefix}animated`, `${prefix}${animation.name}`];
         const node = obj;
         
-        // BUG: numeric durations currently do not work
         if (typeof(animation.speed) == 'number') {
-            util.log('Set Animation Speed to ' + animation.speed, true);
+            util.log('Set Animation Speed to ' + `${animation.speed / 1000}s`, true);
             node.style.setProperty('--animate-duration', `${animation.speed / 1000}s`);
+            animationClasses.push(`${prefix}${animationClass.animated}`);
         } else {
             node.style.removeProperty('--animate-duration'); // Remove property if it exists
             animationClasses.push(`${prefix}${animation.speed}`);
         }
-        // BUG: numeric delays currently do not work
+
         if (typeof(animation.delay) == 'number') {
-            util.log('Set Animation Delay to ' + animation.delay, true);
+            util.log('Set Animation Delay to ' + `${animation.delay / 1000}s`, true);
             node.style.setProperty('--animate-delay', `${animation.delay / 1000}s`);
+            animationClasses.push(`${prefix}${delayClass.delay_1s}`);
         } else {
             node.style.removeProperty('--animate-delay'); // Remove property if it exists
             animationClasses.push(`${prefix}${animation.delay}`);
         }
+        
         if (typeof(animation.repeat) == 'number') {
             util.log('Set Animation Repeat to ' + animation.repeat, true);
             node.style.setProperty('--animate-repeat', animation.repeat);
