@@ -77,7 +77,10 @@ class HeroTemplate extends HTMLElement {
 
     connectedCallback() {
         util.getResource('components/singletons/hero.html').then(html => {
+            const heroContent = this.#shadow.host.innerHTML;
+            this.#shadow.host.innerHTML = '';
             this.#shadow.innerHTML = html;
+            this.#shadow.getElementById('hero-content').innerHTML = heroContent;
             addToLoadedDOMS('hero', this);
         });
     }
@@ -145,7 +148,7 @@ class SideBarTemplate extends HTMLElement {
     }
 }
 
-
+// Container Templates
 class SideCardTemplate extends HTMLElement {
     #shadow;
     constructor() {

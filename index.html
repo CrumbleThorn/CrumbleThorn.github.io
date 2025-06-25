@@ -58,17 +58,33 @@
 		<loadingscreen-template></loadingscreen-template>
 		<div class="content hidden" id="content">
 			<!--TO DO: Show/Hide sidebar on burger menu click AND display ratio flip-->
-			<sidebar-template></sidebar-template>
-			<navbar-template class="progress-bar" >
-			</navbar-template>
+			<!-- <sidebar-template></sidebar-template> -->
+			<!-- <navbar-template class="navbar-progress-bar" data-title="CrumbleThorn" data-menuitem-1="Home" data-menuitem-2="About about/" data-menuitem-3="Portfolios " data-menuitem-4="Contact contact/">
+				<progressbar-template id="navbar-progress-bar" data-start=""></progressbar-template>
+			</navbar-template> -->
 			<!--TO DO: Animate hero banner-->
-			<hero-template></hero-template>
-			<button-template class="return-button"></button-template>
-			<main id="main">
+			<hero-template>
+				<div class="hero-section">
+					<div class="hero-title" id="hero-title">
+						Hey! I'm<br>Gabe Tamayo!
+					</div>
+					<div class="hero-subtitle" id="hero-subtitle">
+						I make stuff!
+					</div>
+					<div class="hero-menu">
+						<button class="hero-button" id="hero-button" href="#main">Learn more</button>
+						<div id="hero-menu-text">or</div>
+						<div class="scroll-down-text" id="scroll-down-text">scroll down!</div>
+					</div>
+				</div>
+				<img class="hero-image" id="hero-image" src="../img/cil-chibi.png"/>
+			</hero-template>
+			<!-- <button class="return-button"></button>
+			<main id="main"> -->
 				<!--TO DO: Animate sections and make them sticky-->
 				<!--TO DO: Finalize section layout-->
 				<!--TO DO: Adjust section layout based on display ratio-->
-				<div class="main-title-bar">
+				<!-- <div class="main-title-bar">
 						<div class="main-title-bar-content" id="title-bar">
 							<div class="main-title">I'm a&nbsp;</div>
 							<div class="main-label" id="title-text">Game Developer</div>
@@ -98,10 +114,10 @@
 			</main>
 			<div class="end-section" id="end-section">
 					<centercard-template class="end-card"></centercard-template>
-			</div>
+			</div> -->
 			<!--TO DO: Animate bottom bar similarly to navbar-->
-			<horizontalbar-template></horizontalbar-template>
-			<footer-template></footer-template>
+			<!-- <horizontalbar-template></horizontalbar-template>
+			<footer-template></footer-template> -->
 			<!--TO DO: Finalize background design-->
 			<background-template></background-template>
 		</div>
