@@ -57,27 +57,22 @@ export class AnimatedElement {
     #isAnimating;
 
     constructor(obj,
-                display = obj.style.display,
                 active = true,
                 entry,
                 exit,
                 highlight,
                 ) {
-        this.#obj = obj;
-        if (display != util.css.display.none) {
-            this.#display = display;
-        } else {
+        if (obj.style.display == util.css.display.none) {
             throw RangeError("Default Display cannot be set to \'none\'!")
         }
+        this.#obj = obj;
         this.#active = active;
         this.#entryAnimation = entry;
         this.#exitAnimation = exit;
         this.#highlightAnimation = highlight;
         this.#isAnimating = false;
-        if (this.#active) {
-            this.#obj.style.display = this.#display;
-        } else {
-            this.#obj.style.display = util.css.display.none;
+        if (!this.#active) {
+            this.#obj.classList.add(util.css.siteClasses.hidden);
         }
     }
 
@@ -125,12 +120,11 @@ export class AnimatedElement {
         if (this.#entryAnimation != undefined) {
             if (!this.#active) {
                 util.log('Showing ' + this.#obj.id + '...');
-                this.#obj.style.display = this.#display;
+                this.#obj.classList.remove(util.css.siteClasses.hidden);
                 this.#active = true;
                 this.#isAnimating = true;
                 animate.css(this.#obj, this.#entryAnimation, override).then((value) => {
                     util.log('Done Showing ' + this.#obj.id + '!');
-                    this.#obj.style.display = this.#display;
                     this.#isAnimating = false;
                 });
             } else {
@@ -162,7 +156,7 @@ export class AnimatedElement {
                 util.log('Hiding ' + this.#obj.id + '...');
                 animate.css(this.#obj, this.#exitAnimation, override).then((value) => {
                     util.log('Done Hiding ' + this.#obj.id + '!');
-                    this.#obj.style.display = 'none';
+                    this.#obj.classList.add(util.css.siteClasses.hidden);
                     this.#isAnimating = false;
                 });
             } else {
