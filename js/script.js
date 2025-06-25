@@ -107,6 +107,6 @@ function onLoadComplete() {
         }
         // TO DO: Animate hero banner
         util.log("TO DO: Animate Hero");
-    }, 1000);
+    }, 500);
 }
 window.addEventListener('load', onLoadComplete);
