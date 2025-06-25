@@ -48,6 +48,7 @@ export const css = {
     siteClasses: {
         // Global classes
         content: 'content',
+        hidden: 'hidden',
         noScroll: 'no-scroll',
         unselectable: 'unselectable',
         // Background classes

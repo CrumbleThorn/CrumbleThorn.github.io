@@ -44,15 +44,14 @@ export class Content {
     #display;
     constructor(obj) {
         this.#obj = obj;
-        this.#display = obj.style.display;
     }
 
     hideContent() {
-        this.#obj.style.display = util.css.display.none;
+        this.#obj.classList.add(util.css.siteClasses.hidden);
     }
 
     showContent() {
-        this.#obj.style.display = this.#display;
+        this.#obj.classList.remove(util.css.siteClasses.hidden);
     }
 }
 

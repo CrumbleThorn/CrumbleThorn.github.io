@@ -121,6 +121,10 @@ a:visited {
 	width: 100vw;
 }
 
+.hidden {
+	display: none;
+}
+
 .no-scroll {
 	overflow: hidden;
 
