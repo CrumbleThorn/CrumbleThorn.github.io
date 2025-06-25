@@ -122,6 +122,7 @@ export const animationClass = {
 
 // Animation Delay Constants
 export const delayClass = {
+    delay_1s: 'delay-1s',
     delay_2s: 'delay-2s',
     delay_3s: 'delay-3s',
     delay_4s: 'delay-4s',
