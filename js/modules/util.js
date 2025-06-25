@@ -54,11 +54,6 @@ export const css = {
         // Background classes
         siteOverlay: 'overlay',
         siteBackground: 'background',
-        // Button classes
-        button: 'button',
-        buttonText: 'button-text',
-        buttonImage: 'button-image',
-        returnButton: 'return-button',
         // Center Card Classes
         centercard: 'centercard',
         centercardContent: 'centercard-content',

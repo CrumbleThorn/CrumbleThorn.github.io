@@ -206,25 +206,6 @@ class ModalTemplate extends HTMLElement {
 }
 
 // Internal Components
-class ButtonTemplate extends HTMLElement {
-    #shadow;
-    constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-    }
-
-    get shadow() {
-        return this.#shadow
-    }
-
-    connectedCallback() {
-        util.getResource('../../components/subcomponents/button.html').then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMS('button', this);
-        });
-    }
-}
-
 class DropdownTemplate extends HTMLElement {
     #shadow;
     constructor() {
@@ -323,10 +304,6 @@ class VerticalBarTemplate extends HTMLElement {
 
 export const templateList = {
     // Internal Components
-    buttonTemplate: {
-        name: 'button-template',
-        definition: ButtonTemplate
-    },
     dropdownTemplate: {
         name: 'dropdown-template',
         definition: DropdownTemplate
