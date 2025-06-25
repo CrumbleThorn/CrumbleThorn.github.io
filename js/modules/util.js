@@ -148,7 +148,7 @@ export const css = {
 
 export function log(message, verboseOnly = false) {
     if (isDev) {
-        if (!verboseOnly && !verbose) {
+        if (!(verboseOnly && !verbose)) {
             console.log(message);
         }
     }
