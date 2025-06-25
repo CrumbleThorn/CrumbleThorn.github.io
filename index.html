@@ -10,22 +10,22 @@
 		<title>CrumbleThorn - Home</title>
 
 		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu"/>
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" />
 
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-		<link rel="stylesheet" type="text/css" href="css/defaults.css">
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<link rel="stylesheet" type="text/css" href="css/animate.css">
+		<link rel="stylesheet" type="text/css" href="css/defaults.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+
 		<!--TO DO: Add noscript fallback styles-->
 		<noscript>
-			<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">	
+			<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />	
 		</noscript>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
 		<!--Preload the Loading Screen Animation-->
-		<link rel="preload" type="application/json" href="data/json/loading.json" as="fetch">
+		<link rel="preload" type="application/json" href="data/json/loading.json" as="fetch" crossorigin="anonymous" />
 
 		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
@@ -44,7 +44,7 @@
 		<link rel="icon" type="image/png" href="favicon/favicon-16x16.png" sizes="16x16" />
 		<link rel="icon" type="image/png" href="favicon/favicon-128.png" sizes="128x128" />
 
-		<meta name="application-name" content="CrumbleThorn&nbsp;-&nbsp;Home"/>
+		<meta name="application-name" content="CrumbleThorn&nbsp;-&nbsp;Home" />
 		<meta name="msapplication-TileColor" content="#FFFFFFFF" />
 		<meta name="msapplication-TileImage" content="favicon/mstile-144x144.png" />
 		<meta name="msapplication-square70x70logo" content="favicon/mstile-70x70.png" />
@@ -54,45 +54,45 @@
 	</head>
 	<body>
 		<!--TO DO: Replace loading wheel with custom animation -->
+		<!--TO DO: Make use of innerhtml for templates to assign certain parts-->
 		<loadingscreen-template></loadingscreen-template>
 		<div class="content" id="content">
 			<!--TO DO: Show/Hide sidebar on burger menu click AND display ratio flip-->
 			<sidebar-template></sidebar-template>
-			<navbar-template>
-				<progressbar-template></progressbar-template>
+			<navbar-template class="progress-bar" >
 			</navbar-template>
 			<!--TO DO: Animate hero banner-->
 			<hero-template></hero-template>
 			<button-template class="return-button"></button-template>
-			<main>
+			<main id="main">
 				<!--TO DO: Animate sections and make them sticky-->
 				<!--TO DO: Finalize section layout-->
 				<!--TO DO: Adjust section layout based on display ratio-->
 				<div class="main-title-bar">
-						<div class="main-title-content">
+						<div class="main-title-bar-content" id="title-bar">
 							<div class="main-title">I'm a&nbsp;</div>
-							<div class="main-label">Game Developer</div>
+							<div class="main-label" id="title-text">Game Developer</div>
 							<div class="main-title">!</div>
 						</div>
 				</div>
 				<div class="main-section">
-					<div class="main-sticky-section">
-						<sidecard-template class="side-card-left" id="game-section"></sidecard-template>
+					<div class="main-sticky-section" id="game-section">
+						<sidecard-template class="side-card-left"></sidecard-template>
 					</div>
 				</div>
 				<div class="main-section">
-					<div class="main-sticky-section">
-						<sidecard-template class="side-card-left" id="dev-section"></sidecard-template>
+					<div class="main-sticky-section" id="dev-section">
+						<sidecard-template class="side-card-right"></sidecard-template>
 					</div>
 				</div>
 				<div class="main-section">
-					<div class="main-sticky-section">
-						<sidecard-template class="side-card-left" id="art-section"></sidecard-template>
+					<div class="main-sticky-section" id="art-section">
+						<sidecard-template class="side-card-left"></sidecard-template>
 					</div>
 				</div>
 				<div class="main-section">
-					<div class="main-sticky-section">
-						<sidecard-template class="side-card-left" id="music-section"></sidecard-template>
+					<div class="main-sticky-section" id="music-section">
+						<sidecard-template class="side-card-right"></sidecard-template>
 					</div>
 				</div>
 			</main>
@@ -106,7 +106,7 @@
 			<background-template></background-template>
 		</div>
 		<script type="module" src="js/global.js"></script>
-		<!-- <script type="module" src="js/script.js"></script> -->
+		<script type="module" src="js/script.js"></script>
 	</body>
 	<!--TO DO: Add noscript fallback-->
 	<noscript>
@@ -164,9 +164,9 @@
 					<!--TO DO: Finalize section layout-->
 					<!--TO DO: Adjust section layout based on display ratio-->
 					<div class="main-title-bar">
-						<div class="main-title-content">
+						<div class="main-title-bar-content">
 							<div class="main-title">I'm a&nbsp;</div>
-							<div class="main-label">Game Developer</div>
+							<div class="main-label" id="main-label">Game Developer</div>
 							<div class="main-title">!</div>
 						</div>
 					</div>
