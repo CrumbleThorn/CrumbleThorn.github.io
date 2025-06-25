@@ -14,7 +14,6 @@ const pageClasses = {
 }
 const pageElements =  {
     // Global Screen Elements
-    content: 'content',
     main: 'main',
 }
         
@@ -24,6 +23,7 @@ function onLoadComplete() {
     setTimeout(() => {
         const hero = new ui.Hero(new anim.AnimatedElement(loadedDOMS.hero[0].shadow.querySelector('.hero')));
 
+        if (Object.hasOwn(loadedDOMS, 'sidecard')) {
         const gameSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[0].shadow.querySelector('.sidecard'),
                                                                      undefined,
                                                                      true,
@@ -44,6 +44,8 @@ function onLoadComplete() {
         const musicSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[3].shadow.querySelector('.sidecard'),
                                                                       ),
                                              anim.anchor.right);
+                                                                    }
+        if (Object.hasOwn(loadedDOMS, 'sidebar')) {
         const sidebar = new ui.SideBar(new anim.AnimatedElement(loadedDOMS.sidebar[0].shadow.getElementById('sidebar'),
                                                         undefined,
                                                         false,
@@ -54,6 +56,8 @@ function onLoadComplete() {
                                                                               animate.speedClass.fast,
                                                                               ),
                                                         ));
+                                                    }
+        if (Object.hasOwn(loadedDOMS, 'navbar')) {
         const navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById('navbar'),
                                                               undefined,
                                                               false,
@@ -73,10 +77,15 @@ function onLoadComplete() {
                                                             0,
                                                             true,
                                                             true);
+        }
+        if (Object.hasOwn(loadedDOMS, 'progressbar')) {
         const progressbar = new ui.ProgressBar(new anim.AnimatedElement(loadedDOMS.progressbar[0].shadow.getElementById('progressbar'),
                                                                 undefined,
                                                                 ),
                                        );
+        progressbar.start = gameSection.elem.obj.getBoundingClientRect().top - window.innerHeight;
+        }
+        if (Object.hasOwn(loadedDOMS, 'horizontalbar')) {
         const bottomBar = new ui.BottomBar(new anim.AnimatedElement(loadedDOMS.horizontalbar[0].shadow.getElementById('bottombar'),
                                                                     undefined,
                                                                     false,
@@ -95,7 +104,7 @@ function onLoadComplete() {
                                                                 0,
                                                                 true,
                                                                 true);
-        progressbar.start = gameSection.elem.obj.getBoundingClientRect().top - window.innerHeight;
+        }
         // TO DO: Animate hero banner
         util.log("TO DO: Animate Hero");
     }, 1000);
