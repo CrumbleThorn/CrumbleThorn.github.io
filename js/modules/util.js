@@ -36,8 +36,10 @@ export const css = {
     siteColors: { 
         cillyBlue: 'var(--cilly-blue)',
         cillyDarkBlue: 'var(--cilly-darkblue)',
+        cillyDarkBlueOverlay: 'var(--cilly-darkblue-overlay)',
         cillyAccentBlue: 'var(--cilly-accentblue)',
         cillyAccentGray: 'var(--cilly-accentgray)',
+        cillyAccentGrayOverlay: 'var(--cilly-accentgray-overlay)',
         cillyWhite: 'var(--cilly-white)',
         cillyJetBlack: 'var(--cilly-jetblack)',
         cillyBlack: 'var(--cilly-black)',
@@ -49,8 +51,8 @@ export const css = {
         noScroll: 'no-scroll',
         unselectable: 'unselectable',
         // Background classes
-        overlay: 'overlay',
-        background: 'background',
+        siteOverlay: 'overlay',
+        siteBackground: 'background',
         // Button classes
         button: 'button',
         buttonText: 'button-text',
@@ -121,6 +123,26 @@ export const css = {
         leftbar: 'leftbar',
         rightbar: 'rightbar',
         },
+    siteElements: {
+        siteOverlay: 'site-overlay',
+        siteBackground: 'site-background',
+        footer: 'footer',
+        footerContent: 'footer-content',
+        hero: 'hero',
+        heroContent: 'hero-content',
+        loadingscreen: 'loadingscreen',
+        loadingAnimation: 'loading-animation',
+        navbar: 'navbar',
+        navbarContent: 'navbar-content',
+        navbarBurger: 'navbar-burger',
+        navbarLogo: 'navbar-logo',
+        navbarTitle: 'navbar-title',
+        navbarMenu: 'navbar-menu',
+        sidebar: 'sidebar',
+        sidebarContent: 'sidebar-content',
+        sidebarTitle: 'sidebar-title',
+        sidebarMenu: 'sidebar-menu',
+    },
 };
 
 export function log(message, verboseOnly = false) {

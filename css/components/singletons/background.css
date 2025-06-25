@@ -1,4 +1,4 @@
-.overlay {
+.site-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -7,10 +7,10 @@
 	height: 100vh;
 	width: 100vw;
 
-	background-image: linear-gradient(rgba(0, 0, 255, 0.5), transparent);
+	background-image: linear-gradient(transparent, #24496D80);
 }
 
-.background {
+.site-background {
 	position: fixed;
 	bottom: 0;
 	right: 0;
@@ -19,9 +19,9 @@
 	width: 150vw;
 	height: 150vh;
 
-	background-color: purple;
-	background-image: linear-gradient(45deg, transparent 33.3%, orange 33.3%, orange 66.6%, transparent 66.6%),
-    				  linear-gradient(-45deg, transparent 33.3%, orange 33.3%, orange 66.6%, transparent 66.6%);
+	background-color: var(--cilly-accentblue);
+	background-image: linear-gradient(45deg, transparent 33.3%, var(--cilly-blue) 33.3%, var(--cilly-blue) 66.6%, transparent 66.6%),
+    				  linear-gradient(-45deg, transparent 33.3%, var(--cilly-blue) 33.3%, var(--cilly-blue) 66.6%, transparent 66.6%);
 	background-size: 25px 25px;
 
 	animation: moveBackground 3s linear infinite;

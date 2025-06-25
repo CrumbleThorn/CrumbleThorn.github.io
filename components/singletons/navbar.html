@@ -6,17 +6,17 @@
     logo: Adds a logo to the navbar (define image with src="")
     progressbar: Adds a progress bar to the navbar-->
 <nav class="navbar" id="navbar">
-    <div class="navbar-content">
-        <div class="navbar-burger">|||</div>
+    <div class="navbar-content" id="navbar-content">
+        <div class="navbar-burger" id="navbar-burger">|||</div>
         <!--TO DO: Show/Hide burger menu based on display ratio-->
         <div class="navbar-label">
-        <img class="navbar-logo" src="../favicon/favicon-96x96.png">
+        <img class="navbar-logo" src="../favicon/favicon-96x96.png" id="navbar-logo">
         <div unselectable="on" class="unselectable divider">|</div>
         <!--TO DO: Add hover animation to title-->
         <!--TO DO: Add programmatic div definitions-->
-        <div class="navbar-title">CrumbleThorn</div>
+        <div class="navbar-title" id="navbar-title">CrumbleThorn</div>
         </div>
-        <div class="navbar-menu">
+        <div class="navbar-menu" id="navbar-menu">
             <div class="navbar-current">Home</div>
             <div unselectable="on" class="unselectable divider">|</div>
             <!--TO DO: Add hover and click animations to links-->

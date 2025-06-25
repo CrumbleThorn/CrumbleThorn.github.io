@@ -2,8 +2,10 @@
 	/*Style Colours*/
 	--cilly-blue: #92b6db;
 	--cilly-darkblue: #24496D;
+	--cilly-darkblue-overlay: #24496D80;
 	--cilly-accentblue: #496D92;
 	--cilly-accentgray: #9292B6;
+	--cilly-accentgray-overlay: #9292B680;
 	--cilly-white: #EBEBFF;
 	--cilly-jetblack: #151515;
 	--cilly-black: #002424;
