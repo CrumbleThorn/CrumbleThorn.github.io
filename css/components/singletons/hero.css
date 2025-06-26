@@ -33,7 +33,7 @@
 	bottom: -10vh;
 
 	height: 55vh;
-	width: 100%;
+	width: 100vw;
 	z-index: 1;
 
 	background-color: var(--cilly-white);

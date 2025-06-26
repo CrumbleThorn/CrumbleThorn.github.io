@@ -12,8 +12,8 @@
 
 .site-background {
 	position: fixed;
-	bottom: 0;
-	right: 0;
+	top: -50px;
+	left: -50px;
 	z-index: -2;
 
 	width: 150vw;
