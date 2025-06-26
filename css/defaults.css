@@ -133,13 +133,13 @@ a:visited {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .no-scroll {
-	overflow: hidden;
+	overflow: hidden !important;
 
-	max-height: 100vh;
+	max-height: 100vh !important;
 }
 
 .unselectable {
