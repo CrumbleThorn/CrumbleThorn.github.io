@@ -123,10 +123,16 @@ export class AnimatedElement {
                 this.#obj.classList.remove(util.css.siteClasses.hidden);
                 this.#active = true;
                 this.#isAnimating = true;
-                animate.css(this.#obj, this.#entryAnimation, override).then((value) => {
+                animate.css(this.#obj, this.#entryAnimation, override).then(() => {
                     util.log('Done Showing ' + this.#obj.id + '!');
                     this.#isAnimating = false;
                     this.#obj.dispatchEvent(new Event('showAnimationComplete', {
+                        bubbles: true,
+                        composed: true,
+                    }));
+                }, () => {
+                    util.log('Showing ' + this.#obj.id + ' was interrupted!');
+                    this.#obj.dispatchEvent(new Event('showAnimationInterrupted', {
                         bubbles: true,
                         composed: true,
                     }));
@@ -143,11 +149,19 @@ export class AnimatedElement {
         if (this.#highlightAnimation != undefined) {
             if (this.#active) {
                 util.log('Highlighting ' + this.#obj.id + '...');
-                animate.css(this.#obj, this.#highlightAnimation, override);
-                this.#obj.dispatchEvent(new Event('highlightAnimationComplete', {
-                    bubbles: true,
-                    composed: true,
-                }));
+                animate.css(this.#obj, this.#highlightAnimation, override).then(() => {
+                    util.log('Done Highlighting ' + this.#obj.id + '!');
+                    this.#obj.dispatchEvent(new Event('highlightAnimationComplete', {
+                        bubbles: true,
+                        composed: true,
+                    }));
+                }, () => {
+                    util.log('Highlighting ' + this.#obj.id + ' was interrupted!');
+                    this.#obj.dispatchEvent(new Event('highlightAnimationInterrupted', {
+                        bubbles: true,
+                        composed: true,
+                    }));
+                });
             } else {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation');
             }
@@ -156,17 +170,29 @@ export class AnimatedElement {
         }
     }
 
+    // Use this function to cleanly stop infinite animations
+    stopHighlighting() {
+        this.#obj.classList.add(animate.repeatClass.repeat_1);
+        this.#obj.classList.remove(animate.repeatClass.infinite);
+    }
+
     hide(override = false) {
         if (this.#exitAnimation != undefined) {
             if (this.#active) {
                 this.#active = false;
                 this.#isAnimating = true;
                 util.log('Hiding ' + this.#obj.id + '...');
-                animate.css(this.#obj, this.#exitAnimation, override).then((value) => {
+                animate.css(this.#obj, this.#exitAnimation, override).then(() => {
                     util.log('Done Hiding ' + this.#obj.id + '!');
                     this.#obj.classList.add(util.css.siteClasses.hidden);
                     this.#isAnimating = false;
                     this.#obj.dispatchEvent(new Event('hideAnimationComplete', {
+                        bubbles: true,
+                        composed: true,
+                    }));
+                }, () => {
+                    util.log('Hiding ' + this.#obj.id + ' was interrupted!');
+                    this.#obj.dispatchEvent(new Event('hideAnimationInterrupted', {
                         bubbles: true,
                         composed: true,
                     }));

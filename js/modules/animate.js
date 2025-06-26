@@ -274,8 +274,11 @@ export const css = (obj, animation, override = false) =>
         }
 
         // Remove existing animations if an override is requested
-        if (override)
-            util.removeClassesByPrefix(obj, prefix);
+        if (override) {
+            node.dispatchEvent(new Event('animationinterrupted', {
+                bubbles: false
+            }));
+        }
 
         util.log("Playing animation for " + obj.id);
         node.classList.add(...animationClasses);
@@ -285,8 +288,16 @@ export const css = (obj, animation, override = false) =>
             util.log(event, true);
             event.stopPropagation();
             node.classList.remove(...animationClasses);
-            resolve('Animation ended');
+            resolve('Animation Ended!');
         }
-    
+
+        // If the animation is interrupted, we reject the Promise
+        function handleAnimationInterrupt(event) {
+            util.log(event, true);
+            node.classList.remove(...animationClasses);
+            reject('Animation Interrupted!');
+        }
+
         node.addEventListener('animationend', handleAnimationEnd, {once: true});
+        node.addEventListener('animationinterrupted', handleAnimationInterrupt, {once: true});
     });
