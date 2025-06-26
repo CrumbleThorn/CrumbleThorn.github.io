@@ -18,7 +18,6 @@ function onDocumentLoaded() {
 
 function loadLoadingScreen(event) {
     loadingScreen = new ui.LoadingScreen(new anim.AnimatedElement(event.target.shadow.getElementById('loadingscreen'),
-                                                                    undefined,
                                                                     true,
                                                                     new animate.Animation(animate.animationClass.fadeIn,
                                                                                         animate.speedClass.faster,
@@ -41,7 +40,6 @@ function onLoadComplete() {
             loadingScreen.toggle();
         }
         content.showContent();
-        
     }, 500);
 }
 

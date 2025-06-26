@@ -23,23 +23,21 @@ function onLoadComplete() {
     setTimeout(() => {
         //#region Hero
         if (Object.hasOwn(loadedDOMS, 'hero')) {
+            util.log('Hero Detected!');
             const hero = new ui.Hero(new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.hero)));
             const heroButton = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-button'),
-                                                        undefined,
                                                         false,
                                                         new animate.Animation(animate.animationClass.fadeInUp,
                                                                                 animate.speedClass.fast,
                                                                                 1000
                                                                                 ));
             const heroMenuText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-menu-text'),
-                                                            undefined,
                                                             false,
                                                             new animate.Animation(animate.animationClass.fadeInUp,
                                                                                     animate.speedClass.fast,
                                                                                     1200
                                                                                     ));
             const scrollDownText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('scroll-down-text'),
-                                                            undefined,
                                                             false,
                                                             new animate.Animation(animate.animationClass.fadeInUp,
                                                                                     animate.speedClass.fast,
@@ -52,27 +50,23 @@ function onLoadComplete() {
                                                                                     animate.repeatClass.infinite
                                                                                     ));
             const heroTitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-title'),
-                                                        undefined,
                                                         false,
                                                         new animate.Animation(animate.animationClass.backInLeft,
                                                                                 animate.speedClass.animated,
                                                                                 ));
             const heroSubtitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-subtitle'),
-                                                            undefined,
                                                             false,
                                                             new animate.Animation(animate.animationClass.backInLeft,
                                                                                     animate.speedClass.animated,
                                                                                     500
                                                                                     ));
             const heroImage = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-image'),
-                                                        undefined,
                                                         false,
                                                         new animate.Animation(animate.animationClass.backInRight,
                                                                                 animate.speedClass.animated,
                                                                                 200
                                                                                 ));
             const heroContent = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.heroContent),
-                                                            undefined,
                                                             false,
                                                             new animate.Animation(animate.animationClass.fadeInLeft,
                                                                                     animate.speedClass.animated,
@@ -179,8 +173,6 @@ function onLoadComplete() {
                                                                 true,
                                                                 true);
         }
-        // TO DO: Animate hero banner
-        util.log("TO DO: Animate Hero");
     }, 500);
 }
 window.addEventListener('load', onLoadComplete);
