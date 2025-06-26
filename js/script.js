@@ -95,7 +95,6 @@ function onLoadComplete() {
 
         if (Object.hasOwn(loadedDOMS, 'sidecard')) {
         const gameSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[0].shadow.querySelector('.sidecard'),
-                                                                     undefined,
                                                                      true,
                                                                      new animate.Animation(animate.animationClass.slideInUp,
                                                                                            animate.speedClass.fast,
@@ -117,7 +116,6 @@ function onLoadComplete() {
                                                                     }
         if (Object.hasOwn(loadedDOMS, 'sidebar')) {
         const sidebar = new ui.SideBar(new anim.AnimatedElement(loadedDOMS.sidebar[0].shadow.getElementById('sidebar'),
-                                                        undefined,
                                                         false,
                                                         new animate.Animation(animate.animationClass.slideInLeft,
                                                                               animate.speedClass.fast,
@@ -129,7 +127,6 @@ function onLoadComplete() {
                                                     }
         if (Object.hasOwn(loadedDOMS, 'navbar')) {
         const navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById('navbar'),
-                                                              undefined,
                                                               false,
                                                               new animate.Animation(animate.animationClass.slideInDown,
                                                                                     animate.speedClass.faster,
@@ -157,7 +154,6 @@ function onLoadComplete() {
         }
         if (Object.hasOwn(loadedDOMS, 'horizontalbar')) {
         const bottomBar = new ui.BottomBar(new anim.AnimatedElement(loadedDOMS.horizontalbar[0].shadow.getElementById('bottombar'),
-                                                                    undefined,
                                                                     false,
                                                                     new animate.Animation(animate.animationClass.slideInUp,
                                                                                           animate.speedClass.faster,
