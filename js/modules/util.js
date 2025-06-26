@@ -1,5 +1,5 @@
 // Modify this to toggle certain logs on or off!
-export const verbose = false;
+export const verbose = true;
 
 export const isDev = window.location.hostname === 'localhost' || 
               window.location.hostname === '127.0.0.1' || 
