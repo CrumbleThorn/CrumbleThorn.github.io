@@ -83,10 +83,12 @@ function onLoadComplete() {
                     hero.elem.obj.addEventListener('showAnimationComplete', (event) => {
                         if (event.target == scrollDownText.obj) {
                             scrollDownText.highlight();
+                            document.body.classList.remove(util.css.siteClasses.noScroll);
                         }
                     });
                 }
             });
+            document.body.classList.add(util.css.siteClasses.noScroll);
             heroContent.show();
         }
         //#endregion
