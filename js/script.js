@@ -151,14 +151,22 @@ function handleNavbar() {
                                                                                 ),
                                                             ),
                                     undefined);
-    const navbarTrigger = new anim.AnimationScrollTrigger(navbar.elem,
-                                                            anim.animationType.toggle,
-                                                            new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom, -1),
-                                                            new anim.ScrollTriggerElement(window),
-                                                            undefined,
-                                                            0,
-                                                            true,
-                                                            true);
+    const navbarScrollDownTrigger = new anim.AnimationScrollTrigger(navbar.elem,
+                                                                    anim.animationType.show,
+                                                                    new anim.ScrollTriggerElement(titleBar.obj),
+                                                                    new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                    undefined,
+                                                                    0,
+                                                                    undefined,
+                                                                    true);
+    const navbarScrollUpTrigger = new anim.AnimationScrollTrigger(  navbar.elem,
+                                                                    anim.animationType.hide,
+                                                                    new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
+                                                                    new anim.ScrollTriggerElement(window),
+                                                                    anim.scrollTriggerType.onScrollUp,
+                                                                    0,
+                                                                    undefined,
+                                                                    true);
     }
 }
 
