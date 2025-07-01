@@ -384,6 +384,10 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         window.addEventListener('scroll', () => {this.handle()});
     }
 
+    get triggered() {
+        return this.#triggered;
+    }
+
     #checkTriggerType(triggerType) {
         if (Object.values(scrollTriggerType).includes(triggerType)) {
             return triggerType;
