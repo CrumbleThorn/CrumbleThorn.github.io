@@ -128,6 +128,8 @@ export const css = {
         heroContent: 'hero-content',
         loadingscreen: 'loadingscreen',
         loadingAnimation: 'loading-animation',
+        content: 'content',
+        main: 'main',
         navbar: 'navbar',
         navbarContent: 'navbar-content',
         navbarBurger: 'navbar-burger',
