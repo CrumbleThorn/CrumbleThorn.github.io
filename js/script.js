@@ -51,7 +51,7 @@ class TitleBar {
 
     handle(event) {
         if (event.detail.origin == this.obj && event.detail.animatedElement == heroContent.obj) {
-            window.scrollTo(0, this.obj.getBoundingClientRect().top + 5);
+            util.scrollTo(this.obj);
         } else if (event.detail.origin == hero.elem.obj && event.detail.animatedElement == heroContent.obj) {
             util.scrollToTop();
         }
@@ -153,7 +153,7 @@ function handleNavbar() {
                                     undefined);
     const navbarTrigger = new anim.AnimationScrollTrigger(navbar.elem,
                                                             anim.animationType.toggle,
-                                                            new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
+                                                            new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom, -1),
                                                             new anim.ScrollTriggerElement(window),
                                                             undefined,
                                                             0,
