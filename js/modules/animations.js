@@ -406,7 +406,7 @@ export class AnimationScrollTrigger extends AnimationTrigger {
                 break;
             case scrollTriggerType.onScrollUp:
                 point1 = this.#triggerPoint.computeY();
-                point2 = this.#triggerElem.computeY;
+                point2 = this.#triggerElem.computeY();
                 break;
         }
         if (point1 <= point2) {
