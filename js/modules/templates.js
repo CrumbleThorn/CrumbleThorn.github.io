@@ -136,8 +136,8 @@ class HeroTemplate extends HTMLElement {
             const heroContent = this.#shadow.host.innerHTML;
             this.#shadow.host.innerHTML = '';
             this.#shadow.innerHTML = html;
-            this.#shadow.getElementById('hero-content').innerHTML = heroContent;
-            addToLoadedDOMS('hero', this);
+            this.#shadow.getElementById(util.css.siteElements.heroContent).innerHTML = heroContent;
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -162,8 +162,8 @@ class LoadingScreenTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('loadingscreen', this);
             this.dispatchEvent(new Event('loadingScreenReady', {
+            addToLoadedDOMS(this.#name, this);
                 bubbles: true,
                 composed: true,
             }));
@@ -192,7 +192,7 @@ class NavBarTemplate extends HTMLElement {
             // TO DO: Programmatic checking of template classes so it can adjust the contents 
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML += html;
-            addToLoadedDOMS('navbar', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -217,7 +217,7 @@ class SideBarTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('sidebar', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -243,7 +243,7 @@ class SideCardTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('sidecard', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -270,7 +270,7 @@ class CenterCardTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('centercard', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -295,7 +295,7 @@ class ModalTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('modal', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -321,7 +321,7 @@ class DropdownTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('dropdown', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -346,7 +346,7 @@ class HorizontalBarTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('horizontalbar', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -371,7 +371,7 @@ class ProgressBarTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('progressbar', this);
+            addToLoadedDOMS(this.#name, this);
         });
         
     }
@@ -397,7 +397,7 @@ class SlideshowTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('slideshow', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
@@ -422,7 +422,7 @@ class VerticalBarTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('verticalbar', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
