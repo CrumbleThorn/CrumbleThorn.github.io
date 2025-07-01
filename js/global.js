@@ -6,6 +6,8 @@ import * as templates from './modules/templates.js';
 import * as ui from './modules/ui.js';
 import * as util from './modules/util.js';
 
+const scrollManager = new util.DirectionalScrollManager();
+
 const content = new ui.Content(document.getElementById('content'));
 let loadingScreen;
 

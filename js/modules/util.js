@@ -189,3 +189,36 @@ export function removeClassesByPrefix (obj, prefix) {
     const classes = obj.className.split(' ').filter(c => !c.startsWith(prefix));
     obj.className = classes.join(' ').trim();
 }
+
+export class DirectionalScrollManager {
+    #previousX;
+    #previousY;
+    constructor() {
+        if (DirectionalScrollManager.instance) {
+            return DirectionalScrollManager.instance;
+        }
+        this.#previousX = 0;
+        this.#previousY = 0;
+        DirectionalScrollManager.instance = this;
+        window.addEventListener('scroll', () => {this.update()});
+    }
+
+    update() {
+        const currentScrollY = window.scrollY;
+        const currentScrollX = window.scrollX;
+        if (currentScrollY > this.#previousY) {
+            window.dispatchEvent(new Event('scrollDown'));
+        } else {
+            window.dispatchEvent(new Event('scrollUp'));
+        }
+
+        if (currentScrollX > this.#previousX) {
+            window.dispatchEvent(new Event('scrollRight'));
+        } else {
+            window.dispatchEvent(new Event('scrollLeft'));
+        }
+
+        this.#previousX = currentScrollX;
+        this.#previousY = currentScrollY;
+    }
+}
