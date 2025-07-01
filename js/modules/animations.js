@@ -338,17 +338,17 @@ export class ScrollTriggerElement {
 
     computeX() {
         if (this.#obj instanceof Window) {
-            return this.anchorX == 'left' ? this.offsetX : this.#obj.innerWidth + this.offsetX;
+            return this.anchorX == anchor.left ? this.offsetX : this.#obj.innerWidth + this.offsetX;
         } else {
-            return this.anchorX == 'left' ? this.#obj.getBoundingClientRect().left + this.offsetX : this.#obj.getBoundingClientRect().right + this.offsetX;
+            return this.anchorX == anchor.left ? this.#obj.getBoundingClientRect().left + this.offsetX : this.#obj.getBoundingClientRect().right + this.offsetX;
         }
     }
 
     computeY() {
         if (this.#obj instanceof Window) {
-            return this.anchorY == 'top' ? this.offsetY : this.#obj.innerHeight + this.offsetY;
+            return this.anchorY == anchor.top ? this.offsetY : this.#obj.innerHeight + this.offsetY;
         } else {
-            return this.anchorY == 'top' ? this.#obj.getBoundingClientRect().top + this.offsetY : this.#obj.getBoundingClientRect().bottom + this.offsetY;
+            return this.anchorY == anchor.top ? this.#obj.getBoundingClientRect().top + this.offsetY : this.#obj.getBoundingClientRect().bottom + this.offsetY;
         }
     }
 }
