@@ -126,13 +126,15 @@ export class AnimatedElement {
                 animate.css(this.#obj, this.#entryAnimation, override).then(() => {
                     util.log('Done Showing ' + this.#obj.id + '!');
                     this.#isAnimating = false;
-                    this.#obj.dispatchEvent(new Event('showAnimationComplete', {
+                    this.#obj.dispatchEvent(new CustomEvent('showAnimationComplete', {
+                        detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
                 }, () => {
                     util.log('Showing ' + this.#obj.id + ' was interrupted!');
-                    this.#obj.dispatchEvent(new Event('showAnimationInterrupted', {
+                    this.#obj.dispatchEvent(new CustomEvent('showAnimationInterrupted', {
+                        detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
@@ -151,13 +153,15 @@ export class AnimatedElement {
                 util.log('Highlighting ' + this.#obj.id + '...');
                 animate.css(this.#obj, this.#highlightAnimation, override).then(() => {
                     util.log('Done Highlighting ' + this.#obj.id + '!');
-                    this.#obj.dispatchEvent(new Event('highlightAnimationComplete', {
+                    this.#obj.dispatchEvent(new CustomEvent('highlightAnimationComplete', {
+                        detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
                 }, () => {
                     util.log('Highlighting ' + this.#obj.id + ' was interrupted!');
-                    this.#obj.dispatchEvent(new Event('highlightAnimationInterrupted', {
+                    this.#obj.dispatchEvent(new CustomEvent('highlightAnimationInterrupted', {
+                        detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
@@ -186,13 +190,15 @@ export class AnimatedElement {
                     util.log('Done Hiding ' + this.#obj.id + '!');
                     this.#obj.classList.add(util.css.siteClasses.hidden);
                     this.#isAnimating = false;
-                    this.#obj.dispatchEvent(new Event('hideAnimationComplete', {
+                    this.#obj.dispatchEvent(new CustomEvent('hideAnimationComplete', {
+                        detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
                 }, () => {
                     util.log('Hiding ' + this.#obj.id + ' was interrupted!');
-                    this.#obj.dispatchEvent(new Event('hideAnimationInterrupted', {
+                    this.#obj.dispatchEvent(new CustomEvent('hideAnimationInterrupted', {
+                        detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
@@ -291,7 +297,8 @@ export class AnimationTrigger {
                     break;
                 //TO DO: Add reset function for removing looping animations
             }
-            this.#elem.obj.dispatchEvent(new Event('animationTriggered', {
+            this.#elem.obj.dispatchEvent(new CustomEvent('animationTriggered', {
+                    detail: {origin: this.elem.obj},
                     bubbles: true,
                     composed: true,
                 }));
