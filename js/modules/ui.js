@@ -91,11 +91,14 @@ export class ProgressBar {
         this.#elem = elem;
         this.#start = start;
         this.#end = end;
-        window.addEventListener('scroll', () => {this.updateProgress()});
     }
 
     get elem() {
         return this.#elem;
+    }
+
+    get start() {
+        return this.#start;
     }
 
     set start(start) {
@@ -103,20 +106,45 @@ export class ProgressBar {
         util.log('Progress Bar Start set to ' + start + '.');
     }
 
+    get end() {
+        return this.#end;
+    }
+
     set end(end) {
         this.#end = end;
         util.log('Progress Bar End set to ' + end + '.');
     }
 
-    updateProgress() {
-        const progress = ((window.scrollY - this.#start) / (this.#end - window.innerHeight - this.#start)) * 100;
+    updateProgress(progress) {
         this.#elem.obj.style.width = `${progress}%`;
-
         // If the user has reached the end, fill the progress bar
         if (progress >= 100) {
             this.#elem.obj.style.width = '100%';
         } else if (progress <= 0) {
             this.#elem.obj.style.width = '0%';
+        }
+    }
+}
+
+export class ScrollProgressBar extends ProgressBar {
+
+    constructor(elem,
+                start = 0,
+                end = document.documentElement.scrollHeight,
+                ) {
+        super(elem, start, end);
+        window.addEventListener('scroll', () => {this.updateProgress()});
+    }
+
+    updateProgress() {
+        const progress = ((window.scrollY - this.start) / (this.end - window.innerHeight - this.start)) * 100;
+        this.elem.obj.style.width = `${progress}%`;
+
+        // If the user has reached the end, fill the progress bar
+        if (progress >= 100) {
+            this.elem.obj.style.width = '100%';
+        } else if (progress <= 0) {
+            this.elem.obj.style.width = '0%';
         }
     }
 }
@@ -155,6 +183,7 @@ export class Slideshow {
     }
 }
 
+// TO DO: Check if this is necessary
 class HeaderBar {
     constructor(elem, content, textbox) {
         this.element = elem;
@@ -162,8 +191,5 @@ class HeaderBar {
         this.textbox = textbox;
     }
 
-    modifyText(newText) {
-        // TO DO: Logic
-        this.textbox.innerHTML = newText;
-    }
+
 }
