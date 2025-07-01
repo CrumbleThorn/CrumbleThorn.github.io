@@ -7,6 +7,32 @@ if (!Object.hasOwn(window, 'loadedDOMS')) {
     window.loadedDOMS = {};
 }
 
+export const templateList = {
+    // Internal Components
+    dropdownTemplate: 'dropdown',
+    horizontalBarTemplate: 'horizontalbar',
+    progressbarTemplate: 'progressbar',
+    slideshowTemplate: 'slideshow',
+    verticalbarTemplate: 'verticalbar',
+    // Singleton Components
+    loadingScreenTemplate: 'loadingscreen',
+    navbarTemplate: 'navbar',
+    sidebarTemplate: 'sidebar',
+    backgroundTemplate: 'background',
+    footerTemplate: 'footer',
+    heroTemplate: 'hero',
+    // Containers and External Components
+    centerCardTemplate: 'centercard',
+    sidecardTemplate: 'sidecard',
+    modalTemplate: 'modal',
+};
+
+const templateType = {
+    singleton: 'singletons/',
+    subcomponent: 'subcomponents/',
+    standard: ''
+}
+
 function addToLoadedDOMS(key, value) {
     if (Object.hasOwn(loadedDOMS, key)) {
         loadedDOMS[key].push(value)
@@ -19,6 +45,10 @@ function addToLoadedDOMS(key, value) {
     }));
 }
 
+function constructURL(template, type) {
+    return 'components/' + type + template + '.html';
+}
+
 // Singleton Templates
 class BackgroundTemplate extends HTMLElement {
     #shadow;
@@ -26,7 +56,7 @@ class BackgroundTemplate extends HTMLElement {
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = 'background';
+        this.#name = templateList.backgroundTemplate;
     }
 
     get shadow() {
@@ -38,7 +68,7 @@ class BackgroundTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource('components/singletons/background.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -47,36 +77,48 @@ class BackgroundTemplate extends HTMLElement {
 
 class FooterTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.footerTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('components/singletons/footer.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
-            addToLoadedDOMS('footer', this);
+            addToLoadedDOMS(this.#name, this);
         });
     }
 }
 
 class HeroTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.heroTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('components/singletons/hero.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             const heroContent = this.#shadow.host.innerHTML;
             this.#shadow.host.innerHTML = '';
             this.#shadow.innerHTML = html;
@@ -88,17 +130,23 @@ class HeroTemplate extends HTMLElement {
 
 class LoadingScreenTemplate extends HTMLElement {
     #shadow;
-    constructor(test) {
+    #name;
+    constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.loadingScreenTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('components/singletons/loadingscreen.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('loadingscreen', this);
             this.dispatchEvent(new Event('loadingScreenReady', {
@@ -111,18 +159,24 @@ class LoadingScreenTemplate extends HTMLElement {
 
 class NavBarTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.navbarTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('components/singletons/navbar.html').then(html => {
             // TO DO: Programmatic checking of template classes so it can adjust the contents 
+        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML += html;
             addToLoadedDOMS('navbar', this);
         });
@@ -131,17 +185,23 @@ class NavBarTemplate extends HTMLElement {
 
 class SideBarTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.sidebarTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('components/singletons/sidebar.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('sidebar', this);
         });
@@ -151,17 +211,23 @@ class SideBarTemplate extends HTMLElement {
 // Container Templates
 class SideCardTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.sidecardTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/sidecard.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('sidecard', this);
         });
@@ -172,17 +238,23 @@ class SideCardTemplate extends HTMLElement {
 
 class CenterCardTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.centerCardTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/centercard.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('centercard', this);
         });
@@ -191,17 +263,23 @@ class CenterCardTemplate extends HTMLElement {
 
 class ModalTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.modalTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/modal.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('modal', this);
         });
@@ -211,17 +289,23 @@ class ModalTemplate extends HTMLElement {
 // Internal Components
 class DropdownTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.dropdownTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/subcomponents/dropdown.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('dropdown', this);
         });
@@ -230,17 +314,23 @@ class DropdownTemplate extends HTMLElement {
 
 class HorizontalBarTemplate extends HTMLElement {
     #shadow;
-    constructor(test) {
+    #name;
+    constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.horizontalBarTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/subcomponents/horizontalbar.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('horizontalbar', this);
         });
@@ -249,17 +339,23 @@ class HorizontalBarTemplate extends HTMLElement {
 
 class ProgressBarTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.progressbarTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/subcomponents/progressbar.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('progressbar', this);
         });
@@ -269,17 +365,23 @@ class ProgressBarTemplate extends HTMLElement {
 
 class SlideshowTemplate extends HTMLElement {
     #shadow;
+    #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.slideshowTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/subcomponents/slideshow.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('slideshow', this);
         });
@@ -288,83 +390,49 @@ class SlideshowTemplate extends HTMLElement {
 
 class VerticalBarTemplate extends HTMLElement {
     #shadow;
-    constructor(test) {
+    #name;
+    constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = templateList.verticalbarTemplate;
     }
 
     get shadow() {
         return this.#shadow
     }
 
+    get name() {
+        return this.#name;
+    }
+
     connectedCallback() {
-        util.getResource('../../components/subcomponents/verticalbar.html').then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS('verticalbar', this);
         });
     }
 }
 
-export const templateList = {
+const suffix = '-template';
+
+const templateDefinitions = {
     // Internal Components
-    dropdownTemplate: {
-        name: 'dropdown-template',
-        definition: DropdownTemplate
-    },
-    horizontalBarTemplate: {
-        name: 'horizontalbar-template',
-        definition: HorizontalBarTemplate
-    },
-    progressbarTemplate: {
-        name: 'progressbar-template',
-        definition: ProgressBarTemplate
-    },
-    slideshowTemplate: {
-        name: 'slideshow-template',
-        definition: SlideshowTemplate
-    },
-    verticalbarTemplate: {
-        name: 'verticalbar-template',
-        definition: VerticalBarTemplate
-    },
+    dropdownTemplate: DropdownTemplate,
+    horizontalBarTemplate: HorizontalBarTemplate,
+    progressbarTemplate: ProgressBarTemplate,
+    slideshowTemplate: SlideshowTemplate,
+    verticalbarTemplate: VerticalBarTemplate,
     // Singleton Components
-    loadingScreenTemplate: {
-        name: 'loadingscreen-template',
-        definition: LoadingScreenTemplate
-    },
-    navbarTemplate: {
-        name: 'navbar-template',
-        definition: NavBarTemplate
-    },
-    sidebarTemplate: {
-        name: 'sidebar-template',
-        definition: SideBarTemplate
-    },
-    backgroundTemplate: {
-        name: 'background-template',
-        definition: BackgroundTemplate
-    },
-    footerTemplate: {
-        name: 'footer-template',
-        definition: FooterTemplate
-    },
-    heroTemplate: {
-        name: 'hero-template',
-        definition: HeroTemplate
-    },
+    loadingScreenTemplate: LoadingScreenTemplate,
+    navbarTemplate: NavBarTemplate,
+    sidebarTemplate: SideBarTemplate,
+    backgroundTemplate: BackgroundTemplate,
+    footerTemplate: FooterTemplate,
+    heroTemplate: HeroTemplate,
     // Containers and External Components
-    centerCardTemplate: {
-        name: 'centercard-template',
-        definition: CenterCardTemplate
-    },
-    sidecardTemplate: {
-        name: 'sidecard-template',
-        definition: SideCardTemplate
-    },
-    modalTemplate: {
-        name: 'modal-template',
-        definition: ModalTemplate
-    },
+    centerCardTemplate: CenterCardTemplate,
+    sidecardTemplate: SideCardTemplate,
+    modalTemplate: ModalTemplate,
 };
 
 export function loadTemplate(templateName, definition) {
@@ -373,7 +441,7 @@ export function loadTemplate(templateName, definition) {
 
 export function loadAllTemplates() {
     for (const template in templateList) {
-        loadTemplate(templateList[template].name, templateList[template].definition);
+        loadTemplate(templateList[template] + suffix, templateDefinitions[template]);
     }
     util.log("Templates Loaded!");
 }
