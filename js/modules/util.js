@@ -143,6 +143,14 @@ export const css = {
     },
 };
 
+export const scrollEvents = {
+    scroll: 'scroll',
+    scrollDown: 'scrollDown',
+    scrollUp: 'scrollUp',
+    scrollRight: 'scrollRight',
+    scrollLeft: 'scrollLeft',
+};
+
 export function log(message, verboseOnly = false) {
     if (isDev) {
         if (!(verboseOnly && !verbose)) {
@@ -202,22 +210,22 @@ export class DirectionalScrollManager {
         this.#previousX = 0;
         this.#previousY = 0;
         DirectionalScrollManager.instance = this;
-        window.addEventListener('scroll', () => {this.update()});
+        window.addEventListener(scrollEvents.scroll, () => {this.update()});
     }
 
     update() {
         const currentScrollY = window.scrollY;
         const currentScrollX = window.scrollX;
         if (currentScrollY > this.#previousY) {
-            window.dispatchEvent(new Event('scrollDown'));
+            window.dispatchEvent(new Event(scrollEvents.scrollDown));
         } else {
-            window.dispatchEvent(new Event('scrollUp'));
+            window.dispatchEvent(new Event(scrollEvents.scrollUp));
         }
 
         if (currentScrollX > this.#previousX) {
-            window.dispatchEvent(new Event('scrollRight'));
+            window.dispatchEvent(new Event(scrollEvents.scrollRight));
         } else {
-            window.dispatchEvent(new Event('scrollLeft'));
+            window.dispatchEvent(new Event(scrollEvents.scrollLeft));
         }
 
         this.#previousX = currentScrollX;
