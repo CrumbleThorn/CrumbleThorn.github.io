@@ -193,10 +193,78 @@ class NavBarTemplate extends HTMLElement {
         return this.#name;
     }
 
+    #intiializeNavbarLabel() {
+        let html = '';
+        const navbarLabel = this.#shadow.getElementById(util.css.siteElements.navbarLabel);
+
+        if (this.dataset.logoSrc != undefined) {
+            html += '<img class="' + util.css.siteClasses.navbarLogo + '" src="' + this.dataset.logoSrc +'" id="' + util.css.siteElements.navbarLogo + '">\n';
+        } else if (this.dataset.logoId != undefined) {
+            const navbarLogo = this.getElementById(util.css.siteElements.navbarLogo);
+            html += navbarLogo.outerHTML;
+            navbarLogo.outerHTML = '';
+        }
+
+        if ((this.dataset.title != undefined || this.dataset.titleId != undefined) && (this.dataset.logoSrc != undefined || this.dataset.logoId != undefined)) {
+            html += '<'+ templateList.verticalbarTemplate + suffix + ' id="' + util.css.siteElements.navbarLabelDivider + '"></' + templateList.verticalbarTemplate + suffix + '>\n';
+        }
+        
+        if (this.dataset.title != undefined) {
+            html += '<div class="' + util.css.siteClasses.navbarTitle + '" id="' + util.css.siteElements.navbarTitle + '">' + this.dataset.title + '</div>\n';
+        } else if (this.dataset.titleId != undefined) {
+            const navbarTitle = this.getElementById(util.css.siteElements.navbarTitle);
+            html += navbarTitle.outerHTML;
+            navbarTitle.outerHTML = '';
+        }
+
+        navbarLabel.innerHTML = html;
+    }
+
+    #populateNavbarMenu() {
+        let html = '';
+        const navbarMenu = this.#shadow.getElementById(util.css.siteElements.navbarMenu);
+        
+        for (let ctr = 1; this.dataset['menuitem' + ctr.toString()] != undefined; ctr++) {
+            if (ctr > 1) {
+                html += '<'+ templateList.verticalbarTemplate + suffix + ' id="' + util.css.siteElements.navbarLabelDivider + '"></' + templateList.verticalbarTemplate + suffix + '>\n';
+            }
+            let linkDetails = this.dataset['menuitem' + ctr.toString()].split(' ');
+
+            if (linkDetails.length == 1) {
+                html += '<div class="' + util.css.siteClasses.navbarCurrent + '">' + linkDetails[0] + '</div>\n';
+            } else if (linkDetails.length == 2) {
+                html += '<a class="' + util.css.siteClasses.navbarLink + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
+            } else {
+                // TO DO: Implement Dropdown
+            }
+        }
+
+        navbarMenu.innerHTML = html
+    }
+
+    #initializeNavbar() {
+        util.log(this.dataset, true);
+
+        // TO DO: Initialize Burger menu Button
+        if (this.dataset.sidebarId != undefined) {
+            const navbarBurger = this.#shadow.getElementById(util.css.siteElements.navbarBurger);
+            //navbarBurger.classList.remove(util.css.siteClasses.hidden);
+        }
+
+        this.#intiializeNavbarLabel();
+        this.#populateNavbarMenu();
+        
+        // Initialize Navbar Progress Bar
+        if (this.dataset.progressbarStartId) {
+            const navbar = this.#shadow.getElementById(util.css.siteElements.navbar);
+            navbar.innerHTML += '<'+ templateList.progressbarTemplate + suffix + ' id="' + util.css.siteElements.navbarProgressBar + '"></' + templateList.progressbarTemplate + suffix + '>\n';
+        }
+    }
+
     connectedCallback() {
-            // TO DO: Programmatic checking of template classes so it can adjust the contents 
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML += html;
+            this.#initializeNavbar();
             addToLoadedDOMS(this.#name, this);
         });
     }

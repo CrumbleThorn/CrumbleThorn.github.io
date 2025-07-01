@@ -1,31 +1,27 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <link rel="stylesheet" type="text/css" href="css/defaults.css">
 <link rel="stylesheet" type="text/css" href="css/components/singletons/navbar.css">
-<!--Available Navbar Classes:
-    burger: Adds a burger menu button to the navbar
-    label: Adds title text to the navbar (define text by title="")
-    logo: Adds a logo to the navbar (define image with src="")
-    progressbar: Adds a progress bar to the navbar-->
+<!--
+Available Navbar data- attributes:
+data-sidebar-id: Links the sidebar and adds a burger menu button to the navbar
+data-logo-src: Adds logo to the navbar
+data-logo-id: Uses the element with the ID provided as the logo
+data-title: Adds title text to the navbar
+data-title-id: Uses the element with the ID provided as the title
+data-progressbar-start-id: adds a progress bar to the navbar using the provided startId as the stating progress point
+data-menuitem*="link_text": Creates a Navbar Entry with the provided text
+data-menuitem*="link_text href/": Creates a Navbar Link with the provided text and href
+data-menuitem*="link_text dropdown dropdown-id": Creates a Navbar Entry that shows a dropdown when hovered or clicked
+NOTE: data-menuitem* MUST start with 1 and CANNOT skip numbers
+-->
 <nav class="navbar" id="navbar">
     <div class="navbar-content" id="navbar-content">
-        <div class="navbar-burger" id="navbar-burger">|||</div>
         <!--TO DO: Show/Hide burger menu based on display ratio-->
-        <div class="navbar-label">
-        <img class="navbar-logo" src="favicon/favicon-96x96.png" id="navbar-logo">
-        <div unselectable="on" class="unselectable divider">|</div>
+        <div class="navbar-burger hidden" id="navbar-burger">|||</div>
+        <div class="navbar-label" id="navbar-label">
         <!--TO DO: Add hover animation to title-->
-        <!--TO DO: Add programmatic div definitions-->
-        <div class="navbar-title" id="navbar-title">CrumbleThorn</div>
         </div>
         <div class="navbar-menu" id="navbar-menu">
-            <div class="navbar-current">Home</div>
-            <div unselectable="on" class="unselectable divider">|</div>
-            <!--TO DO: Add hover and click animations to links-->
-            <a class="navbar-link" href="about/">About</a>
-            <div unselectable="on" class="unselectable divider">|</div>
-            <a class="navbar-link">Portfolios</a>
-            <div unselectable="on" class="unselectable divider">|</div>
-            <a class="navbar-link" href="contact/">Contact</a>
         </div>
     </div>
 </nav>
