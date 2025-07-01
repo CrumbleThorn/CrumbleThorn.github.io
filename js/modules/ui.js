@@ -76,15 +76,7 @@ export class NavBar {
     }
 
     toggleMenus() {
-        if (this.burger.style.display == 'none') {
-            this.content.style.padding = '0.5vh';
-            this.burger.style.display = 'block';
-            this.menu.style.display = 'none';
-        } else {
-            this.content.style.padding = '0.5vh 10vw 0';
-            this.burger.style.display = 'none';
-            this.menu.style.display = 'flex';
-        }
+
     }
 }
 
