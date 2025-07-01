@@ -1,6 +1,6 @@
 .vertical-spacer {
-    background-color: var(--cilly-jetblack);
-    height: 50px;
+    background-color: var(--cilly-accentgray);
+    height: 5vh;
     min-width: 3px;
 }
 
