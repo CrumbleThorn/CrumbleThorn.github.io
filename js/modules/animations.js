@@ -430,7 +430,9 @@ export class AnimationScrollTrigger extends AnimationTrigger {
                     window.removeEventListener('scroll', () => {this.handle()});
                 }
                 this.#triggerElem.obj.dispatchEvent(new CustomEvent('scrollTriggered', {
-                    detail: {origin: this.#triggerElem.obj},
+                    detail: {   animatedElement: this.elem.obj,
+                                origin: this.#triggerElem.obj
+                            },
                     bubbles: true,
                     composed: true,
                 }));
