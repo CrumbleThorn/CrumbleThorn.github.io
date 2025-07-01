@@ -152,6 +152,12 @@ export class ScrollProgressBar extends ProgressBar {
 export class Hero {
     constructor(elem) {
         this.elem = elem;
+        this.content = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.heroContent),
+                                                false,
+                                                new animate.Animation(  animate.animationClass.fadeInLeft,
+                                                                        animate.speedClass.animated),
+                                                new animate.Animation(  animate.animationClass.fadeOutUp,
+                                                                        animate.speedClass.animated));
     }
 }
 

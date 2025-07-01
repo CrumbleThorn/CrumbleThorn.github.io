@@ -22,7 +22,6 @@ const pageElements =  {
 
 // Temporary variables while definitions are not put into classes
 let hero;
-let heroContent;
 let titleBar;
 
 class TitleBar {
@@ -30,7 +29,7 @@ class TitleBar {
         this.obj = obj;
         this.titleContent = document.getElementById(pageElements.titleBarContent);
         this.titleText = document.getElementById(pageElements.titleText);
-        this.titleTrigger = new anim.AnimationScrollTrigger(heroContent,
+        this.titleTrigger = new anim.AnimationScrollTrigger(hero.content,
                                                             anim.animationType.hide,
                                                             new anim.ScrollTriggerElement(this.obj),
                                                             undefined,
@@ -38,7 +37,7 @@ class TitleBar {
                                                             0,
                                                             undefined,
                                                             true);
-        this.heroTrigger = new anim.AnimationScrollTrigger(heroContent,
+        this.heroTrigger = new anim.AnimationScrollTrigger(hero.content,
                                                             anim.animationType.show,
                                                             new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
                                                             new anim.ScrollTriggerElement(window),
@@ -50,9 +49,9 @@ class TitleBar {
     }
 
     handle(event) {
-        if (event.detail.origin == this.obj && event.detail.animatedElement == heroContent.obj) {
+        if (event.detail.origin == this.obj && event.detail.animatedElement == hero.content.obj) {
             util.scrollTo(this.obj);
-        } else if (event.detail.origin == hero.elem.obj && event.detail.animatedElement == heroContent.obj) {
+        } else if (event.detail.origin == hero.elem.obj && event.detail.animatedElement == hero.content.obj) {
             util.scrollToTop();
         }
     }
@@ -109,16 +108,9 @@ function handleHero() {
                                                                             animate.speedClass.animated,
                                                                             200
                                                                             ));
-        heroContent = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.heroContent),
-                                                        false,
-                                                        new animate.Animation(animate.animationClass.fadeInLeft,
-                                                                                animate.speedClass.animated,
-                                                                                ),
-                                                        new animate.Animation(animate.animationClass.fadeOutUp,
-                                                                                animate.speedClass.animated));
         // TO DO: Create AnimationEventTrigger for these
         hero.elem.obj.addEventListener('showAnimationComplete', (event) => {
-            if (event.target == heroContent.obj) {
+            if (event.target == hero.content.obj) {
                 heroTitle.show();
                 heroSubtitle.show();
                 heroImage.show();
@@ -135,7 +127,7 @@ function handleHero() {
             }
         });
         document.body.classList.add(util.css.siteClasses.noScroll);
-        heroContent.show();
+        hero.content.show();
     }
 }
 
