@@ -1,5 +1,7 @@
 .vertical-spacer {
-
+    background-color: var(--cilly-jetblack);
+    height: 50px;
+    min-width: 3px;
 }
 
 .leftbar {
