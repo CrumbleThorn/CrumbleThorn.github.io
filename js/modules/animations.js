@@ -12,10 +12,10 @@ export const animationType = {
 
 // Scroll Trigger Type Constants
 export const scrollTriggerType = {
-    onScrollDown: 'onScrollDown',
-    onScrollUp: 'onScrollUp',
-    onScrollLeft: 'onScrollLeft',
-    onScrollRight: 'onScrollRight',
+    onScrollDown: 'scrollDown',
+    onScrollUp: 'scrollUp',
+    onScrollLeft: 'scrollLeft',
+    onScrollRight: 'scrollRight',
 }
 
 // Scroll Trigger Anchor Constants
