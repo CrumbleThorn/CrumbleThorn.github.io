@@ -364,7 +364,7 @@ export class AnimationScrollTrigger extends AnimationTrigger {
     constructor(elem,
                 animationType = toggle,
                 triggerElem = new ScrollTriggerElement(elem.obj),
-                triggerPoint = new ScrollTriggerElement(window),
+                triggerPoint = new ScrollTriggerElement(window, anchor.bottom),
                 triggerType = scrollTriggerType.onScrollDown,
                 triggerLimit = 1,
                 reversible = false, // Use this flag if you want the Trigger to check for the reverse value once triggered
