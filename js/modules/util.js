@@ -184,6 +184,10 @@ export function scrollToTop() {
     document.documentElement.scrollTop = 0;
 }
 
+export function scrollTo(element) {
+    window.scrollTo(element.getBoundingClientRect().left + window.scrollX, element.getBoundingClientRect().top + window.scrollY);
+}
+
 export function getResource(uri) {
     return fetch(uri)
         .then(response => {
