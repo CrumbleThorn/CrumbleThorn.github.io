@@ -455,3 +455,8 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         }
     }
 }
+
+// TO DO: Implement
+export class AnimationEventTrigger extends AnimationTrigger {
+
+}
