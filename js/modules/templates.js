@@ -49,6 +49,20 @@ function constructURL(template, type) {
     return 'components/' + type + template + '.html';
 }
 
+// TO DO: base all templates to this template class
+// Base Template Class
+class HTMLTemplate extends HTMLElement {
+    #shadow;
+    constructor() {
+        super();
+        this.#shadow = this.attachShadow({ mode: 'open' });
+    }
+
+    get shadow() {
+        return this.#shadow
+    }
+}
+
 // Singleton Templates
 class BackgroundTemplate extends HTMLElement {
     #shadow;
