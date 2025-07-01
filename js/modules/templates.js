@@ -27,6 +27,11 @@ export const templateList = {
     modalTemplate: 'modal',
 };
 
+const templateEvents = {
+    templateLoaded: 'templateLoaded',
+    loadingScreenReady: 'loadingScreenReady',
+}
+
 const templateType = {
     singleton: 'singletons/',
     subcomponent: 'subcomponents/',
@@ -39,7 +44,7 @@ function addToLoadedDOMS(key, value) {
     } else {
         loadedDOMS[key] = [value];
     }
-    value.dispatchEvent(new Event('templateLoaded', {
+    value.dispatchEvent(new Event(templateEvents.templateLoaded, {
         bubbles: true,
         composed: true,
     }));
@@ -162,8 +167,8 @@ class LoadingScreenTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML = html;
-            this.dispatchEvent(new Event('loadingScreenReady', {
             addToLoadedDOMS(this.#name, this);
+            this.dispatchEvent(new Event(templateEvents.loadingScreenReady, {
                 bubbles: true,
                 composed: true,
             }));
