@@ -360,6 +360,8 @@ export class AnimationScrollTrigger extends AnimationTrigger {
     #triggerType;
     #reversible;
     #triggered;
+    #point1;
+    #point2;
 
     constructor(elem,
                 animationType = toggle,
@@ -381,7 +383,14 @@ export class AnimationScrollTrigger extends AnimationTrigger {
             throw new TypeError(reversible + ' is not a boolean value!');
         }
         this.#triggered = false;
-        window.addEventListener('scroll', () => {this.handle()});
+        // Initialization so the values are not undefined
+        this.calculate();
+        window.addEventListener('scroll', () => {this.calculate()});
+        if (reversible) {
+            window.addEventListener('scroll', () => {this.handle()});
+        } else {
+            window.addEventListener(triggerType, () => {this.handle()});
+        }
     }
 
     get triggered() {
@@ -396,35 +405,50 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         }
     }
 
-    handle() {
-        let point1;
-        let point2;
+    calculate() {
         switch (this.#triggerType) {
             case scrollTriggerType.onScrollDown:
-                point1 = this.#triggerElem.computeY();
-                point2 = this.#triggerPoint.computeY();
+                this.#point1 = this.#triggerElem.computeY();
+                this.#point2 = this.#triggerPoint.computeY();
                 break;
             case scrollTriggerType.onScrollUp:
-                point1 = this.#triggerPoint.computeY();
-                point2 = this.#triggerElem.computeY();
+                this.#point1 = this.#triggerPoint.computeY();
+                this.#point2 = this.#triggerElem.computeY();
                 break;
         }
-        if (point1 <= point2) {
-            if(!this.#triggered) {
+    }
+
+    handle() {
+        if (this.#point1 < this.#point2) {
+            if (!this.#triggered) {
                 this.trigger();
                 this.#triggered = true;
                 
+                // TO DO: Update listener removal (It doesn't work because of the update)
                 // Remove listener once trigger limit has been reached for efficiency
                 if (this.timesTriggered == this.triggerLimit) {
-                    window.removeEventListener('scroll', this.handle);
+                    window.removeEventListener('scroll', () => {this.handle()});
                 }
+                this.#triggerElem.obj.dispatchEvent(new CustomEvent('scrollTriggered', {
+                    detail: {origin: this.#triggerElem.obj},
+                    bubbles: true,
+                    composed: true,
+                }));
             }
-        } else if (this.#reversible && this.#triggered) {
-            this.trigger();
+        } else if (this.#triggered) {
             this.#triggered = false;
-            // Remove listener once trigger limit has been reached for efficiency
-            if (this.timesTriggered == this.triggerLimit) {
-                window.removeEventListener('scroll', this.handle);
+            if (this.#reversible) {
+                this.trigger();
+                
+                // Remove listener once trigger limit has been reached for efficiency
+                if (this.timesTriggered == this.triggerLimit) {
+                    window.removeEventListener('scroll', () => {this.handle()});
+                }
+                this.#triggerElem.obj.dispatchEvent(new CustomEvent('scrollTriggered', {
+                    detail: {origin: this.#triggerElem.obj},
+                    bubbles: true,
+                    composed: true,
+                }));
             }
         }
     }
