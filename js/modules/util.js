@@ -106,6 +106,10 @@ export const css = {
         sidebarItem: 'sidebar-item',
         sidebarLink: 'sidebar-link',
         // Side Card Classes
+        card: 'card',
+        cardContent: 'card-content',
+        cardContentLeft: 'card-content-left',
+        cardContentRight: 'card-content-right',
         sidecard: 'sidecard',
         sidecardLeft: 'sidecard-left',
         sidecardRight: 'sidecard-right',

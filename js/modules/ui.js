@@ -161,7 +161,7 @@ export class Hero {
     }
 }
 
-export class SideCard {
+export class Card {
     constructor(elem, side) {
         this.elem = elem;
         this.side = side;

@@ -23,7 +23,7 @@ export const templateList = {
     heroTemplate: 'hero',
     // Containers and External Components
     centerCardTemplate: 'centercard',
-    sidecardTemplate: 'sidecard',
+    cardTemplate: 'card',
     modalTemplate: 'modal',
 };
 
@@ -296,13 +296,13 @@ class SideBarTemplate extends HTMLElement {
 }
 
 // Container Templates
-class SideCardTemplate extends HTMLElement {
+class CardTemplate extends HTMLElement {
     #shadow;
     #name;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = templateList.sidecardTemplate;
+        this.#name = templateList.cardTemplate;
     }
 
     get shadow() {
@@ -512,7 +512,7 @@ const templateDefinitions = {
     heroTemplate: HeroTemplate,
     // Containers and External Components
     centerCardTemplate: CenterCardTemplate,
-    sidecardTemplate: SideCardTemplate,
+    cardTemplate: CardTemplate,
     modalTemplate: ModalTemplate,
 };
 
