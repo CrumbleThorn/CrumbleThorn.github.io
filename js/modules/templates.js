@@ -308,9 +308,36 @@ class CardTemplate extends HTMLElement {
         return this.#name;
     }
 
+    #initialize(html) {
+        const cardhtml = this.#shadow.host.innerHTML;
+        this.#shadow.host.innerHTML = '';
+        this.#shadow.innerHTML = html;
+        const cardContent = this.#shadow.querySelector('.' + util.css.siteClasses.cardContent);
+        cardContent.innerHTML = cardhtml;
+
+        const card = this.#shadow.querySelector('.' + util.css.siteClasses.card);
+
+        switch(this.dataset.side) {
+            case 'left':
+                card.classList.add(util.css.siteClasses.sidecard, util.css.siteClasses.sidecardLeft);
+                cardContent.classList.add(util.css.siteClasses.cardContentLeft);
+                break;
+            case 'right':
+                card.classList.add(util.css.siteClasses.sidecard, util.css.siteClasses.sidecardRight);
+                cardContent.classList.add(util.css.siteClasses.cardContentRight);
+                break;
+            case 'top':
+                break;
+            case 'bottom':
+                card.classList.add(util.css.siteClasses.endcard);
+                cardContent.classList.add(util.css.siteClasses.endcardContent);
+                break;
+        }
+    }
+
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
-            this.#shadow.innerHTML = html;
+            this.#initialize(html);
             addToLoadedDOMS(this.#name, this);
         });
     }
