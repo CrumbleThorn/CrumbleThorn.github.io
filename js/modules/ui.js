@@ -133,7 +133,7 @@ export class ScrollProgressBar extends ProgressBar {
                 end = document.documentElement.scrollHeight,
                 ) {
         super(elem, start, end);
-        window.addEventListener('scroll', () => {this.updateProgress()});
+        window.addEventListener(util.scrollEvents.scroll, () => {this.updateProgress()});
     }
 
     updateProgress() {

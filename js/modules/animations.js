@@ -12,6 +12,7 @@ export const animationType = {
 
 // Scroll Trigger Type Constants
 export const scrollTriggerType = {
+    onScroll: 'scroll',
     onScrollDown: 'scrollDown',
     onScrollUp: 'scrollUp',
     onScrollLeft: 'scrollLeft',
@@ -46,6 +47,17 @@ export const mouseEventTriggerType = {
     onMouseEnter: 'onmouseenter',
     onMouseExit: 'onmouseleave',
 };
+
+export const animationEvents = {
+    showAnimationComplete: 'showAnimationComplete',
+    showAnimationInterrupted: 'showAnimationInterrupted',
+    highlightAnimationComplete: 'highlightAnimationComplete',
+    highlightAnimationInterrupted: 'highlightAnimationInterrupted',
+    hideAnimationComplete: 'hideAnimationComplete',
+    hideAnimationInterrupted: 'hideAnimationInterrupted',
+    animationTriggered: 'animationTriggered',
+    scrollTriggered: 'scrollTriggered',
+}
 
 export class AnimatedElement {
     #obj;
@@ -126,14 +138,14 @@ export class AnimatedElement {
                 animate.css(this.#obj, this.#entryAnimation, override).then(() => {
                     util.log('Done Showing ' + this.#obj.id + '!');
                     this.#isAnimating = false;
-                    this.#obj.dispatchEvent(new CustomEvent('showAnimationComplete', {
+                    this.#obj.dispatchEvent(new CustomEvent(animationEvents.showAnimationComplete, {
                         detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
                 }, () => {
                     util.log('Showing ' + this.#obj.id + ' was interrupted!');
-                    this.#obj.dispatchEvent(new CustomEvent('showAnimationInterrupted', {
+                    this.#obj.dispatchEvent(new CustomEvent(animationEvents.showAnimationInterrupted, {
                         detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
@@ -154,14 +166,14 @@ export class AnimatedElement {
                 util.log('Highlighting ' + this.#obj.id + '...');
                 animate.css(this.#obj, this.#highlightAnimation, override).then(() => {
                     util.log('Done Highlighting ' + this.#obj.id + '!');
-                    this.#obj.dispatchEvent(new CustomEvent('highlightAnimationComplete', {
+                    this.#obj.dispatchEvent(new CustomEvent(animationEvents.highlightAnimationComplete, {
                         detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
                 }, () => {
                     util.log('Highlighting ' + this.#obj.id + ' was interrupted!');
-                    this.#obj.dispatchEvent(new CustomEvent('highlightAnimationInterrupted', {
+                    this.#obj.dispatchEvent(new CustomEvent(animationEvents.highlightAnimationInterrupted, {
                         detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
@@ -192,14 +204,14 @@ export class AnimatedElement {
                     util.log('Done Hiding ' + this.#obj.id + '!');
                     this.#obj.classList.add(util.css.siteClasses.hidden);
                     this.#isAnimating = false;
-                    this.#obj.dispatchEvent(new CustomEvent('hideAnimationComplete', {
+                    this.#obj.dispatchEvent(new CustomEvent(animationEvents.hideAnimationComplete, {
                         detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
                     }));
                 }, () => {
                     util.log('Hiding ' + this.#obj.id + ' was interrupted!');
-                    this.#obj.dispatchEvent(new CustomEvent('hideAnimationInterrupted', {
+                    this.#obj.dispatchEvent(new CustomEvent(animationEvents.hideAnimationInterrupted, {
                         detail: {origin: this.#obj},
                         bubbles: true,
                         composed: true,
@@ -300,8 +312,8 @@ export class AnimationTrigger {
                     break;
                 //TO DO: Add reset function for removing looping animations
             }
-            this.#elem.obj.dispatchEvent(new CustomEvent('animationTriggered', {
-                    detail: {origin: this.elem.obj},
+            this.#elem.obj.dispatchEvent(new CustomEvent(animationEvents.animationTriggered, {
+                    detail: {origin: this},
                     bubbles: true,
                     composed: true,
                 }));
@@ -388,9 +400,9 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         this.#triggered = false;
         // Initialization so the values are not undefined
         this.calculate();
-        window.addEventListener('scroll', () => {this.calculate()});
+        window.addEventListener(scrollTriggerType.onScroll, () => {this.calculate()});
         if (reversible) {
-            window.addEventListener('scroll', () => {this.handle()});
+            window.addEventListener(scrollTriggerType.onScroll, () => {this.handle()});
         } else {
             window.addEventListener(triggerType, () => {this.handle()});
         }
@@ -430,11 +442,11 @@ export class AnimationScrollTrigger extends AnimationTrigger {
                 // TO DO: Update listener removal (It doesn't work because of the update)
                 // Remove listener once trigger limit has been reached for efficiency
                 if (this.timesTriggered == this.triggerLimit) {
-                    window.removeEventListener('scroll', () => {this.handle()});
+                    window.removeEventListener(scrollTriggerType.onScroll, () => {this.handle()});
                 }
-                this.#triggerElem.obj.dispatchEvent(new CustomEvent('scrollTriggered', {
-                    detail: {   animatedElement: this.elem.obj,
-                                origin: this.#triggerElem.obj
+                this.elem.obj.dispatchEvent(new CustomEvent(animationEvents.scrollTriggered, {
+                    detail: {   origin: this,
+                                direction: 'forward'
                             },
                     bubbles: true,
                     composed: true,
@@ -447,10 +459,12 @@ export class AnimationScrollTrigger extends AnimationTrigger {
                 
                 // Remove listener once trigger limit has been reached for efficiency
                 if (this.timesTriggered == this.triggerLimit) {
-                    window.removeEventListener('scroll', () => {this.handle()});
+                    window.removeEventListener(scrollTriggerType.onScroll, () => {this.handle()});
                 }
-                this.#triggerElem.obj.dispatchEvent(new CustomEvent('scrollTriggered', {
-                    detail: {origin: this.#triggerElem.obj},
+                this.elem.obj.dispatchEvent(new CustomEvent(animationEvents.scrollTriggered, {
+                    detail: {   origin: this,
+                                direction: 'reverse'
+                            },
                     bubbles: true,
                     composed: true,
                 }));
