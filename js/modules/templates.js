@@ -237,7 +237,7 @@ class NavBarTemplate extends HTMLElement {
         navbarMenu.innerHTML = html
     }
 
-    #initializeNavbar() {
+    #initialize() {
         util.log(this.dataset, true);
 
         // TO DO: Initialize Burger menu Button
@@ -259,7 +259,7 @@ class NavBarTemplate extends HTMLElement {
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
             this.#shadow.innerHTML += html;
-            this.#initializeNavbar();
+            this.#initialize();
             addToLoadedDOMS(this.#name, this);
         });
     }
