@@ -400,16 +400,10 @@ class DropdownTemplate extends HTMLElement {
 }
 
 class HorizontalBarTemplate extends HTMLElement {
-    #shadow;
     #name;
     constructor() {
         super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
         this.#name = templateList.horizontalBarTemplate;
-    }
-
-    get shadow() {
-        return this.#shadow
     }
 
     get name() {
@@ -418,7 +412,7 @@ class HorizontalBarTemplate extends HTMLElement {
 
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
-            this.#shadow.innerHTML = html;
+            this.outerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
     }
