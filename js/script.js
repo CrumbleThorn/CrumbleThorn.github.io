@@ -17,12 +17,37 @@ const pageElements =  {
     titleBar: 'title-bar',
     titleBarContent: 'title-bar-content',
     titleText: 'title-text',
-    start: 'start',
+    gameSection: 'game-section',
+    gameCard: 'game-card',
+    devSection: 'dev-section',
+    devCard: 'dev-card',
+    artSection: 'art-section',
+    artCard: 'art-card',
+    musicSection: 'music-section',
+    musicCard: 'music-card',
+    endSection: 'end-section',
+    endCard: 'end-card',
 }
+
+let vh = window.innerHeight / 100;
+let vw = window.innerWidth / 100;
 
 // Temporary variables while definitions are not put into classes
 let hero;
-let titleBar;
+let titlebar;
+let navbar;
+let gameSection;
+let gameCard;
+let devSection;
+let devCard;
+let artSection;
+let artCard;
+let musicSection;
+let musicCard;
+let endCard;
+let endSection;
+
+const start = document.getElementById(pageElements.gameSection);
 
 class TitleBar {
     constructor(obj) {
@@ -45,14 +70,13 @@ class TitleBar {
                                                             0,
                                                             undefined,
                                                             true);
-        window.addEventListener('scrollTriggered', (event) => {this.handle(event)});
+        window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {this.handle(event)});
     }
 
     handle(event) {
-        if (event.detail.origin == this.obj && event.detail.animatedElement == hero.content.obj) {
-            util.scrollTo(this.obj);
-        } else if (event.detail.origin == hero.elem.obj && event.detail.animatedElement == hero.content.obj) {
-            util.scrollToTop();
+        util.log(event.detail.origin);
+        if (event.detail.origin == this.titleTrigger) {
+            util.scrollTo(start, 28 * vh);
         }
     }
 
@@ -109,7 +133,7 @@ function handleHero() {
                                                                             200
                                                                             ));
         // TO DO: Create AnimationEventTrigger for these
-        hero.elem.obj.addEventListener('showAnimationComplete', (event) => {
+        hero.elem.obj.addEventListener(anim.animationEvents.showAnimationComplete, (event) => {
             if (event.target == hero.content.obj) {
                 heroTitle.show();
                 heroSubtitle.show();
@@ -117,13 +141,14 @@ function handleHero() {
                 heroButton.show();
                 heroMenuText.show();
                 scrollDownText.show();
-                removeEventListener('showAnimationComplete', hero.obj);
-                hero.elem.obj.addEventListener('showAnimationComplete', (event) => {
+                removeEventListener(anim.animationEvents.showAnimationComplete, hero.elem.obj);
+                hero.elem.obj.addEventListener(anim.animationEvents.showAnimationComplete, (event) => {
                     if (event.target == scrollDownText.obj) {
                         scrollDownText.highlight();
                         document.body.classList.remove(util.css.siteClasses.noScroll);
+                        removeEventListener(anim.animationEvents.showAnimationComplete, scrollDownText.obj);
                     }
-                });
+                }, );
             }
         });
         document.body.classList.add(util.css.siteClasses.noScroll);
@@ -133,32 +158,164 @@ function handleHero() {
 
 function handleNavbar() {
     if (Object.hasOwn(loadedDOMS, templates.templateList.navbarTemplate)) {
-    const navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById(util.css.siteElements.navbar),
-                                                            false,
-                                                            new animate.Animation(animate.animationClass.slideInDown,
-                                                                                animate.speedClass.faster,
-                                                                                ),
-                                                            new animate.Animation(animate.animationClass.slideOutUp,
-                                                                                animate.speedClass.faster,
-                                                                                ),
-                                                            ),
-                                    undefined);
-    const navbarScrollDownTrigger = new anim.AnimationScrollTrigger(navbar.elem,
-                                                                    anim.animationType.show,
-                                                                    new anim.ScrollTriggerElement(titleBar.obj),
-                                                                    new anim.ScrollTriggerElement(window, anim.anchor.bottom),
-                                                                    undefined,
-                                                                    0,
-                                                                    undefined,
-                                                                    true);
-    const navbarScrollUpTrigger = new anim.AnimationScrollTrigger(  navbar.elem,
+        util.log("Navbar Detected!");
+        navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById(util.css.siteElements.navbar),
+                                                                false,
+                                                                new animate.Animation(animate.animationClass.slideInDown,
+                                                                                    animate.speedClass.faster,
+                                                                                    ),
+                                                                new animate.Animation(animate.animationClass.slideOutUp,
+                                                                                    animate.speedClass.faster,
+                                                                                    ),
+                                                                ),
+                                        undefined);
+        const navbarScrollDownTrigger = new anim.AnimationScrollTrigger(navbar.elem,
+                                                                        anim.animationType.show,
+                                                                        new anim.ScrollTriggerElement(titlebar.obj),
+                                                                        new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                        undefined,
+                                                                        0,
+                                                                        undefined,
+                                                                        true);
+        const navbarScrollUpTrigger = new anim.AnimationScrollTrigger(  navbar.elem,
+                                                                        anim.animationType.hide,
+                                                                        new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
+                                                                        new anim.ScrollTriggerElement(window),
+                                                                        anim.scrollTriggerType.onScrollUp,
+                                                                        0,
+                                                                        undefined,
+                                                                        true);
+    }
+}
+
+// TO DO: Add exceptions for when pressing back to top
+function handleCards() {
+    if (Object.hasOwn(loadedDOMS, templates.templateList.cardTemplate)) {
+        endCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][4].shadow.querySelector('.card')),
+                                    anim.anchor.bottom);
+        endSection = new anim.AnimatedElement(document.getElementById(pageElements.endSection));
+
+        musicCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][3].shadow.querySelector('.card')),
+                                    anim.anchor.right);
+        musicSection = new anim.AnimatedElement(document.getElementById(pageElements.musicSection));
+        const endSectionScrollUpTrigger = new anim.AnimationScrollTrigger(  endSection,
                                                                     anim.animationType.hide,
-                                                                    new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
+                                                                    new anim.ScrollTriggerElement(endSection.obj),
                                                                     new anim.ScrollTriggerElement(window),
                                                                     anim.scrollTriggerType.onScrollUp,
                                                                     0,
                                                                     undefined,
                                                                     true);
+        window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
+            if (event.detail.origin == endSectionScrollUpTrigger) {
+                util.scrollTo(musicSection.obj, 28 * vh);
+            }
+        });
+        const musicSectionScrollDownTrigger = new anim.AnimationScrollTrigger(  musicSection,
+                                                                                anim.animationType.show,
+                                                                                new anim.ScrollTriggerElement(endSection.obj),
+                                                                                new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                                undefined,
+                                                                                0,
+                                                                                undefined,
+                                                                                true);
+        const musicSectionScrollUpTrigger = new anim.AnimationScrollTrigger(musicSection,
+                                                                            anim.animationType.hide,
+                                                                            new anim.ScrollTriggerElement(musicSection.obj),
+                                                                            new anim.ScrollTriggerElement(window),
+                                                                            anim.scrollTriggerType.onScrollUp,
+                                                                            0,
+                                                                            undefined,
+                                                                            true);
+
+        artCard = new ui.Card(  new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][2].shadow.querySelector('.card')),
+                                    anim.anchor.left);
+        artSection = new anim.AnimatedElement(document.getElementById(pageElements.artSection));
+        window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
+            if (event.detail.origin == musicSectionScrollDownTrigger) {
+                window.scrollTo(0, document.body.scrollHeight);
+            } else if (event.detail.origin == musicSectionScrollUpTrigger) {
+                util.scrollTo(artSection.obj, 28 * vh);
+            }
+        });
+        const artSectionScrollDownTrigger = new anim.AnimationScrollTrigger(artSection,
+                                                                            anim.animationType.show,
+                                                                            new anim.ScrollTriggerElement(musicSection.obj),
+                                                                            new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                            undefined,
+                                                                            0,
+                                                                            undefined,
+                                                                            true);
+        const artSectionScrollUpTrigger = new anim.AnimationScrollTrigger(  artSection,
+                                                                            anim.animationType.hide,
+                                                                            new anim.ScrollTriggerElement(artSection.obj),
+                                                                            new anim.ScrollTriggerElement(window),
+                                                                            anim.scrollTriggerType.onScrollUp,
+                                                                            0,
+                                                                            undefined,
+                                                                            true);
+
+        devCard = new ui.Card(  new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][1].shadow.querySelector('.card')),
+                                    anim.anchor.right);
+        devSection = new anim.AnimatedElement(document.getElementById(pageElements.devSection));
+        window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
+            if (event.detail.origin == artSectionScrollDownTrigger) {
+                util.scrollTo(musicSection.obj, 28 * vh);
+            } else if (event.detail.origin == artSectionScrollUpTrigger) {
+                util.scrollTo(devSection.obj, 28 * vh);
+            }
+        });
+        const devSectionScrollDownTrigger = new anim.AnimationScrollTrigger(devSection,
+                                                                            anim.animationType.show,
+                                                                            new anim.ScrollTriggerElement(artSection.obj),
+                                                                            new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                            undefined,
+                                                                            0,
+                                                                            undefined,
+                                                                            true);
+        const devSectionScrollUpTrigger = new anim.AnimationScrollTrigger(  devSection,
+                                                                            anim.animationType.hide,
+                                                                            new anim.ScrollTriggerElement(devSection.obj),
+                                                                            new anim.ScrollTriggerElement(window),
+                                                                            anim.scrollTriggerType.onScrollUp,
+                                                                            0,
+                                                                            undefined,
+                                                                            true);
+
+
+        gameCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][0].shadow.querySelector('.card')),
+                                            anim.anchor.left);
+        gameSection = new anim.AnimatedElement(document.getElementById(pageElements.gameSection));
+        window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
+            if (event.detail.origin == devSectionScrollDownTrigger) {
+                util.scrollTo(artSection.obj, 28 * vh);
+            } else if (event.detail.origin == devSectionScrollUpTrigger) {
+                util.scrollTo(gameSection.obj, 28 * vh);
+            }
+        });
+        const gameSectionScrollDownTrigger = new anim.AnimationScrollTrigger(   gameSection,
+                                                                                anim.animationType.show,
+                                                                                new anim.ScrollTriggerElement(devSection.obj),
+                                                                                new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                                undefined,
+                                                                                0,
+                                                                                undefined,
+                                                                                true);
+        const gameSectionScrollUpTrigger = new anim.AnimationScrollTrigger( gameSection,
+                                                                            anim.animationType.hide,
+                                                                            new anim.ScrollTriggerElement(gameSection.obj),
+                                                                            new anim.ScrollTriggerElement(window),
+                                                                            anim.scrollTriggerType.onScrollUp,
+                                                                            0,
+                                                                            undefined,
+                                                                            true);
+        window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
+            if (event.detail.origin == gameSectionScrollDownTrigger) {
+                util.scrollTo(devSection.obj, 28 * vh);
+            } else if (event.detail.origin == gameSectionScrollUpTrigger) {
+                util.scrollToTop();
+            }
+        });
     }
 }
 
@@ -168,36 +325,14 @@ function onLoadComplete() {
     setTimeout(() => {
         handleHero();
         //#region Title Bar
-        titleBar = document.getElementById(pageElements.titleBar);
-        if (titleBar) {
+        titlebar = document.getElementById(pageElements.titleBar);
+        if (titlebar) {
             util.log('Title Bar Detected!');
-            titleBar = new TitleBar(titleBar);
+            titlebar = new TitleBar(titlebar);
         }
         //#endregion
         handleNavbar();
-
-
-        if (Object.hasOwn(loadedDOMS, 'sidecard')) {
-        const gameSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[0].shadow.querySelector('.sidecard'),
-                                                                     true,
-                                                                     new animate.Animation(animate.animationClass.slideInUp,
-                                                                                           animate.speedClass.fast,
-                                                                                           ),
-                                                                     new animate.Animation(animate.animationClass.slideOutUp,
-                                                                                           animate.speedClass.fast,
-                                                                                           ),
-                                                                     ),
-                                            anim.anchor.left);
-        const devSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[1].shadow.querySelector('.sidecard'),
-                                                                    ),
-                                           anim.anchor.right);
-        const artSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[2].shadow.querySelector('.sidecard'),
-                                                                    ),
-                                           anim.anchor.left);
-        const musicSection = new ui.SideCard(new anim.AnimatedElement(loadedDOMS.sidecard[3].shadow.querySelector('.sidecard'),
-                                                                      ),
-                                             anim.anchor.right);
-                                                                    }
+        handleCards();
         if (Object.hasOwn(loadedDOMS, 'sidebar')) {
         const sidebar = new ui.SideBar(new anim.AnimatedElement(loadedDOMS.sidebar[0].shadow.getElementById('sidebar'),
                                                         false,
@@ -211,27 +346,35 @@ function onLoadComplete() {
                                                     }
 
         if (Object.hasOwn(loadedDOMS, 'progressbar')) {
-        const progressbar = new ui.ScrollProgressBar(new anim.AnimatedElement(loadedDOMS.progressbar[0].shadow.getElementById('progressbar')),
-                                                    document.getElementById('start').getBoundingClientRect().top - window.innerHeight);
+        const progressbar = new ui.ScrollProgressBar(   new anim.AnimatedElement(loadedDOMS.progressbar[0].shadow.getElementById('progressbar')),
+                                                        document.getElementById(pageElements.gameSection).getBoundingClientRect().top - window.innerHeight);
         }
         if (Object.hasOwn(loadedDOMS, 'horizontalbar')) {
-        const bottomBar = new ui.BottomBar(new anim.AnimatedElement(loadedDOMS.horizontalbar[0].shadow.getElementById('bottombar'),
-                                                                    false,
-                                                                    new animate.Animation(animate.animationClass.slideInUp,
-                                                                                          animate.speedClass.faster,
-                                                                                          ),
-                                                                    new animate.Animation(animate.animationClass.slideOutDown,
-                                                                                          animate.speedClass.faster,
-                                                                                          ),
-                                                                    ));
-        const bottombarTrigger = new anim.AnimationScrollTrigger(bottomBar.elem,
-                                                                anim.animationType.toggle,
-                                                                new anim.ScrollTriggerElement(gameSection.elem.obj),
-                                                                new anim.ScrollTriggerElement(window, anim.anchor.bottom),
-                                                                anim.scrollTriggerType.onScrollDown,
-                                                                0,
-                                                                true,
-                                                                true);
+            const bottombar = new ui.BottomBar(new anim.AnimatedElement(document.getElementById('bottombar'),
+                                                                        false,
+                                                                        new animate.Animation(animate.animationClass.slideInUp,
+                                                                                            animate.speedClass.faster,
+                                                                                            ),
+                                                                        new animate.Animation(animate.animationClass.slideOutDown,
+                                                                                            animate.speedClass.faster,
+                                                                                            ),
+                                                                        ));
+            const bottombarScrollDownTrigger = new anim.AnimationScrollTrigger( bottombar.elem,
+                                                                                anim.animationType.show,
+                                                                                new anim.ScrollTriggerElement(titlebar.obj),
+                                                                                new anim.ScrollTriggerElement(window, anim.anchor.bottom),
+                                                                                undefined,
+                                                                                0,
+                                                                                undefined,
+                                                                                true);
+            const bottombarScrollUpTrigger = new anim.AnimationScrollTrigger(   bottombar.elem,
+                                                                                anim.animationType.hide,
+                                                                                new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
+                                                                                new anim.ScrollTriggerElement(window),
+                                                                                anim.scrollTriggerType.onScrollUp,
+                                                                                0,
+                                                                                undefined,
+                                                                                true);
         }
     }, 500);
 }

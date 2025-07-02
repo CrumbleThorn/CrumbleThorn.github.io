@@ -77,45 +77,63 @@
 				</div>
 				<img class="hero-image" id="hero-image" src="../img/cil-chibi.png"/>
 			</hero-template>
-			<!-- <button class="return-button"></button>
-			<main id="main"> -->
+			
+			<main id="main">
+				<!-- <button class="return-button"></button> -->
 				<!--TO DO: Animate sections and make them sticky-->
 				<!--TO DO: Finalize section layout-->
 				<!--TO DO: Adjust section layout based on display ratio-->
-				<!-- <div class="main-title-bar">
-						<div class="main-title-bar-content" id="title-bar">
-							<div class="main-title">I'm a&nbsp;</div>
-							<div class="main-label" id="title-text">Game Developer</div>
-							<div class="main-title">!</div>
+				<div class="title-bar" id="title-bar">
+						<div class="title-bar-content" id="title-bar-content">
+							<div class="title-text">I'm a&nbsp;</div>
+							<div class="title-text" id="title-text">Game Developer</div>
+							<div class="title-text">!</div>
 						</div>
 				</div>
-				<div class="main-section">
-					<div class="main-sticky-section" id="game-section">
-						<sidecard-template class="side-card-left"></sidecard-template>
+				<div class="main-section" id="game-section">
+					<div class="main-sticky-section sticky-left">
+						<card-template data-side="left" id="game-card">
+							<slideshow-template></slideshow-template>
+							<div>I make video games!</div>
+						</card-template>
 					</div>
 				</div>
-				<div class="main-section">
-					<div class="main-sticky-section" id="dev-section">
-						<sidecard-template class="side-card-right"></sidecard-template>
+				<div class="main-section" id="dev-section">
+					<div class="main-sticky-section sticky-right">
+						<card-template data-side="right" id="dev-card">
+							<slideshow-template></slideshow-template>
+							<div>I write programs!</div>
+						</card-template>
 					</div>
 				</div>
-				<div class="main-section">
-					<div class="main-sticky-section" id="art-section">
-						<sidecard-template class="side-card-left"></sidecard-template>
+				<div class="main-section" id="art-section">
+					<div class="main-sticky-section sticky-left">
+						<card-template data-side="left" id="art-card">
+							<slideshow-template></slideshow-template>
+							<div>I create illustrations!</div>
+						</card-template>
 					</div>
 				</div>
-				<div class="main-section">
-					<div class="main-sticky-section" id="music-section">
-						<sidecard-template class="side-card-right"></sidecard-template>
+				<div class="main-section" id="music-section">
+					<div class="main-sticky-section sticky-right">
+						<card-template data-side="right" id="music-card">
+							<slideshow-template></slideshow-template>
+							<div>I compose music!</div>
+						</card-template>
 					</div>
 				</div>
-			</main>
+			</main> 
 			<div class="end-section" id="end-section">
-					<centercard-template class="end-card"></centercard-template>
-			</div> -->
+				<div class="end-sticky"> 
+					<card-template class="end-card" data-side="bottom" id="end-card">
+						<div></div>
+						<div></div>
+					</card-template>
+				</div>
+			</div>
 			<!--TO DO: Animate bottom bar similarly to navbar-->
-			<!-- <horizontalbar-template></horizontalbar-template>
-			<footer-template></footer-template> -->
+			<horizontalbar-template data-type="bottombar"></horizontalbar-template>
+			<footer-template></footer-template>
 			<!--TO DO: Finalize background design-->
 			<background-template></background-template>
 		</div>
@@ -177,11 +195,11 @@
 					<!--TO DO: Animate sections and make them sticky-->
 					<!--TO DO: Finalize section layout-->
 					<!--TO DO: Adjust section layout based on display ratio-->
-					<div class="main-title-bar">
-						<div class="main-title-bar-content">
-							<div class="main-title">I'm a&nbsp;</div>
-							<div class="main-label" id="main-label">Game Developer</div>
-							<div class="main-title">!</div>
+					<div class="title-bar">
+						<div class="title-bar-content">
+							<div class="title-text">I'm a&nbsp;</div>
+							<div class="title-text" id="title-text">Game Developer</div>
+							<div class="title-text">!</div>
 						</div>
 					</div>
 					<div class="main-section">
