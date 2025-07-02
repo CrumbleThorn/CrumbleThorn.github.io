@@ -95,17 +95,12 @@ class BackgroundTemplate extends HTMLElement {
 }
 
 class FooterTemplate extends HTMLElement {
-    #shadow;
     #name;
     constructor() {
         super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
         this.#name = templateList.footerTemplate;
     }
 
-    get shadow() {
-        return this.#shadow
-    }
 
     get name() {
         return this.#name;
@@ -113,7 +108,7 @@ class FooterTemplate extends HTMLElement {
 
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
-            this.#shadow.innerHTML = html;
+            this.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
     }
@@ -470,16 +465,10 @@ class SlideshowTemplate extends HTMLElement {
 }
 
 class VerticalBarTemplate extends HTMLElement {
-    #shadow;
     #name;
     constructor() {
         super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
         this.#name = templateList.verticalbarTemplate;
-    }
-
-    get shadow() {
-        return this.#shadow
     }
 
     get name() {
@@ -488,7 +477,7 @@ class VerticalBarTemplate extends HTMLElement {
 
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
-            this.#shadow.innerHTML = html;
+            this.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
     }
