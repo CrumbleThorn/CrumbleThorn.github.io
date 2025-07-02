@@ -101,7 +101,6 @@ class FooterTemplate extends HTMLElement {
         this.#name = templateList.footerTemplate;
     }
 
-
     get name() {
         return this.#name;
     }
@@ -131,12 +130,16 @@ class HeroTemplate extends HTMLElement {
         return this.#name;
     }
 
+    #initialize(html) {
+        const heroContent = this.#shadow.host.innerHTML;
+        this.#shadow.host.innerHTML = '';
+        this.#shadow.innerHTML = html;
+        this.#shadow.getElementById(util.css.siteElements.heroContent).innerHTML = heroContent;
+    }
+
     connectedCallback() {
         util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
-            const heroContent = this.#shadow.host.innerHTML;
-            this.#shadow.host.innerHTML = '';
-            this.#shadow.innerHTML = html;
-            this.#shadow.getElementById(util.css.siteElements.heroContent).innerHTML = heroContent;
+            this.#initialize(html);
             addToLoadedDOMS(this.#name, this);
         });
     }
