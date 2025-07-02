@@ -12,6 +12,6 @@
 	z-index: 99;
 
 	height: 2vh;
-
+	width: 100vw;
 	background-color: var(--cilly-accentgray);
 }
