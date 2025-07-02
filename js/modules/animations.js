@@ -143,7 +143,8 @@ export class AnimatedElement {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is already active, skipping animation');
             }
         } else {
-            throw new ReferenceError("entryAnimation is undefined!");
+            util.warn('WARNING: entryAnimation is undefined, nothing will be animated!');
+            //throw new ReferenceError("entryAnimation is undefined!");
         }
     }
 
@@ -170,7 +171,8 @@ export class AnimatedElement {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation');
             }
         } else {
-            throw new ReferenceError("highlightAnimation is undefined!");
+            util.warn('WARNING: highlightAnimation is undefined, nothing will be animated!');
+            //throw new ReferenceError("highlightAnimation is undefined!");
         }
     }
 
@@ -207,7 +209,8 @@ export class AnimatedElement {
                 util.warn('WARNING: Object ' + this.#obj.id + ' is already inactive, skipping animation');
             }
         } else {
-            throw new ReferenceError("exitAnimation is undefined!");
+            util.warn('WARNING: exitAnimation is undefined, nothing will be animated!');
+            //throw new ReferenceError("exitAnimation is undefined!");
         }
     }
 
