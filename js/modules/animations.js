@@ -386,6 +386,7 @@ export class AnimationScrollTrigger extends AnimationTrigger {
                 triggerLimit = 1,
                 reversible = false, // Use this flag if you want the Trigger to check for the reverse value once triggered
                 override = false,
+                active = true,
                 ) {
         super(elem, animationType, triggerLimit, override);
         this.#triggerElem = triggerElem;
@@ -397,7 +398,7 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         } else {
             throw new TypeError(reversible + ' is not a boolean value!');
         }
-        this.#triggered = false;
+        this.#triggered = !active;
         // Initialization so the values are not undefined
         this.calculate();
         window.addEventListener(scrollTriggerType.onScroll, () => {this.calculate()});
