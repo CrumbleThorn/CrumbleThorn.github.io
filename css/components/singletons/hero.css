@@ -57,22 +57,33 @@
 	width: fit-content;
 
 	margin: 0;
-	line-height: 110%;
+}
 
-	font-family: "Source Sans Pro", sans-serif;
+.hero-title-1 {
+
+	padding-left: 0.5vh;
+
+	font-size: 48px;
+	font-size: 5vh;
+
+	line-height: 150%;
+}
+
+.hero-title-2 {
 	font-size: 96px;
 	font-size: 10vh;
-	font-weight: bold;
+
+	line-height: 110%;
 }
 
 .hero-subtitle {
 	width: fit-content;
 
 	margin: 0;
+	padding-left: 0.5vh;
 
-	font-size: 36px;
+	font-size: 40px;
 	font-size: 4.5vh;
-	font-weight: normal;
 }
 
 .hero-menu {
@@ -87,7 +98,6 @@
 	width: 100%;
 
 	font-size: 1.5rem;
-	font-weight: normal;
 }
 
 .hero-button {
@@ -106,5 +116,4 @@
 
 #scroll-down-text {
 	font-size: 1.75rem;
-	font-weight: bold;
 }
