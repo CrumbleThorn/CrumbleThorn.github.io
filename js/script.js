@@ -3,20 +3,29 @@ import * as anim from './modules/animations.js';
 import * as templates from './modules/templates.js';
 import * as ui from './modules/ui.js';
 import * as util from './modules/util.js';
+import * as vivus from './modules/vivus.js';
 
 const pageClasses = {
-    mainTitleBar: 'main-title-bar',
-    mainTitleBarContent: 'main-title-bar-content',
-    mainTitle: 'main-title',
-    mainLabel: 'main-label',
+    titleBar: 'title-bar',
+    titleBarContent: 'title-bar-content',
+    titleText: 'title-text',
+    vivusText: 'vivus-text',
+    vivusTextAfter: 'vivus-text-after',
     mainSection: 'main-section',
     mainStickySection: 'main-sticky-section',
-    endSection: 'end-section'
+    stickyLeft: 'sticky-left',
+    stickyRight: 'sticky-right',
+    endSection: 'end-section',
+    endSticky: 'end-sticky',
+    endCard: 'end-card',
 }
 const pageElements =  {
     titleBar: 'title-bar',
     titleBarContent: 'title-bar-content',
-    titleText: 'title-text',
+    vivusGame: 'vivus-game',
+    vivusDev: 'vivus-dev',
+    vivusArt: 'vivus-art',
+    vivusMusic: 'vivus-music',
     gameSection: 'game-section',
     gameCard: 'game-card',
     devSection: 'dev-section',
@@ -53,7 +62,41 @@ class TitleBar {
     constructor(obj) {
         this.obj = obj;
         this.titleContent = document.getElementById(pageElements.titleBarContent);
-        this.titleText = document.getElementById(pageElements.titleText);
+        this.vivusGame = new vivus.VivusContainer ( pageElements.vivusGame,
+                                                    {
+                                                        type: 'oneByOne',
+                                                        file: 'data/svg/gamedeveloper.svg',
+                                                        start: 'manual',
+                                                    }).then((vivusObject) => {
+                                                                                this.vivusGame = vivusObject;
+                                                                                this.intializeVivus(this.vivusGame);
+                                                                                this.activeVivus = this.vivusGame;});
+        this.vivusDev = new vivus.VivusContainer (  pageElements.vivusDev,
+                                                    {
+                                                        type: 'oneByOne',
+                                                        file: 'data/svg/softwareengineer.svg',
+                                                        start: 'manual',
+                                                    }).then((vivusObject) => {
+                                                                                this.vivusDev = vivusObject;
+                                                                                this.intializeVivus(this.vivusDev, false);});
+        this.vivusArt = new vivus.VivusContainer (  pageElements.vivusArt,
+                                                    {
+                                                        type: 'oneByOne',
+                                                        file: 'data/svg/digitalartist.svg',
+                                                        start: 'manual',
+                                                    }).then((vivusObject) => {
+                                                                                this.vivusArt = vivusObject;
+                                                                                this.intializeVivus(this.vivusArt, false);});
+        this.vivusMusic = new vivus.VivusContainer (pageElements.vivusMusic,
+                                                    {
+                                                        type: 'oneByOne',
+                                                        file: 'data/svg/musician.svg',
+                                                        start: 'manual',
+                                                    }).then((vivusObject) => {
+                                                                                this.vivusMusic = vivusObject;
+                                                                                this.vivusMusic.obj.classList.add('vivus-music');
+                                                                                this.intializeVivus(this.vivusMusic, false);});
+        
         this.titleTrigger = new anim.AnimationScrollTrigger(hero.content,
                                                             anim.animationType.hide,
                                                             new anim.ScrollTriggerElement(this.obj),
@@ -69,14 +112,63 @@ class TitleBar {
                                                             anim.scrollTriggerType.onScrollUp,
                                                             0,
                                                             undefined,
-                                                            true);
+                                                            true,
+                                                            false);
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {this.handle(event)});
     }
 
+    intializeVivus(elem, active = true) {
+        util.log(this.vivusGame);
+        elem.obj.classList.add(pageClasses.vivusText);
+        if (!active) {
+            elem.hide();
+        }
+    }
+
+    playVivus() {
+        this.activeVivus.vivus.play(1.5, () => {
+            this.activeVivus.obj.classList.add(pageClasses.vivusTextAfter);
+        });
+    }
+
+    rewindVivus() {
+        this.activeVivus.obj.classList.remove(pageClasses.vivusTextAfter);
+        this.activeVivus.vivus.play(-2);
+    }
+
+    transitionVivus(next) {
+        this.activeVivus.obj.classList.remove(pageClasses.vivusTextAfter);
+        this.activeVivus.vivus.play(-2, () => {
+            this.activeVivus.hide();
+            this.activeVivus = next;
+            this.activeVivus.show();
+            this.playVivus();
+        })
+    }
+
+    resetVivus() {
+        this.vivusGame.reset();
+        this.vivusDev.reset();
+        this.vivusDev.hide();
+        this.vivusArt.reset();
+        this.vivusArt.hide();
+        this.vivusMusic.reset();
+        this.vivusMusic.hide();
+        this.activeVivus = this.vivusGame;
+        this.activeVivus.show();
+    }
+
+    scrollToMain() {
+        util.scrollTo(start, 28 * vh);
+        setTimeout(() => {
+            this.playVivus();
+        }, 500);
+    }
+
     handle(event) {
-        util.log(event.detail.origin);
         if (event.detail.origin == this.titleTrigger) {
-            util.scrollTo(start, 28 * vh);
+            util.log("hero scroll down");
+            this.scrollToMain();
         }
     }
 
@@ -91,19 +183,19 @@ function handleHero() {
     if (Object.hasOwn(loadedDOMS, templates.templateList.heroTemplate)) {
         util.log('Hero Detected!');
         hero = new ui.Hero(new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.hero)));
-        const heroButton = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-button'),
+        hero.heroButton = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-button'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.fadeInUp,
                                                                             animate.speedClass.fast,
                                                                             1000
                                                                             ));
-        const heroMenuText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-menu-text'),
+        hero.heroMenuText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-menu-text'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.fadeInUp,
                                                                                 animate.speedClass.fast,
                                                                                 1200
                                                                                 ));
-        const scrollDownText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('scroll-down-text'),
+        hero.scrollDownText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('scroll-down-text'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.fadeInUp,
                                                                                 animate.speedClass.fast,
@@ -115,18 +207,18 @@ function handleHero() {
                                                                                 animate.delayClass.delay_4s,
                                                                                 animate.repeatClass.infinite
                                                                                 ));
-        const heroTitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-title'),
+        hero.heroTitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-title'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.backInLeft,
                                                                             animate.speedClass.animated,
                                                                             ));
-        const heroSubtitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-subtitle'),
+        hero.heroSubtitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-subtitle'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.backInLeft,
                                                                                 animate.speedClass.animated,
                                                                                 500
                                                                                 ));
-        const heroImage = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-image'),
+        hero.heroImage = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-image'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.backInRight,
                                                                             animate.speedClass.animated,
@@ -135,18 +227,18 @@ function handleHero() {
         // TO DO: Create AnimationEventTrigger for these
         hero.elem.obj.addEventListener(anim.animationEvents.showAnimationComplete, (event) => {
             if (event.target == hero.content.obj) {
-                heroTitle.show();
-                heroSubtitle.show();
-                heroImage.show();
-                heroButton.show();
-                heroMenuText.show();
-                scrollDownText.show();
+                hero.heroTitle.show();
+                hero.heroSubtitle.show();
+                hero.heroImage.show();
+                hero.heroButton.show();
+                hero.heroMenuText.show();
+                hero.scrollDownText.show();
                 removeEventListener(anim.animationEvents.showAnimationComplete, hero.elem.obj);
                 hero.elem.obj.addEventListener(anim.animationEvents.showAnimationComplete, (event) => {
-                    if (event.target == scrollDownText.obj) {
-                        scrollDownText.highlight();
+                    if (event.target == hero.scrollDownText.obj) {
+                        hero.scrollDownText.highlight();
                         document.body.classList.remove(util.css.siteClasses.noScroll);
-                        removeEventListener(anim.animationEvents.showAnimationComplete, scrollDownText.obj);
+                        removeEventListener(anim.animationEvents.showAnimationComplete, hero.scrollDownText.obj);
                     }
                 }, );
             }
@@ -169,7 +261,7 @@ function handleNavbar() {
                                                                                     ),
                                                                 ),
                                         undefined);
-        const navbarScrollDownTrigger = new anim.AnimationScrollTrigger(navbar.elem,
+        navbar.scrollDownTrigger = new anim.AnimationScrollTrigger(navbar.elem,
                                                                         anim.animationType.show,
                                                                         new anim.ScrollTriggerElement(titlebar.obj),
                                                                         new anim.ScrollTriggerElement(window, anim.anchor.bottom),
@@ -177,14 +269,15 @@ function handleNavbar() {
                                                                         0,
                                                                         undefined,
                                                                         true);
-        const navbarScrollUpTrigger = new anim.AnimationScrollTrigger(  navbar.elem,
+        navbar.scrollUpTrigger = new anim.AnimationScrollTrigger(  navbar.elem,
                                                                         anim.animationType.hide,
                                                                         new anim.ScrollTriggerElement(hero.elem.obj, anim.anchor.bottom),
                                                                         new anim.ScrollTriggerElement(window),
                                                                         anim.scrollTriggerType.onScrollUp,
                                                                         0,
                                                                         undefined,
-                                                                        true);
+                                                                        true,
+                                                                        false);
     }
 }
 
@@ -198,121 +291,148 @@ function handleCards() {
         musicCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][3].shadow.querySelector('.card')),
                                     anim.anchor.right);
         musicSection = new anim.AnimatedElement(document.getElementById(pageElements.musicSection));
-        const endSectionScrollUpTrigger = new anim.AnimationScrollTrigger(  endSection,
+        endSection.scrollUpTrigger = new anim.AnimationScrollTrigger(  endSection,
                                                                     anim.animationType.hide,
                                                                     new anim.ScrollTriggerElement(endSection.obj),
                                                                     new anim.ScrollTriggerElement(window),
                                                                     anim.scrollTriggerType.onScrollUp,
                                                                     0,
                                                                     undefined,
-                                                                    true);
+                                                                    true,
+                                                                    false);
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
-            if (event.detail.origin == endSectionScrollUpTrigger) {
+            if (event.detail.origin == endSection.scrollUpTrigger) {
+                util.log("end scroll up");
+                titlebar.playVivus();
                 util.scrollTo(musicSection.obj, 28 * vh);
             }
         });
-        const musicSectionScrollDownTrigger = new anim.AnimationScrollTrigger(  musicSection,
+        musicSection.scrollDownTrigger = new anim.AnimationScrollTrigger(  musicSection,
                                                                                 anim.animationType.show,
                                                                                 new anim.ScrollTriggerElement(endSection.obj),
                                                                                 new anim.ScrollTriggerElement(window, anim.anchor.bottom),
                                                                                 undefined,
                                                                                 0,
                                                                                 undefined,
-                                                                                true);
-        const musicSectionScrollUpTrigger = new anim.AnimationScrollTrigger(musicSection,
+                                                                                true,
+                                                                                false);
+        musicSection.scrollUpTrigger = new anim.AnimationScrollTrigger(musicSection,
                                                                             anim.animationType.hide,
                                                                             new anim.ScrollTriggerElement(musicSection.obj),
                                                                             new anim.ScrollTriggerElement(window),
                                                                             anim.scrollTriggerType.onScrollUp,
                                                                             0,
                                                                             undefined,
-                                                                            true);
+                                                                            true,
+                                                                            false);
 
         artCard = new ui.Card(  new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][2].shadow.querySelector('.card')),
                                     anim.anchor.left);
         artSection = new anim.AnimatedElement(document.getElementById(pageElements.artSection));
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
-            if (event.detail.origin == musicSectionScrollDownTrigger) {
+            if (event.detail.origin == musicSection.scrollDownTrigger) {
+                util.log("music scroll down");
+                titlebar.rewindVivus();
                 window.scrollTo(0, document.body.scrollHeight);
-            } else if (event.detail.origin == musicSectionScrollUpTrigger) {
+            } else if (event.detail.origin == musicSection.scrollUpTrigger) {
+                util.log("music scroll up");
+                titlebar.transitionVivus(titlebar.vivusArt);
                 util.scrollTo(artSection.obj, 28 * vh);
             }
         });
-        const artSectionScrollDownTrigger = new anim.AnimationScrollTrigger(artSection,
+        artSection.scrollDownTrigger = new anim.AnimationScrollTrigger(artSection,
                                                                             anim.animationType.show,
                                                                             new anim.ScrollTriggerElement(musicSection.obj),
                                                                             new anim.ScrollTriggerElement(window, anim.anchor.bottom),
                                                                             undefined,
                                                                             0,
                                                                             undefined,
-                                                                            true);
-        const artSectionScrollUpTrigger = new anim.AnimationScrollTrigger(  artSection,
+                                                                            true,
+                                                                            false);
+        artSection.scrollUpTrigger = new anim.AnimationScrollTrigger(  artSection,
                                                                             anim.animationType.hide,
                                                                             new anim.ScrollTriggerElement(artSection.obj),
                                                                             new anim.ScrollTriggerElement(window),
                                                                             anim.scrollTriggerType.onScrollUp,
                                                                             0,
                                                                             undefined,
-                                                                            true);
+                                                                            true,
+                                                                            false);
 
         devCard = new ui.Card(  new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][1].shadow.querySelector('.card')),
                                     anim.anchor.right);
         devSection = new anim.AnimatedElement(document.getElementById(pageElements.devSection));
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
-            if (event.detail.origin == artSectionScrollDownTrigger) {
+            if (event.detail.origin == artSection.scrollDownTrigger) {
+                util.log("art scroll down");
+                titlebar.transitionVivus(titlebar.vivusMusic);
                 util.scrollTo(musicSection.obj, 28 * vh);
-            } else if (event.detail.origin == artSectionScrollUpTrigger) {
+            } else if (event.detail.origin == artSection.scrollUpTrigger) {
+                util.log("art scroll up");
+                titlebar.transitionVivus(titlebar.vivusDev);
                 util.scrollTo(devSection.obj, 28 * vh);
             }
         });
-        const devSectionScrollDownTrigger = new anim.AnimationScrollTrigger(devSection,
+        devSection.scrollDownTrigger = new anim.AnimationScrollTrigger(devSection,
                                                                             anim.animationType.show,
                                                                             new anim.ScrollTriggerElement(artSection.obj),
                                                                             new anim.ScrollTriggerElement(window, anim.anchor.bottom),
                                                                             undefined,
                                                                             0,
                                                                             undefined,
-                                                                            true);
-        const devSectionScrollUpTrigger = new anim.AnimationScrollTrigger(  devSection,
+                                                                            true,
+                                                                            false);
+        devSection.scrollUpTrigger = new anim.AnimationScrollTrigger(  devSection,
                                                                             anim.animationType.hide,
                                                                             new anim.ScrollTriggerElement(devSection.obj),
                                                                             new anim.ScrollTriggerElement(window),
                                                                             anim.scrollTriggerType.onScrollUp,
                                                                             0,
                                                                             undefined,
-                                                                            true);
+                                                                            true,
+                                                                            false);
 
 
         gameCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][0].shadow.querySelector('.card')),
                                             anim.anchor.left);
         gameSection = new anim.AnimatedElement(document.getElementById(pageElements.gameSection));
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
-            if (event.detail.origin == devSectionScrollDownTrigger) {
+            if (event.detail.origin == devSection.scrollDownTrigger) {
+                util.log("dev scroll down");
+                titlebar.transitionVivus(titlebar.vivusArt);
                 util.scrollTo(artSection.obj, 28 * vh);
-            } else if (event.detail.origin == devSectionScrollUpTrigger) {
+            } else if (event.detail.origin == devSection.scrollUpTrigger) {
+                util.log("dev scroll up");
+                titlebar.transitionVivus(titlebar.vivusGame);
                 util.scrollTo(gameSection.obj, 28 * vh);
             }
         });
-        const gameSectionScrollDownTrigger = new anim.AnimationScrollTrigger(   gameSection,
+        gameSection.scrollDownTrigger = new anim.AnimationScrollTrigger(   gameSection,
                                                                                 anim.animationType.show,
                                                                                 new anim.ScrollTriggerElement(devSection.obj),
                                                                                 new anim.ScrollTriggerElement(window, anim.anchor.bottom),
                                                                                 undefined,
                                                                                 0,
                                                                                 undefined,
-                                                                                true);
-        const gameSectionScrollUpTrigger = new anim.AnimationScrollTrigger( gameSection,
+                                                                                true,
+                                                                                false);
+        gameSection.scrollUpTrigger = new anim.AnimationScrollTrigger( gameSection,
                                                                             anim.animationType.hide,
                                                                             new anim.ScrollTriggerElement(gameSection.obj),
                                                                             new anim.ScrollTriggerElement(window),
                                                                             anim.scrollTriggerType.onScrollUp,
                                                                             0,
                                                                             undefined,
-                                                                            true);
+                                                                            true,
+                                                                            false);
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
-            if (event.detail.origin == gameSectionScrollDownTrigger) {
+            if (event.detail.origin == gameSection.scrollDownTrigger) {
+                util.log("game scroll down");
+                titlebar.transitionVivus(titlebar.vivusDev);
                 util.scrollTo(devSection.obj, 28 * vh);
-            } else if (event.detail.origin == gameSectionScrollUpTrigger) {
+            } else if (event.detail.origin == gameSection.scrollUpTrigger) {
+                util.log("game scroll up");
+                titlebar.resetVivus();
                 util.scrollToTop();
             }
         });
@@ -333,6 +453,10 @@ function onLoadComplete() {
         //#endregion
         handleNavbar();
         handleCards();
+        hero.heroButton.obj.addEventListener('click', () => {
+            titlebar.titleTrigger.trigger();
+            titlebar.scrollToMain();
+        })
         if (Object.hasOwn(loadedDOMS, 'sidebar')) {
         const sidebar = new ui.SideBar(new anim.AnimatedElement(loadedDOMS.sidebar[0].shadow.getElementById('sidebar'),
                                                         false,
@@ -344,7 +468,6 @@ function onLoadComplete() {
                                                                               ),
                                                         ));
                                                     }
-
         if (Object.hasOwn(loadedDOMS, 'progressbar')) {
         const progressbar = new ui.ScrollProgressBar(   new anim.AnimatedElement(loadedDOMS.progressbar[0].shadow.getElementById('progressbar')),
                                                         document.getElementById(pageElements.gameSection).getBoundingClientRect().top - window.innerHeight);
@@ -374,7 +497,8 @@ function onLoadComplete() {
                                                                                 anim.scrollTriggerType.onScrollUp,
                                                                                 0,
                                                                                 undefined,
-                                                                                true);
+                                                                                true,
+                                                                                false);
         }
     }, 500);
 }

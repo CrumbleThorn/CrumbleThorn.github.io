@@ -234,4 +234,13 @@ a:visited {
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.vivus-text {
+    fill-opacity: 0;
+    transition: fill-opacity 1s;
+}
+
+.vivus-text-after {
+    fill-opacity: 1;
+}
 /* #endregion */
