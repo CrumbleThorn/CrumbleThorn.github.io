@@ -191,8 +191,8 @@ export function scrollToTop() {
     document.documentElement.scrollTop = 0;
 }
 
-export function scrollTo(element) {
-    window.scrollTo(element.getBoundingClientRect().left + window.scrollX, element.getBoundingClientRect().top + window.scrollY);
+export function scrollTo(element, offsetY = 0, offsetX = 0) {
+    window.scrollTo(element.getBoundingClientRect().left + window.scrollX + offsetX, element.getBoundingClientRect().top + window.scrollY + offsetY);
 }
 
 export function getResource(uri) {
