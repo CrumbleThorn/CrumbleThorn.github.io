@@ -1,0 +1,18 @@
+# THIRD-PARTY SOFTWARE
+
+This project uses the following third-party components:
+
+1. Animate.css
+    - Source: https://github.com/animate-css/animate.css
+    - License: Hippocratic License v2.1
+    - Copyright: Animate.css
+
+2. Lottie-web
+    - Source: https://github.com/airbnb/lottie-web
+    - License: MIT License
+    - Copyright (c) Airbnb
+
+3. vivus
+    - Source: https://github.com/maxwellito/vivus
+    - License: MIT License
+    - Copyright (c) maxwellito
