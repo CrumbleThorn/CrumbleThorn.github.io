@@ -18,7 +18,7 @@
     align-items: center;
     
     padding-top: 3vh;
-    padding-bottom: 3vh;
+    padding-bottom: 2.5vh;
     padding-left: 10vw;
     padding-right: 2vw;
 
@@ -105,5 +105,11 @@
 }
 
 .end-card {
-    justify-content: center;
+    display: flex;
+    align-items: center;
+
+    width: 60vw;
+    height: 70vh;
+
+    max-height: calc(60vw * 1.3);
 }

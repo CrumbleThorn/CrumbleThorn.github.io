@@ -89,9 +89,8 @@
     right: 0;
     bottom: -5px;
 
-    width: 60vw;
-    height: 70vh;
-    max-height: calc(60vw * 1.3);
+    width: 100%;
+    height: 100%;
     /*TO DO: Add set  to prevent weird dimensions*/
     border-radius: 5px;
     padding: 5%;
