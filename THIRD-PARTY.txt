@@ -2,17 +2,41 @@
 
 This project uses the following third-party components:
 
-1. Animate.css
-    - Source: https://github.com/animate-css/animate.css
-    - License: Hippocratic License v2.1
-    - Copyright: Animate.css
+    1. Animate.css
+        - Source: https://github.com/animate-css/animate.css
+        - License: Hippocratic License v2.1
+        - Copyright: Animate.css
 
-2. Lottie-web
-    - Source: https://github.com/airbnb/lottie-web
-    - License: MIT License
-    - Copyright (c) Airbnb
+    2. Lottie-web
+        - Source: https://github.com/airbnb/lottie-web
+        - License: MIT License
+        - Copyright (c) Airbnb
 
-3. vivus
-    - Source: https://github.com/maxwellito/vivus
-    - License: MIT License
-    - Copyright (c) maxwellito
+    3. vivus
+        - Source: https://github.com/maxwellito/vivus
+        - License: MIT License
+        - Copyright (c) maxwellito
+
+# THIRD-PARTY FONTS
+
+This project uses the following fonts from Google Fonts:
+
+    1. Noto Sans Tagalog
+        - License: SIL Open Font License v1.1
+        - Copyright (c) Google
+
+    2. Nunito
+        - License: SIL Open Font License v1.1
+        - Copyright (c) Vernon Adams, Cyreal & Jacques Le Bailly
+
+    3. Saira
+        - License: SIL Open Font License v1.1
+        - Copyright (c) Omnibus-Type
+
+    4. Source Code Pro
+        - License: SIL Open Font License v1.1
+        - Copyright (c) Paul D. Hunt
+
+    5. Ubuntu
+        - License: Ubuntu Font License v1.0
+        - Copyright (c) Dalton Maag

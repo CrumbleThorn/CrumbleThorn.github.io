@@ -16,6 +16,9 @@
 html {
 	scroll-behavior: smooth;
 
+	font-family: "Noto Sans Tagalog", sans-serif;
+	font-weight: 400;
+	font-style: normal;
 	font-size: 12px;
 	color: var(--cilly-black);
 }
@@ -23,12 +26,12 @@ html {
 /* TO DO: Finalize common website style */
 /* TO DO: Move site-specific styling to their own .css files */
 
-body,h1,h2,h3,h4,h5,h6 {
-	font-family: "Ubuntu", sans-serif;
+h1 {
+	font-family: "Saira", sans-serif;
 }
 
-h1,button {
-	font-family: "Source Sans Pro", sans-serif;
+h2,h3,h4,h5,h6 {
+	font-family: "Ubuntu", sans-serif;
 }
 
 body {
@@ -40,11 +43,6 @@ body {
 
 	white-space: nowrap;
 	background: white;
-
-	font-family: 'Ubuntu', sans-serif;
-	font-size: 12px;
-	font-weight: 300;
-	color: var(--cilly-black);
 }
 
 main {
@@ -80,6 +78,7 @@ button {
 	border: 0px;
 	padding: 20px;
 
+	font-family: 'Nunito', sans-serif;
 	font-size: 1rem;
 	text-align: center;
 	color: var(--cilly-white);
@@ -111,6 +110,7 @@ a {
 a:hover {
 	cursor: pointer;
 
+	font-weight: 500;
 	color: var(--cilly-accentblue);
 	text-decoration: underline;
 }
@@ -118,7 +118,7 @@ a:hover {
 a:active {
 	cursor: pointer;
 
-	font-weight: 600;
+	font-weight: 300;
 	color: var(--cilly-darkblue);
 	text-decoration: none;
 }
@@ -127,6 +127,87 @@ a:visited {
 	color: var(--cilly-royalpurple);
 }
 
+/* #region FONTS */
+/* Noto Sans Tagalog can only be used as-is */
+.noto-sans-tagalog {
+	font-family: "Noto Sans Tagalog", sans-serif;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.nunito {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.saira {
+	font-family: "Saira", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	font-variation-settings:
+		"wdth" 100;
+}
+
+.source-code-pro {
+	font-family: "Source Code Pro", monospace;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.ubuntu {
+	font-family: "Ubuntu", sans-serif;
+	font-weight: 400;
+	font-style: normal;
+}
+
+/* ONLY for Saira and Ubuntu */
+.italic {
+	font-style: italic;
+}
+
+.light {
+	font-weight: 300;
+}
+
+.regular {
+	font-weight: 400;
+}
+
+.medium {
+	font-weight: 500;
+}
+
+/* ONLY for Saira and Source Code Pro */
+.semibold {
+	font-weight: 600;
+}
+
+.bold {
+	font-weight: 700;
+}
+
+/* Below are ONLY for Saira */
+.semicondensed {
+	font-variation-settings:
+		"wdth" 87.5;
+}
+
+.condensed {
+	font-variation-settings:
+		"wdth" 75.5;
+}
+
+.semiexpanded {
+	font-variation-settings:
+		"wdth" 112.5;
+}
+/* #endregion */
+
+/* #region Custom Site-wide Classes */
 .content {
 	display: flex;
 	flex-direction: column;
@@ -153,3 +234,4 @@ a:visited {
 	-ms-user-select: none;
 	user-select: none;
 }
+/* #endregion */
