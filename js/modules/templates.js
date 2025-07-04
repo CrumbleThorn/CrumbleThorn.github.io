@@ -1,5 +1,7 @@
 import * as animate from './animate.js';
 import * as anim from './animations.js';
+import * as lottiefiles from './lottiefiles.js';
+import * as ui from './ui.js';
 import * as util from './util.js';
 
 // Instantiates global list if it doesn't exist yet
@@ -44,10 +46,17 @@ function addToLoadedDOMS(key, value) {
     } else {
         loadedDOMS[key] = [value];
     }
-    value.dispatchEvent(new Event(templateEvents.templateLoaded, {
-        bubbles: true,
-        composed: true,
-    }));
+    if (value instanceof HTMLElement) {
+        value.dispatchEvent(new Event(templateEvents.templateLoaded, {
+            bubbles: true,
+            composed: true,
+        }));
+    } else {
+        value.template.dispatchEvent(new Event(templateEvents.templateLoaded, {
+            bubbles: true,
+            composed: true,
+        }));
+    }
 }
 
 function constructURL(template, type) {
@@ -87,7 +96,7 @@ class BackgroundTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -96,6 +105,7 @@ class BackgroundTemplate extends HTMLElement {
 
 class FooterTemplate extends HTMLElement {
     #name;
+    #ui;
     constructor() {
         super();
         this.#name = templateList.footerTemplate;
@@ -105,9 +115,14 @@ class FooterTemplate extends HTMLElement {
         return this.#name;
     }
 
+    get ui() {
+        return this.#ui;
+    }
+
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton), Text).then(html => {
             this.innerHTML = html;
+            //this.#ui = this.querySelector('#' + util.css.siteElements.footer);
             addToLoadedDOMS(this.#name, this);
         });
     }
@@ -116,6 +131,7 @@ class FooterTemplate extends HTMLElement {
 class HeroTemplate extends HTMLElement {
     #shadow;
     #name;
+    #ui;
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
@@ -130,15 +146,19 @@ class HeroTemplate extends HTMLElement {
         return this.#name;
     }
 
+    get ui() {
+        return this.#ui;
+    }
+
     #initialize(html) {
         const heroContent = this.#shadow.host.innerHTML;
         this.#shadow.host.innerHTML = '';
         this.#shadow.innerHTML = html;
-        this.#shadow.getElementById(util.css.siteElements.heroContent).innerHTML = heroContent;
+        this.#shadow.getElementById(util.css.SiteID.heroContent).innerHTML = heroContent;
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton), Text).then(html => {
             this.#initialize(html);
             addToLoadedDOMS(this.#name, this);
         });
@@ -146,12 +166,13 @@ class HeroTemplate extends HTMLElement {
 }
 
 class LoadingScreenTemplate extends HTMLElement {
-    #shadow;
     #name;
+    #shadow;
+    #ui;
     constructor() {
         super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
         this.#name = templateList.loadingScreenTemplate;
+        this.#shadow = this.attachShadow({ mode: 'open' });
     }
 
     get shadow() {
@@ -162,10 +183,37 @@ class LoadingScreenTemplate extends HTMLElement {
         return this.#name;
     }
 
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow.innerHTML = html;
+        if (this.dataset.animationHref != undefined) {
+            util.log("Using custom loading animation provided at " + this.dataset.animationHref);
+            this.#ui = new ui.LoadingScreen(
+                this.#shadow.getElementById(util.css.SiteID.loadingscreen),
+                new lottiefiles.LottieContainer(
+                    this.#shadow.getElementById(util.css.SiteID.loadingAnimation),
+                    this.dataset.animationHref,
+                ),
+            );
+        } else {
+            this.#ui = new ui.LoadingScreen(this.#shadow.getElementById(util.css.SiteID.loadingscreen));
+        }
+        
+    }
+
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMS(this.#name, this);
+        util.getResource(constructURL(this.#name, templateType.singleton), Text).then(html => {
+            this.#initialize(html);
+            addToLoadedDOMS(
+                this.#name,
+                {
+                    template: this,
+                    ui: this.#ui,
+                },
+                 );
             this.dispatchEvent(new Event(templateEvents.loadingScreenReady, {
                 bubbles: true,
                 composed: true,
@@ -193,24 +241,24 @@ class NavBarTemplate extends HTMLElement {
 
     #intiializeNavbarLabel() {
         let html = '';
-        const navbarLabel = this.#shadow.getElementById(util.css.siteElements.navbarLabel);
+        const navbarLabel = this.#shadow.getElementById(util.css.SiteID.navbarLabel);
 
         if (this.dataset.logoSrc != undefined) {
-            html += '<img class="' + util.css.siteClasses.navbarLogo + '" src="' + this.dataset.logoSrc +'" id="' + util.css.siteElements.navbarLogo + '">\n';
+            html += '<img class="' + util.css.SiteClass.navbarLogo + '" src="' + this.dataset.logoSrc +'" id="' + util.css.SiteID.navbarLogo + '">\n';
         } else if (this.dataset.logoId != undefined) {
-            const navbarLogo = this.getElementById(util.css.siteElements.navbarLogo);
+            const navbarLogo = this.getElementById(util.css.SiteID.navbarLogo);
             html += navbarLogo.outerHTML;
             navbarLogo.outerHTML = '';
         }
 
         if ((this.dataset.title != undefined || this.dataset.titleId != undefined) && (this.dataset.logoSrc != undefined || this.dataset.logoId != undefined)) {
-            html += '<'+ templateList.verticalbarTemplate + suffix + ' id="' + util.css.siteElements.navbarLabelDivider + '"></' + templateList.verticalbarTemplate + suffix + '>\n';
+            html += '<'+ templateList.verticalbarTemplate + suffix + ' id="' + util.css.SiteID.navbarLabelDivider + '"></' + templateList.verticalbarTemplate + suffix + '>\n';
         }
         
         if (this.dataset.title != undefined) {
-            html += '<div class="' + util.css.siteClasses.navbarTitle + '" id="' + util.css.siteElements.navbarTitle + '">' + this.dataset.title + '</div>\n';
+            html += '<div class="' + util.css.SiteClass.navbarTitle + '" id="' + util.css.SiteID.navbarTitle + '">' + this.dataset.title + '</div>\n';
         } else if (this.dataset.titleId != undefined) {
-            const navbarTitle = this.getElementById(util.css.siteElements.navbarTitle);
+            const navbarTitle = this.getElementById(util.css.SiteID.navbarTitle);
             html += navbarTitle.outerHTML;
             navbarTitle.outerHTML = '';
         }
@@ -220,18 +268,18 @@ class NavBarTemplate extends HTMLElement {
 
     #populateNavbarMenu() {
         let html = '';
-        const navbarMenu = this.#shadow.getElementById(util.css.siteElements.navbarMenu);
+        const navbarMenu = this.#shadow.getElementById(util.css.SiteID.navbarMenu);
         
         for (let ctr = 1; this.dataset['menuitem' + ctr.toString()] != undefined; ctr++) {
             if (ctr > 1) {
-                html += '<'+ templateList.verticalbarTemplate + suffix + ' id="' + util.css.siteElements.navbarLabelDivider + '"></' + templateList.verticalbarTemplate + suffix + '>\n';
+                html += '<'+ templateList.verticalbarTemplate + suffix + ' id="' + util.css.SiteID.navbarLabelDivider + '"></' + templateList.verticalbarTemplate + suffix + '>\n';
             }
             let linkDetails = this.dataset['menuitem' + ctr.toString()].split(' ');
 
             if (linkDetails.length == 1) {
-                html += '<div class="' + util.css.siteClasses.navbarCurrent + '">' + linkDetails[0] + '</div>\n';
+                html += '<div class="' + util.css.SiteClass.navbarCurrent + '">' + linkDetails[0] + '</div>\n';
             } else if (linkDetails.length == 2) {
-                html += '<a class="' + util.css.siteClasses.navbarLink + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
+                html += '<a class="' + util.css.SiteClass.navbarLink + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
             } else {
                 // TO DO: Implement Dropdown
             }
@@ -245,7 +293,7 @@ class NavBarTemplate extends HTMLElement {
 
         // TO DO: Initialize Burger menu Button
         if (this.dataset.sidebarId != undefined) {
-            const navbarBurger = this.#shadow.getElementById(util.css.siteElements.navbarBurger);
+            const navbarBurger = this.#shadow.getElementById(util.css.SiteID.navbarBurger);
             //navbarBurger.classList.remove(util.css.siteClasses.hidden);
         }
 
@@ -254,13 +302,13 @@ class NavBarTemplate extends HTMLElement {
         
         // Initialize Navbar Progress Bar
         if (this.dataset.progressbarStartId) {
-            const navbar = this.#shadow.getElementById(util.css.siteElements.navbar);
-            navbar.innerHTML += '<'+ templateList.progressbarTemplate + suffix + ' id="' + util.css.siteElements.navbarProgressBar + '"></' + templateList.progressbarTemplate + suffix + '>\n';
+            const navbar = this.#shadow.getElementById(util.css.SiteID.navbar);
+            navbar.innerHTML += '<'+ templateList.progressbarTemplate + suffix + ' id="' + util.css.SiteID.navbarProgressBar + '"></' + templateList.progressbarTemplate + suffix + '>\n';
         }
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton), Text).then(html => {
             this.#shadow.innerHTML += html;
             this.#initialize();
             addToLoadedDOMS(this.#name, this);
@@ -286,7 +334,7 @@ class SideBarTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.singleton)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.singleton), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -315,31 +363,31 @@ class CardTemplate extends HTMLElement {
         const cardhtml = this.#shadow.host.innerHTML;
         this.#shadow.host.innerHTML = '';
         this.#shadow.innerHTML = html;
-        const cardContent = this.#shadow.querySelector('.' + util.css.siteClasses.cardContent);
+        const cardContent = this.#shadow.querySelector('.' + util.css.SiteClass.cardContent);
         cardContent.innerHTML = cardhtml;
 
-        const card = this.#shadow.querySelector('.' + util.css.siteClasses.card);
+        const card = this.#shadow.querySelector('.' + util.css.SiteClass.card);
 
         switch(this.dataset.side) {
             case 'left':
-                card.classList.add(util.css.siteClasses.sidecard, util.css.siteClasses.sidecardLeft);
-                cardContent.classList.add(util.css.siteClasses.cardContentLeft);
+                card.classList.add(util.css.SiteClass.sidecard, util.css.SiteClass.sidecardLeft);
+                cardContent.classList.add(util.css.SiteClass.cardContentLeft);
                 break;
             case 'right':
-                card.classList.add(util.css.siteClasses.sidecard, util.css.siteClasses.sidecardRight);
-                cardContent.classList.add(util.css.siteClasses.cardContentRight);
+                card.classList.add(util.css.SiteClass.sidecard, util.css.SiteClass.sidecardRight);
+                cardContent.classList.add(util.css.SiteClass.cardContentRight);
                 break;
             case 'top':
                 break;
             case 'bottom':
-                card.classList.add(util.css.siteClasses.endcard);
-                cardContent.classList.add(util.css.siteClasses.endcardContent);
+                card.classList.add(util.css.SiteClass.endcard);
+                cardContent.classList.add(util.css.SiteClass.endcardContent);
                 break;
         }
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.standard), Text).then(html => {
             this.#initialize(html);
             addToLoadedDOMS(this.#name, this);
         });
@@ -366,7 +414,7 @@ class CenterCardTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.standard), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -391,7 +439,7 @@ class ModalTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.standard)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.standard), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -417,7 +465,7 @@ class DropdownTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -436,7 +484,7 @@ class HorizontalBarTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent), Text).then(html => {
             this.outerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -461,7 +509,7 @@ class ProgressBarTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -487,7 +535,7 @@ class SlideshowTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent), Text).then(html => {
             this.#shadow.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });
@@ -506,7 +554,7 @@ class VerticalBarTemplate extends HTMLElement {
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, templateType.subcomponent)).then(html => {
+        util.getResource(constructURL(this.#name, templateType.subcomponent), Text).then(html => {
             this.innerHTML = html;
             addToLoadedDOMS(this.#name, this);
         });

@@ -74,7 +74,7 @@ export class AnimatedElement {
                 exit,
                 highlight,
                 ) {
-        if (obj.style.display == util.css.display.none) {
+        if (obj.style.display == util.css.Display.none) {
             throw RangeError("Default Display cannot be set to \'none\'!")
         }
         this.#obj = obj;
@@ -84,7 +84,7 @@ export class AnimatedElement {
         this.#highlightAnimation = highlight;
         this.#isAnimating = false;
         if (!this.#active) {
-            this.#obj.classList.add(util.css.siteClasses.hidden);
+            this.#obj.classList.add(util.css.SiteClass.hidden);
         }
     }
 
@@ -132,7 +132,7 @@ export class AnimatedElement {
         if (this.#entryAnimation != undefined) {
             if (!this.#active) {
                 util.log('Showing ' + this.#obj.id + '...');
-                this.#obj.classList.remove(util.css.siteClasses.hidden);
+                this.#obj.classList.remove(util.css.SiteClass.hidden);
                 this.#active = true;
                 this.#isAnimating = true;
                 animate.css(this.#obj, this.#entryAnimation, override).then(() => {
@@ -202,7 +202,7 @@ export class AnimatedElement {
                 util.log('Hiding ' + this.#obj.id + '...');
                 animate.css(this.#obj, this.#exitAnimation, override).then(() => {
                     util.log('Done Hiding ' + this.#obj.id + '!');
-                    this.#obj.classList.add(util.css.siteClasses.hidden);
+                    this.#obj.classList.add(util.css.SiteClass.hidden);
                     this.#isAnimating = false;
                     this.#obj.dispatchEvent(new CustomEvent(animationEvents.hideAnimationComplete, {
                         detail: {origin: this.#obj},

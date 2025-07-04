@@ -1,20 +1,87 @@
-// Modify this to toggle certain logs on or off!
-export const verbose = true;
+/**
+ * @file Provides reusable utility functions for the website.
+ * @author CrumbleThorn <https://github.com/crumblethorn>
+ * @license MPL-2.0
+*/
 
+/**
+ * The log type for determining verbosity.
+ * @readonly
+ * @enum {number}
+ */
+export const LogType = Object.freeze({
+    DEFAULT: 0,
+    FATAL: 1,
+    ERROR: 2,
+    WARNING: 3,
+    INFO: 4,
+    DEBUG: 5,
+    VERBOSE: 6,
+});
+
+/**
+ * Determines which logs will be displayed in the console. Higher verbosity means more logs will be shown in the console.
+ * - <0: None - No logs will be displayed.
+ * -  0: Default - Only displays logs without verbosity.
+ * -  1: Fatal/Critical - Displays logs resulting from crashes or unrecoverable errors.
+ * -  2: Error - Displays logs resulting from errors that affect functionality.
+ * -  3: Warning - Displays logs that may result in unexpected behavior.
+ * -  4: Info -  Displays logs related to application flow.
+ * -  5: Debug - Displays logs related to diagnostics and troubleshooting.
+ * - >5: Verbose - Displays all logs.
+ * @constant
+ * @type {number}
+ */
+const LOG_VERBOSITY = LogType.DEFAULT;
+
+/**
+ * The scroll events used by the DirectionalScrollManager.
+ * @readonly
+ * @enum {string}
+ */
+export const ScrollEvents = Object.freeze({
+    SCROLL: 'scroll',
+    SCROLL_DOWN: 'scrollDown',
+    SCROLL_UP: 'scrollUp',
+    SCROLL_RIGHT: 'scrollRight',
+    SCROLL_LEFT: 'scrollLeft',
+});
+
+/**
+ * Flag used to determine if the website is loaded in Developer Mode.
+ * @readonly
+ * @const {boolean}
+ */
 export const isDev = window.location.hostname === 'localhost' || 
               window.location.hostname === '127.0.0.1' || 
               window.location.hostname.startsWith('192.168.') || 
               window.location.protocol === 'file:';
 
-export const css = {
-    global: {
+/**
+ * Various CSS-related strings used in the website. Add to this list instead of directly assigning
+ * strings for ease of referencing.
+ * @readonly
+ * @enum {object}
+ */
+export const css = Object.freeze({
+    /**
+     * Global CSS Styles.
+     * @readonly
+     * @enum {string}
+     */
+    Global: {
         inherit: 'inherit',
         initial: 'initial',
         revert: 'revert',
         revertLayer: 'revert-layer',
         unset: 'unset',
         },
-    display: {
+    /**
+     * CSS Styles related to display.
+     * @readonly
+     * @enum {string}
+     */
+    Display: {
         block: 'block',
         inline: 'inline',
         inlineBlock: 'inline-block',
@@ -29,11 +96,21 @@ export const css = {
         tableRow: 'table-row',
         listItem: 'list-item',
         },
-    scrollBehavior: {
+    /**
+     * CSS Styles related to scrollBehavior.
+     * @readonly
+     * @enum {string}
+     */
+    ScrollBehavior: {
         auto: 'auto',
         smooth: 'smooth',
         },
-    siteColors: { 
+    /**
+     * Custom CSS Colors.
+     * @readonly
+     * @enum {string}
+     */
+    SiteColor: { 
         cillyBlue: 'var(--cilly-blue)',
         cillyDarkBlue: 'var(--cilly-darkblue)',
         cillyDarkBlueOverlay: 'var(--cilly-darkblue-overlay)',
@@ -45,7 +122,12 @@ export const css = {
         cillyBlack: 'var(--cilly-black)',
         cillyRoyalPurple: 'var(--cilly-royalpurple)',
         },
-    siteClasses: {
+    /**
+     * Custom CSS Classes used throughout the website.
+     * @readonly
+     * @enum {string}
+     */
+    SiteClass: {
         // Global classes
         content: 'content',
         hidden: 'hidden',
@@ -123,7 +205,12 @@ export const css = {
         leftbar: 'leftbar',
         rightbar: 'rightbar',
         },
-    siteElements: {
+    /**
+     * Custom CSS IDs used throughout the website.
+     * @readonly
+     * @enum {string}
+     */
+    SiteID: {
         siteOverlay: 'site-overlay',
         siteBackground: 'site-background',
         footer: 'footer',
@@ -148,69 +235,121 @@ export const css = {
         sidebarTitle: 'sidebar-title',
         sidebarMenu: 'sidebar-menu',
     },
-};
+});
 
-export const scrollEvents = {
-    scroll: 'scroll',
-    scrollDown: 'scrollDown',
-    scrollUp: 'scrollUp',
-    scrollRight: 'scrollRight',
-    scrollLeft: 'scrollLeft',
-};
-
-export function log(message, verboseOnly = false) {
+/**
+ * Outputs the provided message in the console when developer mode is active.
+ * @param {object} message - The message to be sent to the console.
+ * @param {LogType} [verbosity=LogType.DEFAULT] - The verbosity level of the message.
+ *
+*/
+export function log(message, verbosity = 0) {
     if (isDev) {
-        if (!(verboseOnly && !verbose)) {
+        if (LOG_VERBOSITY >= verbosity) {
             console.log(message);
         }
     }
 }
 
-export function warn(message) {
+/**
+ * Outputs the provided warning in the console when developer mode is active.
+ * @param {object} message - The message to be sent to the console.
+ * @param {LogType} [verbosity=LogType.DEFAULT] - The verbosity level of the message.
+ *
+*/
+export function warn(message, verbosity = 0) {
     if (isDev) {
-        console.warn(message);
+        if (LOG_VERBOSITY >= verbosity) {
+            console.warn(message);
+        }
     }
 }
 
+/**
+ * Returns true if the window is in landscape mode (Width > Height).
+ * @returns {boolean}
+*/
 export function isLandscape() {
-    if (window.innerWidth - window.innerHeight > 0)
-        return true;
-    else
-        return false;
+    return window.innerWidth > window.innerHeight;
 }
 
+
+/**
+ * Returns true if the window is determined to be low-resolution (<800px wide).
+ * @returns {boolean}
+*/
 export function isLowResolution() {
-    if (window.innerWidth < 800)
-        return true;
-    else
-        return false;
+    return window.innerWidth < 800;
 }
 
+/**
+ * Scrolls to the very top of the web page.
+*/
 export function scrollToTop() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
 }
 
+/**
+ * Scrolls the active window to the top-left corner of the selected element.
+ * 
+ * @param {Element} element - The element to scroll to.
+ * @param {number} [offsetX=0] - Horizontal offset from the left of the element.
+ * @param {number} [offsetY=0] - Vertical offset from the top of the element.
+ *
+*/
 export function scrollTo(element, offsetY = 0, offsetX = 0) {
     window.scrollTo(element.getBoundingClientRect().left + window.scrollX + offsetX, element.getBoundingClientRect().top + window.scrollY + offsetY);
 }
 
-export function getResource(uri) {
-    return fetch(uri)
+/**
+ * Downloads the resource from the specified URL. Returns a Promise that resolves to a Response object.
+ * 
+ * @async
+ * @param {string} url - The URL of the resource to be downloaded.
+ * @returns {Promise}
+ * @throws {Error} - Will throw an error if the resource was not successfully retrieved.
+*/
+export function getResource(url, type) {
+    return fetch(url)
         .then(response => {
             if (response.status === 200) {
-                return response.text();
+                switch(type) {
+                    case ArrayBuffer:
+                        return response.arrayBuffer();
+                    case Blob:
+                        return response.blob();
+                    case Uint8Array:
+                        return response.bytes();
+                    case FormData:
+                        return response.formData();
+                    case JSON:
+                        return response.json();
+                    case Text:
+                        return response.text();
+                }
             } else {
-                return Promise.reject(new Error(`Failed to load ${uri} with status ${response.status}`));
+                return Promise.reject(new Error(`Failed to load ${url} with status ${response.status}`));
             }
         });
 }
 
+/**
+ * Removes classes from an Element that begins with the provided prefix.
+ * 
+ * @param {Element} obj - The element to be modified.
+ * @param {string} prefix - The prefix to be filtered.
+*/
 export function removeClassesByPrefix (obj, prefix) {
     const classes = obj.className.split(' ').filter(c => !c.startsWith(prefix));
     obj.className = classes.join(' ').trim();
 }
 
+/**
+ * Singleton Manager class that dispatches directional scroll events.
+ * @class
+ * @singleton
+*/
 export class DirectionalScrollManager {
     #previousX;
     #previousY;
@@ -221,22 +360,22 @@ export class DirectionalScrollManager {
         this.#previousX = 0;
         this.#previousY = 0;
         DirectionalScrollManager.instance = this;
-        window.addEventListener(scrollEvents.scroll, () => {this.update()});
+        window.addEventListener(ScrollEvents.SCROLL, () => {this.#update()});
     }
 
-    update() {
+    #update() {
         const currentScrollY = window.scrollY;
         const currentScrollX = window.scrollX;
         if (currentScrollY > this.#previousY) {
-            window.dispatchEvent(new Event(scrollEvents.scrollDown));
+            window.dispatchEvent(new Event(ScrollEvents.SCROLL_DOWN));
         } else {
-            window.dispatchEvent(new Event(scrollEvents.scrollUp));
+            window.dispatchEvent(new Event(ScrollEvents.SCROLL_UP));
         }
 
         if (currentScrollX > this.#previousX) {
-            window.dispatchEvent(new Event(scrollEvents.scrollRight));
+            window.dispatchEvent(new Event(ScrollEvents.SCROLL_RIGHT));
         } else {
-            window.dispatchEvent(new Event(scrollEvents.scrollLeft));
+            window.dispatchEvent(new Event(ScrollEvents.SCROLL_LEFT));
         }
 
         this.#previousX = currentScrollX;

@@ -182,7 +182,7 @@ class TitleBar {
 function handleHero() {
     if (Object.hasOwn(loadedDOMS, templates.templateList.heroTemplate)) {
         util.log('Hero Detected!');
-        hero = new ui.Hero(new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.hero)));
+        hero = new ui.Hero(new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.SiteID.hero)));
         hero.heroButton = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-button'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.fadeInUp,
@@ -237,13 +237,13 @@ function handleHero() {
                 hero.elem.obj.addEventListener(anim.animationEvents.showAnimationComplete, (event) => {
                     if (event.target == hero.scrollDownText.obj) {
                         hero.scrollDownText.highlight();
-                        document.body.classList.remove(util.css.siteClasses.noScroll);
+                        document.body.classList.remove(util.css.SiteClass.noScroll);
                         removeEventListener(anim.animationEvents.showAnimationComplete, hero.scrollDownText.obj);
                     }
                 }, );
             }
         });
-        document.body.classList.add(util.css.siteClasses.noScroll);
+        document.body.classList.add(util.css.SiteClass.noScroll);
         hero.content.show();
     }
 }
@@ -251,7 +251,7 @@ function handleHero() {
 function handleNavbar() {
     if (Object.hasOwn(loadedDOMS, templates.templateList.navbarTemplate)) {
         util.log("Navbar Detected!");
-        navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById(util.css.siteElements.navbar),
+        navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById(util.css.SiteID.navbar),
                                                                 false,
                                                                 new animate.Animation(animate.animationClass.slideInDown,
                                                                                     animate.speedClass.faster,

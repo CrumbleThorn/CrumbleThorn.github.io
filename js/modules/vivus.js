@@ -37,10 +37,10 @@ export class VivusContainer {
     }
 
     hide() {
-        this.#container.classList.add(util.css.siteClasses.hidden);
+        this.#container.classList.add(util.css.SiteClass.hidden);
     }
 
     show() {
-        this.#container.classList.remove(util.css.siteClasses.hidden);
+        this.#container.classList.remove(util.css.SiteClass.hidden);
     }
 }

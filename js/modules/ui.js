@@ -27,16 +27,14 @@ export class LoadingScreen {
                 )
             );
         } else {
-            throw new TypeError(elem + "is not a valid Loading Screen!");
+            throw new TypeError(elem + " is not a valid Loading Screen!");
         }
-
-        console.log(this.#elem);
 
         if (animation instanceof lottiefiles.LottieContainer) {
             this.#animation = animation;
         } else {
             this.#animation = new lottiefiles.LottieContainer(
-                this.#elem.obj.querySelector("#" + util.css.siteElements.loadingAnimation),
+                this.#elem.obj.querySelector("#" + util.css.SiteID.loadingAnimation),
                 'data/json/loading.json',
             );
         }
@@ -48,7 +46,7 @@ export class LoadingScreen {
             true
         );
         if(this.#elem.active) {
-            document.body.classList.add(util.css.siteClasses.noScroll);
+            document.body.classList.add(util.css.SiteClass.noScroll);
         }
     }
 
@@ -66,9 +64,9 @@ export class LoadingScreen {
     
     toggle() {
         if (!this.#elem.active) {
-            document.body.classList.add(util.css.siteClasses.noScroll);
+            document.body.classList.add(util.css.SiteClass.noScroll);
         } else {
-            document.body.classList.remove(util.css.siteClasses.noScroll);
+            document.body.classList.remove(util.css.SiteClass.noScroll);
         }
         this.#trigger.trigger();
     }
@@ -76,31 +74,45 @@ export class LoadingScreen {
 
 export class Content {
     #obj;
-    #display;
     constructor(obj) {
         this.#obj = obj;
     }
 
     hideContent() {
-        this.#obj.classList.add(util.css.siteClasses.hidden);
+        this.#obj.classList.add(util.css.SiteClass.hidden);
     }
 
     showContent() {
-        this.#obj.classList.remove(util.css.siteClasses.hidden);
+        this.#obj.classList.remove(util.css.SiteClass.hidden);
     }
 }
 
 export class SideBar {
+    #elem;
     constructor(elem) {
-        this.elem = elem;
-        this.links = elem.obj.querySelectorAll('.sidebar-link');
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
+        this.links = this.#elem.obj.querySelectorAll('.sidebar-link');
+    }
+
+    get elem() {
+        return this.#elem;
     }
 }
 
 // TO DO: Use util.css instead of direct string assignments
 export class NavBar {
+    #elem;
+    
     constructor(elem, sidebar) {
-        this.elem = elem;
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
         this.content = elem.obj.querySelector('.navbar-content');
         this.menu = elem.obj.querySelector('.navbar-menu');
         this.burger = elem.obj.querySelector('.navbar-burger');
@@ -108,6 +120,10 @@ export class NavBar {
         this.title = elem.obj.querySelector('.site-title');
         this.links = elem.obj.querySelectorAll('.navbar-link');
         this.sidebar = sidebar;
+    }
+
+    get elem() {
+        return this.#elem;
     }
 
     toggleMenus() {
@@ -123,7 +139,11 @@ export class ProgressBar {
                 start = 0,
                 end = document.documentElement.scrollHeight,
                 ) {
-        this.#elem = elem;
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
         this.#start = start;
         this.#end = end;
     }
@@ -168,7 +188,7 @@ export class ScrollProgressBar extends ProgressBar {
                 end = document.documentElement.scrollHeight,
                 ) {
         super(elem, start, end);
-        window.addEventListener(util.scrollEvents.scroll, () => {this.updateProgress()});
+        window.addEventListener(util.ScrollEvents.SCROLL, () => {this.updateProgress()});
     }
 
     updateProgress() {
@@ -185,42 +205,94 @@ export class ScrollProgressBar extends ProgressBar {
 }
 
 export class Hero {
+    #elem;
     constructor(elem) {
-        this.elem = elem;
-        this.content = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.siteElements.heroContent),
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
+        this.content = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.SiteID.heroContent),
                                                 false,
                                                 new animate.Animation(  animate.animationClass.fadeInLeft,
                                                                         animate.speedClass.animated),
                                                 new animate.Animation(  animate.animationClass.fadeOutUp,
                                                                         animate.speedClass.animated));
     }
+
+    get elem() {
+        return this.#elem;
+    }
 }
 
 export class Card {
+    #elem;
     constructor(elem, side) {
-        this.elem = elem;
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
         this.side = side;
     }
 }
 
 export class BottomBar {
+    #elem;
     constructor(elem) {
-        this.elem = elem;
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
+    }
+
+    get elem() {
+        return this.#elem;
     }
 }
 
 export class NavButton {
-    constructor(elem, target) {
-        this.elem = elem;
+    #elem;
+    constructor(elem, target, offset, offsetY) {
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
         this.target = target;
     }
 }
 
 export class Slideshow {
+    #elem;
     constructor(elem, images, behavior) {
-        this.elem = elem;
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
         this.images = images;
         this.behavior = behavior;
+    }
+
+    get elem() {
+        return this.#elem;
+    }
+}
+
+export class Footer {
+    #elem;
+    constructor(elem) {
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(elem);
+        }
+    }
+
+    get elem() {
+        return this.#elem;
     }
 }
 
@@ -231,6 +303,4 @@ class HeaderBar {
         this.content = content;
         this.textbox = textbox;
     }
-
-
 }

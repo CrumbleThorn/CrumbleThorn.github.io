@@ -19,7 +19,7 @@ function onDocumentLoaded() {
 }
 
 function loadLoadingScreen(event) {
-    loadingScreen = new ui.LoadingScreen(event.target.shadow.getElementById(util.css.siteElements.loadingscreen));
+    loadingScreen = event.target.ui;
     util.log("Loading Screen Loaded");
 }
 
