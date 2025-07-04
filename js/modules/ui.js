@@ -1,17 +1,52 @@
 import * as animate from './animate.js';
 import * as anim from './animations.js';
+import * as lottiefiles from './lottiefiles.js';
 import * as util from './util.js';
 
 export class LoadingScreen {
     #elem;
     #animation;
     #trigger;
-    constructor(elem,
-                animation,
-                ) {
-        this.#elem = elem;
-        this.#animation = animation;
-        this.#trigger = new anim.AnimationTrigger(elem, anim.animationType.toggle, 0, true);
+    constructor(
+        elem,
+        animation,
+    ) {
+        if (elem instanceof anim.AnimatedElement) {
+            this.#elem = elem;
+        } else if (elem instanceof Element) {
+            this.#elem = new anim.AnimatedElement(
+                elem,
+                true,
+                new animate.Animation(
+                    animate.animationClass.fadeIn,
+                    animate.speedClass.faster,
+                ),
+                new animate.Animation(
+                    animate.animationClass.fadeOut,
+                    animate.speedClass.faster,
+                )
+            );
+        } else {
+            throw new TypeError(elem + "is not a valid Loading Screen!");
+        }
+
+        console.log(this.#elem);
+
+        if (animation instanceof lottiefiles.LottieContainer) {
+            this.#animation = animation;
+        } else {
+            this.#animation = new lottiefiles.LottieContainer(
+                this.#elem.obj.querySelector("#" + util.css.siteElements.loadingAnimation),
+                'data/json/loading.json',
+            );
+        }
+        
+        this.#trigger = new anim.AnimationTrigger(
+            this.#elem,
+            anim.animationType.toggle,
+            0,
+            true
+        );
         if(this.#elem.active) {
             document.body.classList.add(util.css.siteClasses.noScroll);
         }

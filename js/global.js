@@ -19,19 +19,7 @@ function onDocumentLoaded() {
 }
 
 function loadLoadingScreen(event) {
-    loadingScreen = new ui.LoadingScreen(new anim.AnimatedElement(event.target.shadow.getElementById('loadingscreen'),
-                                                                    true,
-                                                                    new animate.Animation(animate.animationClass.fadeIn,
-                                                                                        animate.speedClass.faster,
-                                                                                        ),
-                                                                    new animate.Animation(animate.animationClass.fadeOut,
-                                                                                        animate.speedClass.faster,
-                                                                                        )
-                                                                    ),
-                                            new lottiefiles.LottieContainer(event.target.shadow.getElementById('loading-animation'),
-                                                                    'data/json/loading.json',
-                                                                    ),
-                                            );
+    loadingScreen = new ui.LoadingScreen(event.target.shadow.getElementById(util.css.siteElements.loadingscreen));
     util.log("Loading Screen Loaded");
 }
 
