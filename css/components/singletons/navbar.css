@@ -1,3 +1,18 @@
+a::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 0%;
+	height: 2px;
+	background: currentColor;
+	transition: width 0.3s ease;
+}
+
+a:hover::after {
+  	width: 100%;
+}
+
 .navbar {
     display: block;
 
@@ -33,7 +48,7 @@
 
 	font-size: 20px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
 	font-size: 3vh;
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--cilly-darkblue);
 }
 
@@ -43,7 +58,15 @@
 	align-items: center;
 	gap: 10px;
 
+	height: 6vh;
 	padding: 0;
+}
+
+.navbar-label-divider {
+	display: flex;
+	align-items: center;
+
+	height: 6vh;
 }
 
 .navbar-burger {
@@ -55,6 +78,7 @@
 	align-items: center;
 	gap: 10px;
 
+	height: 6vh;
 	max-width: fit-content;
 	padding: 0;
 }
@@ -71,11 +95,11 @@
 .navbar-current {
 	font-size: 24px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
 	font-size: 2vh;
-	font-weight: bold;
-	color: var(--cilly-darkblue)
+	color: var(--cilly-darkblue);
 }
 
 .navbar-link {
+	position: relative;
 	font-size: 24px; /*this font-size is declared as a fallback in case vh isn't accepted by the browser*/
 	font-size: 2vh;
 }

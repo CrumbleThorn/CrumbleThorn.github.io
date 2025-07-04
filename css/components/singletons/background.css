@@ -4,8 +4,9 @@
 	left: 0;
 	z-index: -1;
 
-	height: 100vh;
 	width: 100vw;
+	height: 100vh;
+
 
 	background-image: linear-gradient(transparent, #24496D80);
 }

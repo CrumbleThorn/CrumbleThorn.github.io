@@ -5,10 +5,11 @@
     left: 0;
 	top: 0;
 
+	width: 100vw;
     height: 100vh;
-    width: 100vw;
-	max-height: 100vh;
+
 	max-width: 100vw;
+	max-height: 100vh;
 	overflow: hidden;
 }
 
@@ -19,8 +20,8 @@
 	margin-top: 10vh;
 	margin-bottom: 20vh;
 
-	height:fit-content;
 	width: 100vw;
+	height:fit-content;
 	max-height: 70vh;
 }
 
@@ -32,8 +33,8 @@
 	position: relative;
 	bottom: -10vh;
 
-	height: 55vh;
 	width: 100vw;
+	height: 55vh;
 	z-index: 1;
 
 	background-color: var(--cilly-white);

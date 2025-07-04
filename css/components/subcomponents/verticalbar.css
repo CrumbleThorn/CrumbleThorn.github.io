@@ -1,13 +1,15 @@
 .vertical-spacer {
     background-color: var(--cilly-accentgray);
-    height: 5vh;
+    height: 80%;
     min-width: 3px;
 }
 
 .leftbar {
-
+    position: absolute;
+    left: 0;
 }
 
 .rightbar {
-    
+    position: absolute;
+    right: 0;
 }
