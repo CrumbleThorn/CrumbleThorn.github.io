@@ -310,7 +310,7 @@ export function scrollTo(element, offsetY = 0, offsetX = 0) {
  * @returns {Promise}
  * @throws {Error} - Will throw an error if the resource was not successfully retrieved.
 */
-export function getResource(url, type) {
+export function getResource(url, type = Text) {
     return fetch(url)
         .then(response => {
             if (response.status === 200) {
