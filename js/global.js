@@ -26,7 +26,7 @@ function loadLoadingScreen(event) {
 function onLoadComplete() {
     util.log("LoadComplete");
     setTimeout(() => {
-        if (Object.hasOwn(loadedDOMS, 'loadingscreen')) {
+        if (Object.hasOwn(loadedDOMs, 'loadingscreen')) {
             loadingScreen.toggle();
         }
         content.showContent();

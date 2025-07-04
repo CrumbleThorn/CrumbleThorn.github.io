@@ -212,7 +212,7 @@ export class Hero {
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
-        this.content = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.SiteID.heroContent),
+        this.content = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById(util.css.SiteID.heroContent),
                                                 false,
                                                 new animate.Animation(  animate.animationClass.fadeInLeft,
                                                                         animate.speedClass.animated),

@@ -180,22 +180,22 @@ class TitleBar {
 
 // TO DO: Move to Hero UI Class
 function handleHero() {
-    if (Object.hasOwn(loadedDOMS, templates.templateList.heroTemplate)) {
+    if (Object.hasOwn(loadedDOMs, templates.Template.HERO)) {
         util.log('Hero Detected!');
-        hero = new ui.Hero(new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById(util.css.SiteID.hero)));
-        hero.heroButton = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-button'),
+        hero = new ui.Hero(new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById(util.css.SiteID.hero)));
+        hero.heroButton = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById('hero-button'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.fadeInUp,
                                                                             animate.speedClass.fast,
                                                                             1000
                                                                             ));
-        hero.heroMenuText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-menu-text'),
+        hero.heroMenuText = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById('hero-menu-text'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.fadeInUp,
                                                                                 animate.speedClass.fast,
                                                                                 1200
                                                                                 ));
-        hero.scrollDownText = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('scroll-down-text'),
+        hero.scrollDownText = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById('scroll-down-text'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.fadeInUp,
                                                                                 animate.speedClass.fast,
@@ -207,18 +207,18 @@ function handleHero() {
                                                                                 animate.delayClass.delay_4s,
                                                                                 animate.repeatClass.infinite
                                                                                 ));
-        hero.heroTitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-title'),
+        hero.heroTitle = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById('hero-title'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.backInLeft,
                                                                             animate.speedClass.animated,
                                                                             ));
-        hero.heroSubtitle = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-subtitle'),
+        hero.heroSubtitle = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById('hero-subtitle'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.backInLeft,
                                                                                 animate.speedClass.animated,
                                                                                 500
                                                                                 ));
-        hero.heroImage = new anim.AnimatedElement(loadedDOMS.hero[0].shadow.getElementById('hero-image'),
+        hero.heroImage = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById('hero-image'),
                                                     false,
                                                     new animate.Animation(animate.animationClass.backInRight,
                                                                             animate.speedClass.animated,
@@ -249,9 +249,9 @@ function handleHero() {
 }
 
 function handleNavbar() {
-    if (Object.hasOwn(loadedDOMS, templates.templateList.navbarTemplate)) {
+    if (Object.hasOwn(loadedDOMs, templates.Template.NAVBAR)) {
         util.log("Navbar Detected!");
-        navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMS.navbar[0].shadow.getElementById(util.css.SiteID.navbar),
+        navbar = new ui.NavBar(new anim.AnimatedElement(loadedDOMs.navbar[0].shadow.getElementById(util.css.SiteID.navbar),
                                                                 false,
                                                                 new animate.Animation(animate.animationClass.slideInDown,
                                                                                     animate.speedClass.faster,
@@ -283,12 +283,12 @@ function handleNavbar() {
 
 // TO DO: Add exceptions for when pressing back to top
 function handleCards() {
-    if (Object.hasOwn(loadedDOMS, templates.templateList.cardTemplate)) {
-        endCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][4].shadow.querySelector('.card')),
+    if (Object.hasOwn(loadedDOMs, templates.Template.CARD)) {
+        endCard = new ui.Card(new anim.AnimatedElement(loadedDOMs[templates.Template.CARD][4].shadow.querySelector('.card')),
                                     anim.anchor.bottom);
         endSection = new anim.AnimatedElement(document.getElementById(pageElements.endSection));
 
-        musicCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][3].shadow.querySelector('.card')),
+        musicCard = new ui.Card(new anim.AnimatedElement(loadedDOMs[templates.Template.CARD][3].shadow.querySelector('.card')),
                                     anim.anchor.right);
         musicSection = new anim.AnimatedElement(document.getElementById(pageElements.musicSection));
         endSection.scrollUpTrigger = new anim.AnimationScrollTrigger(  endSection,
@@ -326,7 +326,7 @@ function handleCards() {
                                                                             true,
                                                                             false);
 
-        artCard = new ui.Card(  new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][2].shadow.querySelector('.card')),
+        artCard = new ui.Card(  new anim.AnimatedElement(loadedDOMs[templates.Template.CARD][2].shadow.querySelector('.card')),
                                     anim.anchor.left);
         artSection = new anim.AnimatedElement(document.getElementById(pageElements.artSection));
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
@@ -359,7 +359,7 @@ function handleCards() {
                                                                             true,
                                                                             false);
 
-        devCard = new ui.Card(  new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][1].shadow.querySelector('.card')),
+        devCard = new ui.Card(  new anim.AnimatedElement(loadedDOMs[templates.Template.CARD][1].shadow.querySelector('.card')),
                                     anim.anchor.right);
         devSection = new anim.AnimatedElement(document.getElementById(pageElements.devSection));
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
@@ -393,7 +393,7 @@ function handleCards() {
                                                                             false);
 
 
-        gameCard = new ui.Card(new anim.AnimatedElement(loadedDOMS[templates.templateList.cardTemplate][0].shadow.querySelector('.card')),
+        gameCard = new ui.Card(new anim.AnimatedElement(loadedDOMs[templates.Template.CARD][0].shadow.querySelector('.card')),
                                             anim.anchor.left);
         gameSection = new anim.AnimatedElement(document.getElementById(pageElements.gameSection));
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
@@ -457,8 +457,8 @@ function onLoadComplete() {
             titlebar.titleTrigger.trigger();
             titlebar.scrollToMain();
         })
-        if (Object.hasOwn(loadedDOMS, 'sidebar')) {
-        const sidebar = new ui.SideBar(new anim.AnimatedElement(loadedDOMS.sidebar[0].shadow.getElementById('sidebar'),
+        if (Object.hasOwn(loadedDOMs, 'sidebar')) {
+        const sidebar = new ui.SideBar(new anim.AnimatedElement(loadedDOMs.sidebar[0].shadow.getElementById('sidebar'),
                                                         false,
                                                         new animate.Animation(animate.animationClass.slideInLeft,
                                                                               animate.speedClass.fast,
@@ -468,11 +468,11 @@ function onLoadComplete() {
                                                                               ),
                                                         ));
                                                     }
-        if (Object.hasOwn(loadedDOMS, 'progressbar')) {
-        const progressbar = new ui.ScrollProgressBar(   new anim.AnimatedElement(loadedDOMS.progressbar[0].shadow.getElementById('progressbar')),
+        if (Object.hasOwn(loadedDOMs, 'progressbar')) {
+        const progressbar = new ui.ScrollProgressBar(   new anim.AnimatedElement(loadedDOMs.progressbar[0].shadow.getElementById('progressbar')),
                                                         document.getElementById(pageElements.gameSection).getBoundingClientRect().top - window.innerHeight);
         }
-        if (Object.hasOwn(loadedDOMS, 'horizontalbar')) {
+        if (Object.hasOwn(loadedDOMs, 'horizontalbar')) {
             const bottombar = new ui.BottomBar(new anim.AnimatedElement(document.getElementById('bottombar'),
                                                                         false,
                                                                         new animate.Animation(animate.animationClass.slideInUp,
