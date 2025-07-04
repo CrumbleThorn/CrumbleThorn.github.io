@@ -69,19 +69,19 @@ export const css = Object.freeze({
      * @readonly
      * @enum {string}
      */
-    Global: {
+    Global: Object.freeze({
         inherit: 'inherit',
         initial: 'initial',
         revert: 'revert',
         revertLayer: 'revert-layer',
         unset: 'unset',
-        },
+        }),
     /**
      * CSS Styles related to display.
      * @readonly
      * @enum {string}
      */
-    Display: {
+    Display: Object.freeze({
         block: 'block',
         inline: 'inline',
         inlineBlock: 'inline-block',
@@ -95,22 +95,22 @@ export const css = Object.freeze({
         table: 'table',
         tableRow: 'table-row',
         listItem: 'list-item',
-        },
+        }),
     /**
      * CSS Styles related to scrollBehavior.
      * @readonly
      * @enum {string}
      */
-    ScrollBehavior: {
+    ScrollBehavior: Object.freeze({
         auto: 'auto',
         smooth: 'smooth',
-        },
+        }),
     /**
      * Custom CSS Colors.
      * @readonly
      * @enum {string}
      */
-    SiteColor: { 
+    SiteColor: Object.freeze({ 
         cillyBlue: 'var(--cilly-blue)',
         cillyDarkBlue: 'var(--cilly-darkblue)',
         cillyDarkBlueOverlay: 'var(--cilly-darkblue-overlay)',
@@ -121,13 +121,38 @@ export const css = Object.freeze({
         cillyJetBlack: 'var(--cilly-jetblack)',
         cillyBlack: 'var(--cilly-black)',
         cillyRoyalPurple: 'var(--cilly-royalpurple)',
-        },
+        }),
+    /**
+     * Custom CSS Font classes.
+     * @readonly
+     * @enum {string}
+     */
+    SiteFont: Object.freeze({
+        // Font family classes
+        notoSansTagalog: 'noto-sans-tagalog',
+        nunito: 'nunito',
+        saira: 'saira',
+        sourceCodePro: 'source-code-pro',
+        ubuntu: 'ubuntu',
+        // Font style classes
+        italic: 'italic',
+        // Font weight classes
+        light: 'light',
+        regular: 'regular',
+        medium: 'medium',
+        semibold: 'semibold',
+        bold: 'bold',
+        // Font width classes
+        semicondensed: 'semicondensed',
+        condensed: 'condensed',
+        semiexpanded: 'semiexpanded',
+    }),
     /**
      * Custom CSS Classes used throughout the website.
      * @readonly
      * @enum {string}
      */
-    SiteClass: {
+    SiteClass: Object.freeze({
         // Global classes
         content: 'content',
         hidden: 'hidden',
@@ -204,13 +229,13 @@ export const css = Object.freeze({
         verticalSpacer: 'vertical-spacer',
         leftbar: 'leftbar',
         rightbar: 'rightbar',
-        },
+        }),
     /**
      * Custom CSS IDs used throughout the website.
      * @readonly
      * @enum {string}
      */
-    SiteID: {
+    SiteID: Object.freeze({
         siteOverlay: 'site-overlay',
         siteBackground: 'site-background',
         footer: 'footer',
@@ -234,7 +259,7 @@ export const css = Object.freeze({
         sidebarContent: 'sidebar-content',
         sidebarTitle: 'sidebar-title',
         sidebarMenu: 'sidebar-menu',
-    },
+    }),
 });
 
 /**
