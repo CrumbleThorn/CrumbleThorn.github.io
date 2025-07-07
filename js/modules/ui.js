@@ -81,13 +81,17 @@ export class LoadingScreen {
 export class Content {
     #obj;
     constructor(obj) {
-        this.#obj = obj;
-
-        util.log(
-            'Content has been loaded.',
-            util.LogType.INFO,
-            true,
-        );
+        if (Content.instance) {
+            return Content.instance;
+        } else {
+            this.#obj = obj;
+            Content.instance = this;
+            util.log(
+                'Content has been loaded.',
+                util.LogType.INFO,
+                true,
+            );
+        }
     }
 
     hideContent() {
