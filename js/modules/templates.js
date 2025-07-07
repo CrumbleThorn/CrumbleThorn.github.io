@@ -123,21 +123,13 @@ class HTMLTemplate extends HTMLElement {
         return 'components/' + type + '/' + template + '.html';
     }
 
-    findCommentsRecursively(elem, comments) {
+    removeComments(elem, comments = []) {
         for (const child of elem.childNodes) {
             if (child.nodeType === Node.COMMENT_NODE) {
-                comments.push(child);
+                elem.removeChild(child);
+            } else {
+                this.removeComments(child, comments);
             }
-            // Recursively check child nodes
-            this.findCommentsRecursively(child, comments);
-        }
-    }
-
-    removeComments(elem) {
-        const comments = [];
-        this.findCommentsRecursively(elem, comments)
-        for (const comment of comments) {
-            comment.outerHTML = '';
         }
     }
 }
