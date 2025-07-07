@@ -1,4 +1,4 @@
-.progressbar-container {
+#progressbar-container {
 	left: 0;
 	width: 100%;
 	height: 1vh;
@@ -6,7 +6,7 @@
 	background-color: var(--cilly-blue);
 }
 
-.progressbar {
+#progressbar {
 	height: 100%;
 	width: 0;
 	

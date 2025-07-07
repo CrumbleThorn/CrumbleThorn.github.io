@@ -351,6 +351,13 @@ function handleNavbar() {
             true,
             false,
         );
+
+        if (navbar.progressbar != undefined) {
+            util.log('Navbar Progress Bar Detected!');
+            const progressbar = loadedDOMs[templates.Template.PROGRESS_BAR].find((elem) => elem.template.shadow == navbar.progressbar.shadowRoot).ui;
+            progressbar.start = start.getBoundingClientRect().top - window.innerHeight;
+            progressbar.end = document.documentElement.scrollHeight;
+        }
     }
 }
 
@@ -635,16 +642,6 @@ function onLoadComplete() {
                         animate.speedClass.fast,
                     ),
                 ),
-            );
-        }
-
-        if (Object.hasOwn(loadedDOMs, templates.Template.PROGRESS_BAR)) {
-            util.log('Progress Bar Detected!');
-            const progressbar = new ui.ScrollProgressBar(
-                new anim.AnimatedElement(
-                    loadedDOMs.progressbar[0].template.shadow.getElementById(util.css.SiteID.navbarProgressBar),
-                ),
-                document.getElementById(PageElements.GAME_SECTION).getBoundingClientRect().top - window.innerHeight,
             );
         }
 

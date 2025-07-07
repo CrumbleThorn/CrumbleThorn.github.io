@@ -201,9 +201,6 @@ export const css = Object.freeze({
         navbarMenuItem: 'navbar-menu-item',
         navbarCurrent: 'navbar-current',
         navbarLink: 'navbar-link',
-        // Progress Bar Classes
-        progressbarContainer: 'progressbar-container',
-        progressbar: 'progressbar',
         // Sidebar Classes
         sidebar: 'sidebar',
         sidebarTitle: 'sidebar-title',
@@ -243,6 +240,7 @@ export const css = Object.freeze({
         footerContent: 'footer-content',
         hero: 'hero',
         heroContent: 'hero-content',
+        // TO DO: Move to TemplateID
         loadingscreen: 'loadingscreen',
         loadingAnimation: 'loading-animation',
         content: 'content',
@@ -251,15 +249,22 @@ export const css = Object.freeze({
         navbarContent: 'navbar-content',
         navbarBurger: 'navbar-burger',
         navbarLabel: 'navbar-label',
+        // TO DO: Move to TemplateID
         navbarLogo: 'navbar-logo',
         navbarTitle: 'navbar-title',
         navbarMenu: 'navbar-menu',
         navbarProgressBar: 'navbar-progressbar',
         sidebar: 'sidebar',
         sidebarContent: 'sidebar-content',
+        // TO DO: Move to TemplateID
         sidebarTitle: 'sidebar-title',
         sidebarMenu: 'sidebar-menu',
         bottombar: 'bottombar',
+    }),
+    TemplateID: Object.freeze({
+        // Progress Bar IDs
+        progressbarContainer: 'progressbar-container',
+        progressbar: 'progressbar',
     }),
 });
 

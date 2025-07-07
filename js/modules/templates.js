@@ -406,15 +406,15 @@ class NavBarTemplate extends HTMLTemplate {
 
         // TO DO: Initialize Burger menu Button
         if (this.dataset.sidebarId != undefined) {
-            this.#ui.burger.classList.remove(util.css.siteClasses.hidden);
+            this.#ui.burger.classList.remove(util.css.SiteClass.hidden);
         }
 
         this.#initializeNavbarLabel();
         this.#populateNavbarMenu();
         
         // Initialize Navbar Progress Bar
-        if (this.dataset.progressbarStartId) {
-            this.#ui.elem.obj.innerHTML += '<'+ Template.PROGRESS_BAR + suffix + ' id="' + util.css.SiteID.navbarProgressBar + '"></' + Template.PROGRESS_BAR + suffix + '>\n';
+        if (this.dataset.progressbarStartId != undefined) {
+            this.#ui.elem.obj.innerHTML += '<'+ Template.PROGRESS_BAR + suffix + ' data-start-id="' + this.dataset.progressbarStartId + '" id="' + util.css.SiteID.navbarProgressBar + '"></' + Template.PROGRESS_BAR + suffix + '>\n';
             this.#ui.progressbar = this.#shadow.getElementById(util.css.SiteID.navbarProgressBar);
         }
 
@@ -701,7 +701,17 @@ class ProgressBarTemplate extends HTMLTemplate {
     #initialize(html) {
         this.#shadow = this.attachShadow({ mode: 'open' });
         this.#shadow.innerHTML = html;
-        
+
+        if (this.dataset.startId != undefined) {
+            this.#ui = new ui.ScrollProgressBar(
+                this.#shadow.getElementById(util.css.TemplateID.progressbarContainer),
+            )
+        } else {
+            this.#ui = new ui.ProgressBar(
+                this.#shadow.getElementById(util.css.TemplateID.progressbarContainer),
+            )
+        }
+
         this.removeComments(this);
     }
 

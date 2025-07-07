@@ -161,20 +161,18 @@ export class NavBar {
 
 export class ProgressBar {
     #elem;
-    #start;
-    #end;
+    #bar;
+    #current;
     constructor(
         elem,
-        start = 0,
-        end = document.documentElement.scrollHeight,
     ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
-        this.#start = start;
-        this.#end = end;
+
+        this.#bar = this.#elem.obj.querySelector('#' + util.css.TemplateID.progressbar);
 
         util.log(
             'Progress Bar with id ' + this.#elem.obj.id + ' instantiated.',
@@ -187,6 +185,39 @@ export class ProgressBar {
         return this.#elem;
     }
 
+    get current() {
+        return this.#current;
+    }
+
+    updateProgress(progress) {
+        if (progress >= 100) {
+            this.#current = 100;
+            this.#bar.style.width = '100%';
+        } else if (progress <= 0) {
+            this.#current = 0;
+            this.#bar.style.width = '0%';
+        } else {
+            this.#current = progress;
+            this.#bar.style.width = `${progress}%`;
+        }
+    }
+}
+
+export class ScrollProgressBar extends ProgressBar {
+    #start;
+    #end;
+    constructor(
+        elem,
+        start = 0,
+        end = document.documentElement.scrollHeight,
+    ) {
+        super(elem);
+
+        this.#start = start;
+        this.#end = end;
+        window.addEventListener(util.ScrollEvents.SCROLL, () => {this.updateScrollProgress()});
+    }
+
     get start() {
         return this.#start;
     }
@@ -194,7 +225,7 @@ export class ProgressBar {
     set start(start) {
         this.#start = start;
         util.log(
-            'Progress Bar Start set to ' + start + '.',
+            'Scroll Progress Bar Start set to ' + start + '.',
             util.LogType.INFO,
         );
     }
@@ -206,47 +237,14 @@ export class ProgressBar {
     set end(end) {
         this.#end = end;
         util.log(
-            'Progress Bar End set to ' + end + '.',
+            'Scroll Progress Bar End set to ' + end + '.',
             util.LogType.INFO,
         );
     }
 
-    updateProgress(progress) {
-        this.#elem.obj.style.width = `${progress}%`;
-        // If the user has reached the end, fill the progress bar
-        if (progress >= 100) {
-            this.#elem.obj.style.width = '100%';
-        } else if (progress <= 0) {
-            this.#elem.obj.style.width = '0%';
-        }
-    }
-}
-
-export class ScrollProgressBar extends ProgressBar {
-    constructor(
-        elem,
-        start = 0,
-        end = document.documentElement.scrollHeight,
-    ) {
-        super(elem, start, end);
-        window.addEventListener(util.ScrollEvents.SCROLL, () => {this.updateProgress()});
-        util.log(
-            'Scroll Progress Bar with id ' + this.elem.obj.id + ' instantiated.',
-            util.LogType.INFO,
-            true,
-        );
-    }
-
-    updateProgress() {
-        const progress = ((window.scrollY - this.start) / (this.end - window.innerHeight - this.start)) * 100;
-        this.elem.obj.style.width = `${progress}%`;
-
-        // If the user has reached the end, fill the progress bar
-        if (progress >= 100) {
-            this.elem.obj.style.width = '100%';
-        } else if (progress <= 0) {
-            this.elem.obj.style.width = '0%';
-        }
+    updateScrollProgress() {
+        const progress = ((window.scrollY - this.#start) / (this.#end - window.innerHeight - this.#start)) * 100;
+        this.updateProgress(progress);
     }
 }
 
