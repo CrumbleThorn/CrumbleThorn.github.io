@@ -352,18 +352,28 @@ export class NavButton {
 
 export class Slideshow {
     #elem;
+    #images;
+    #duration;
+    #transition;
+    #currentIndex;
+
     constructor(
         elem,
         images,
-        behavior,
+        duration = 3000,
+        transition,
     ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
-        this.images = images;
-        this.behavior = behavior;
+        this.#images = images;
+        this.#duration = parseInt(duration);
+        this.#transition = transition;
+        this.#currentIndex = 0;
+
+        util.log(this.#images);
 
         util.log(
             'Slideshow with id ' + this.#elem.obj.id + ' instantiated.',
@@ -374,6 +384,16 @@ export class Slideshow {
 
     get elem() {
         return this.#elem;
+    }
+
+    play() {
+        this.#images[this.#currentIndex].classList.add(util.css.SiteClass.hidden);
+        this.#currentIndex = this.#currentIndex + 1 < this.#images.length ? this.#currentIndex + 1 : 0;
+        this.#images[this.#currentIndex].classList.remove(util.css.SiteClass.hidden);
+        
+        setTimeout(() => {
+            this.play();
+        }, this.#duration);
     }
 }
 

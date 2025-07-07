@@ -42,63 +42,12 @@ const TemplateType = Object.freeze({
 });
 
 function addToLoadedDOMs(key, value) {
-    if (Object.hasOwn(loadedDOMs, key)) {
-        loadedDOMs[key].push(value)
-    } else {
-        loadedDOMs[key] = [value];
-    }
-    if (value instanceof HTMLElement) {
-        value.dispatchEvent(
-            new Event(
-                TemplateEvents.TEMPLATE_LOADED,
-                {
-                    bubbles: true,
-                    composed: true,
-                }
-            )
-        );
-    } else {
-        value.template.dispatchEvent(
-            new Event(
-                TemplateEvents.TEMPLATE_LOADED,
-                {
-                    bubbles: true,
-                    composed: true,
-                },
-            )
-        );
-    }
-}
-
-function templateCount(template) {
-    if(Object.hasOwn(window.loadedDOMs, template)) {
-        console.log(Object.keys(window.loadedDOMs[template]).length);
-        return Object.keys(window.loadedDOMs[template]).length;
-    } else {
-        return 0;
-    }
-}
-
-function constructURL(template, type) {
-    return 'components/' + type + '/' + template + '.html';
-}
-
-// TO DO: base all templates to this template class
-// Base Template Class
-class HTMLTemplate extends HTMLElement {
-    #name;
-    constructor(name) {
-        super();
-        this.#name = name;
-    }
-
-    get name() {
-        return this.#name;
-    }
-
-    addToLoadedDOMs(key, value) {
         if (Object.hasOwn(loadedDOMs, key)) {
-            loadedDOMs[key].push(value)
+            const match = loadedDOMs[key].find(item => item.template.id == value.template.id);
+            if (match)
+                Object.assign(match, value);
+            else
+                loadedDOMs[key].push(value);
         } else {
             loadedDOMs[key] = [value];
         }
@@ -112,15 +61,38 @@ class HTMLTemplate extends HTMLElement {
         );
     }
 
-    templateCount(template) {
+function templateCount(template) {
         if(Object.hasOwn(window.loadedDOMs, template)) {
             return Object.keys(window.loadedDOMs[template]).length;
         }
             else return 0;
     }
 
-    constructURL(template, type) {
+function constructURL(template, type) {
         return 'components/' + type + '/' + template + '.html';
+    }
+
+// TO DO: base all templates to this template class
+// Base Template Class
+class HTMLTemplate extends HTMLElement {
+    #name;
+    constructor(name, type) {
+        super();
+        this.#name = name;
+        if (this.id == '') {
+            this.id = this.#name + '-' +  templateCount(this.#name);
+        }
+        // Reserve the entry in the LoadedDOMs list to prevent broken entries when reloading shadow DOMs
+        addToLoadedDOMs(
+            this.#name,
+            {
+                template: this
+            },
+        );
+    }
+
+    get name() {
+        return this.#name;
     }
 
     removeComments(elem, comments = []) {
@@ -158,10 +130,10 @@ class BackgroundTemplate extends HTMLTemplate {
     // TO DO: Make Background Class so we can programmatically cycle between backgrounds
     connectedCallback() {
         // TO DO: Change from singleton to subcomponent
-        util.getResource(this.constructURL(this.name, TemplateType.SINGLETON), Text)
+        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
             .then(html => {
                 this.#initialize(html);
-                this.addToLoadedDOMs(
+                addToLoadedDOMs(
                     this.name,
                     {
                         template: this,
@@ -178,7 +150,7 @@ class FooterTemplate extends HTMLTemplate {
     constructor() {
         const name = Template.FOOTER;
         if (templateCount(name) < 1) {
-            super(name);
+            super(name, TemplateType.SINGLETON);
         } else {
             throw new Error('Footer singleton can only be instantiated once!');
         }
@@ -197,8 +169,7 @@ class FooterTemplate extends HTMLTemplate {
         util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
             .then(html => {
                 this.#initialize(html);
-                //this.#ui = this.querySelector('#' + util.css.siteElements.footer);
-                this.addToLoadedDOMs(
+                addToLoadedDOMs(
                     this.name,
                     {
                         template: this,
@@ -244,7 +215,7 @@ class HeroTemplate extends HTMLTemplate {
         util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
             .then(html => {
                 this.#initialize(html);
-                this.addToLoadedDOMs(
+                addToLoadedDOMs(
                     this.name,
                     {
                         template: this,
@@ -718,7 +689,7 @@ class ProgressBarTemplate extends HTMLTemplate {
     connectedCallback() {
         util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
             .then(html => {
-                this.#initialize(html)
+                this.#initialize(html);
                 addToLoadedDOMs(
                     this.name,
                     {
@@ -745,14 +716,67 @@ class SlideshowTemplate extends HTMLTemplate {
         return this.#ui;
     }
 
+
+
     #initialize(html) {
         this.#shadow = this.attachShadow({ mode: 'open' });
         this.#shadow.innerHTML = html;
 
-        this.removeComments(this);
+        const slideshow = this.shadow.getElementById(util.css.TemplateID.slideshow);
+        const slideshowWindow = this.shadow.getElementById(util.css.TemplateID.slideshowWindow);
+
+        if (this.dataset.dimensions != undefined) {
+            const dimensions = this.dataset.dimensions.split(' ');
+            if (dimensions.length == 1) {
+                slideshow.style.setProperty('width', dimensions[0]);
+                slideshow.style.setProperty('height', dimensions[0]);
+            } else {
+                slideshow.style.setProperty('width', dimensions[0]);
+                slideshow.style.setProperty('height', dimensions[1]);
+            }
+        }
+
+        if (this.dataset.imageHref != undefined) {
+            const urls = this.dataset.imageHref.split(' ');
+            for (let i = 0; i < urls.length; i++) {
+                slideshowWindow.innerHTML += '<img class="'
+                    + util.css.TemplateID.slideshowImage
+                    + (i<1 ? '' : ' ' + util.css.SiteClass.hidden)
+                    + '" src="'
+                    + urls[i]
+                    + '"/>';
+            }
+        }
+
+        const imageList = slideshowWindow.querySelectorAll('.' + util.css.TemplateID.slideshowImage);
+
+        //util.log(imageList);
+
+        const duration = this.dataset.duration;
+        const transition = this.dataset.transition;
+
+        this.#ui = new ui.Slideshow(
+            this.shadow.getElementById(util.css.TemplateID.slideshowWindow),
+            imageList,
+            duration,
+            transition
+        );
+
+        /* // TO DO:
+        if (this.dataset.addProgressbar != undefined) {
+
+        }
+
+        // TO DO:
+        if (this.dataset.addControls != undefined) {
+
+        } */
+
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
+        console.trace('callback');
         util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
             .then(html => {
                 this.#initialize(html);

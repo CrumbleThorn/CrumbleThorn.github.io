@@ -219,10 +219,6 @@ export const css = Object.freeze({
         sidecardLeft: 'sidecard-left',
         sidecardRight: 'sidecard-right',
         sidecardContent: 'sidecard-content',
-        // Slideshow Classes
-        slideshow: 'slideshow',
-        slideshowWindow: 'slideshow-window',
-        slideshowControls: 'slideshow-controls',
         // Vertical Bar Classes
         verticalSpacer: 'vertical-spacer',
         leftbar: 'leftbar',
@@ -265,6 +261,12 @@ export const css = Object.freeze({
         // Progress Bar IDs
         progressbarContainer: 'progressbar-container',
         progressbar: 'progressbar',
+        // Slideshow Classes
+        slideshow: 'slideshow',
+        slideshowWindow: 'slideshow-window',
+        slideshowImage: 'slideshow-image',
+        slideshowControls: 'slideshow-controls',
+        slideshowProgressbar: 'slideshow-progressbar',
     }),
 });
 

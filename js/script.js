@@ -627,6 +627,14 @@ function onLoadComplete() {
             titlebar.scrollToMain();
         });
 
+        if (Object.hasOwn(loadedDOMs, templates.Template.SLIDESHOW)) {
+            util.log('Slideshow Detected!');
+            loadedDOMs[templates.Template.SLIDESHOW][0].ui.play();
+            /* for (const slideshow in loadedDOMs[templates.Template.SLIDESHOW]) {
+                slideshow.ui.play();
+            } */
+        }
+
         if (Object.hasOwn(loadedDOMs, templates.Template.SIDEBAR)) {
             util.log('Side Bar Detected!');
             const sidebar = new ui.SideBar(
