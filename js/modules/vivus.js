@@ -11,11 +11,23 @@ export class VivusContainer {
         this.#container = document.getElementById(id);
         this.played = false;
         return new Promise(resolve => {
-            this.#vivus = new Vivus(id, Object.assign(options, {onReady: (instance) => {
-                                                                                        this.#obj = instance.el;
-                                                                                        resolve(this);
-                                                                                        }
-                                                                }));
+            this.#vivus = new Vivus(
+                id,
+                Object.assign(
+                    options, 
+                    {
+                        onReady: (instance) => {
+                            this.#obj = instance.el;
+                            util.log(
+                                'Vivus instance created on ' + id + ' with ' + options,
+                                util.LogType.INFO, 
+                                true,
+                            );
+                            resolve(this);
+                        }
+                    }
+                )
+            );
         });
     }
 
