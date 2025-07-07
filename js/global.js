@@ -20,11 +20,13 @@ function onDocumentLoaded() {
 
 function loadLoadingScreen(event) {
     loadingScreen = event.target.ui;
-    util.log("Loading Screen Loaded");
 }
 
 function onLoadComplete() {
-    util.log("LoadComplete");
+    util.log(
+        'Page has been fully loaded!',
+        util.LogType.INFO,
+    );
     setTimeout(() => {
         if (Object.hasOwn(loadedDOMs, 'loadingscreen')) {
             loadingScreen.toggle();
