@@ -261,11 +261,12 @@ export const css = Object.freeze({
         navbarLogo: 'navbar-logo',
         navbarTitle: 'navbar-title',
         navbarMenu: 'navbar-menu',
-        navbarProgressBar: 'navbar-progress-bar',
+        navbarProgressBar: 'navbar-progressbar',
         sidebar: 'sidebar',
         sidebarContent: 'sidebar-content',
         sidebarTitle: 'sidebar-title',
         sidebarMenu: 'sidebar-menu',
+        bottombar: 'bottombar',
     }),
 });
 
