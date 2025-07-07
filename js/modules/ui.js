@@ -27,14 +27,14 @@ export class LoadingScreen {
                 )
             );
         } else {
-            throw new TypeError(elem + " is not a valid Loading Screen!");
+            throw new TypeError(elem + ' is not a valid Loading Screen!');
         }
 
         if (animation instanceof lottiefiles.LottieContainer) {
             this.#animation = animation;
         } else {
             this.#animation = new lottiefiles.LottieContainer(
-                this.#elem.obj.querySelector("#" + util.css.SiteID.loadingAnimation),
+                this.#elem.obj.querySelector('#' + util.css.SiteID.loadingAnimation),
                 'data/json/loading.json',
             );
         }
@@ -48,6 +48,12 @@ export class LoadingScreen {
         if(this.#elem.active) {
             document.body.classList.add(util.css.SiteClass.noScroll);
         }
+
+        util.log(
+            'Loading Screen with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -76,6 +82,12 @@ export class Content {
     #obj;
     constructor(obj) {
         this.#obj = obj;
+
+        util.log(
+            'Content has been loaded.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     hideContent() {
@@ -89,13 +101,21 @@ export class Content {
 
 export class SideBar {
     #elem;
-    constructor(elem) {
+    constructor(
+        elem,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
         this.links = this.#elem.obj.querySelectorAll('.sidebar-link');
+
+        util.log(
+            'Side Bar with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -107,7 +127,10 @@ export class SideBar {
 export class NavBar {
     #elem;
     
-    constructor(elem, sidebar) {
+    constructor(
+        elem,
+        sidebar,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
@@ -120,6 +143,12 @@ export class NavBar {
         this.title = elem.obj.querySelector('.site-title');
         this.links = elem.obj.querySelectorAll('.navbar-link');
         this.sidebar = sidebar;
+
+        util.log(
+            'Navigation Bar with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -135,10 +164,11 @@ export class ProgressBar {
     #elem;
     #start;
     #end;
-    constructor(elem,
-                start = 0,
-                end = document.documentElement.scrollHeight,
-                ) {
+    constructor(
+        elem,
+        start = 0,
+        end = document.documentElement.scrollHeight,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
@@ -146,6 +176,12 @@ export class ProgressBar {
         }
         this.#start = start;
         this.#end = end;
+
+        util.log(
+            'Progress Bar with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -158,7 +194,10 @@ export class ProgressBar {
 
     set start(start) {
         this.#start = start;
-        util.log('Progress Bar Start set to ' + start + '.');
+        util.log(
+            'Progress Bar Start set to ' + start + '.',
+            util.LogType.INFO,
+        );
     }
 
     get end() {
@@ -167,7 +206,10 @@ export class ProgressBar {
 
     set end(end) {
         this.#end = end;
-        util.log('Progress Bar End set to ' + end + '.');
+        util.log(
+            'Progress Bar End set to ' + end + '.',
+            util.LogType.INFO,
+        );
     }
 
     updateProgress(progress) {
@@ -182,13 +224,18 @@ export class ProgressBar {
 }
 
 export class ScrollProgressBar extends ProgressBar {
-
-    constructor(elem,
-                start = 0,
-                end = document.documentElement.scrollHeight,
-                ) {
+    constructor(
+        elem,
+        start = 0,
+        end = document.documentElement.scrollHeight,
+    ) {
         super(elem, start, end);
         window.addEventListener(util.ScrollEvents.SCROLL, () => {this.updateProgress()});
+        util.log(
+            'Scroll Progress Bar with id ' + this.elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     updateProgress() {
@@ -206,18 +253,32 @@ export class ScrollProgressBar extends ProgressBar {
 
 export class Hero {
     #elem;
-    constructor(elem) {
+    constructor(
+        elem,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
-        this.content = new anim.AnimatedElement(loadedDOMs.hero[0].shadow.getElementById(util.css.SiteID.heroContent),
-                                                false,
-                                                new animate.Animation(  animate.animationClass.fadeInLeft,
-                                                                        animate.speedClass.animated),
-                                                new animate.Animation(  animate.animationClass.fadeOutUp,
-                                                                        animate.speedClass.animated));
+        this.content = new anim.AnimatedElement(
+            loadedDOMs.hero[0].template.shadow.getElementById(util.css.SiteID.heroContent),
+            false,
+            new animate.Animation(
+                animate.animationClass.fadeInLeft,
+                animate.speedClass.animated,
+            ),
+            new animate.Animation(
+                animate.animationClass.fadeOutUp,
+                animate.speedClass.animated,
+            ),
+        );
+
+        util.log(
+            'Hero with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -227,24 +288,41 @@ export class Hero {
 
 export class Card {
     #elem;
-    constructor(elem, side) {
+    constructor(
+        elem,
+        side,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
         this.side = side;
+
+        util.log(
+            'Card with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 }
 
 export class BottomBar {
     #elem;
-    constructor(elem) {
+    constructor(
+        elem,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
+
+        util.log(
+            'Bottom Bar with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -254,19 +332,34 @@ export class BottomBar {
 
 export class NavButton {
     #elem;
-    constructor(elem, target, offset, offsetY) {
+    constructor(
+        elem,
+        target,
+        offset,
+        offsetY,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
         this.target = target;
+
+        util.log(
+            'Navigation Button with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 }
 
 export class Slideshow {
     #elem;
-    constructor(elem, images, behavior) {
+    constructor(
+        elem,
+        images,
+        behavior,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
@@ -274,6 +367,12 @@ export class Slideshow {
         }
         this.images = images;
         this.behavior = behavior;
+
+        util.log(
+            'Slideshow with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
@@ -283,12 +382,20 @@ export class Slideshow {
 
 export class Footer {
     #elem;
-    constructor(elem) {
+    constructor(
+        elem,
+    ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
+
+        util.log(
+            'Footer with id ' + this.#elem.obj.id + ' instantiated.',
+            util.LogType.INFO,
+            true,
+        );
     }
 
     get elem() {
