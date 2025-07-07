@@ -4,6 +4,7 @@ import * as lottiefiles from './lottiefiles.js';
 import * as ui from './ui.js';
 import * as util from './util.js';
 
+// TO DO: Create TemplateManager class, replace this
 // Instantiates global list if it doesn't exist yet
 if (!Object.hasOwn(window, 'loadedDOMS')) {
     window.loadedDOMs = {};
@@ -47,23 +48,35 @@ function addToLoadedDOMs(key, value) {
         loadedDOMs[key] = [value];
     }
     if (value instanceof HTMLElement) {
-        value.dispatchEvent(new Event(TemplateEvents.TEMPLATE_LOADED, {
-            bubbles: true,
-            composed: true,
-        }));
+        value.dispatchEvent(
+            new Event(
+                TemplateEvents.TEMPLATE_LOADED,
+                {
+                    bubbles: true,
+                    composed: true,
+                }
+            )
+        );
     } else {
-        value.template.dispatchEvent(new Event(TemplateEvents.TEMPLATE_LOADED, {
-            bubbles: true,
-            composed: true,
-        }));
+        value.template.dispatchEvent(
+            new Event(
+                TemplateEvents.TEMPLATE_LOADED,
+                {
+                    bubbles: true,
+                    composed: true,
+                },
+            )
+        );
     }
 }
 
 function templateCount(template) {
     if(Object.hasOwn(window.loadedDOMs, template)) {
+        console.log(Object.keys(window.loadedDOMs[template]).length);
         return Object.keys(window.loadedDOMs[template]).length;
+    } else {
+        return 0;
     }
-        else return 0;
 }
 
 function constructURL(template, type) {
@@ -73,84 +86,110 @@ function constructURL(template, type) {
 // TO DO: base all templates to this template class
 // Base Template Class
 class HTMLTemplate extends HTMLElement {
-    #shadow;
-    constructor() {
+    #name;
+    constructor(name) {
         super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#name = name;
+    }
+
+    get name() {
+        return this.#name;
+    }
+
+    addToLoadedDOMs(key, value) {
+        if (Object.hasOwn(loadedDOMs, key)) {
+            loadedDOMs[key].push(value)
+        } else {
+            loadedDOMs[key] = [value];
+        }
+        value.template.dispatchEvent(
+            new Event(TemplateEvents.TEMPLATE_LOADED,
+            {
+                bubbles: true,
+                composed: true,
+            },
+            )
+        );
+    }
+
+    templateCount(template) {
+        if(Object.hasOwn(window.loadedDOMs, template)) {
+            return Object.keys(window.loadedDOMs[template]).length;
+        }
+            else return 0;
+    }
+
+    constructURL(template, type) {
+        return 'components/' + type + '/' + template + '.html';
+    }
+
+    findCommentsRecursively(elem, comments) {
+        for (const child of elem.childNodes) {
+            if (child.nodeType === Node.COMMENT_NODE) {
+                comments.push(child);
+            }
+            // Recursively check child nodes
+            this.findCommentsRecursively(child, comments);
+        }
+    }
+
+    removeComments(elem) {
+        const comments = [];
+        this.findCommentsRecursively(elem, comments)
+        for (const comment of comments) {
+            comment.outerHTML = '';
+        }
+    }
+}
+
+class BackgroundTemplate extends HTMLTemplate {
+    #shadow;
+    #ui;
+    constructor() {
+        super(Template.BACKGROUND);
     }
 
     get shadow() {
-        return this.#shadow
+        return this.#shadow;
+    }
+
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML = html;
+        this.removeComments(this.#shadow);
+    }
+
+    // TO DO: Make Background Class so we can programmatically cycle between backgrounds
+    connectedCallback() {
+        // TO DO: Change from singleton to subcomponent
+        util.getResource(this.constructURL(this.name, TemplateType.SINGLETON), Text)
+            .then(html => {
+                this.#initialize(html);
+                this.addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    } 
+                );
+            });
     }
 }
 
 // Singleton Templates
-class BackgroundTemplate extends HTMLElement {
-    #shadow;
-    #name;
-    constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.BACKGROUND;
-    }
-
-    get shadow() {
-        return this.#shadow
-    }
-
-    get name() {
-        return this.#name;
-    }
-
-    connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SINGLETON), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
-    }
-}
-
-class FooterTemplate extends HTMLElement {
-    #name;
+class FooterTemplate extends HTMLTemplate {
     #ui;
     constructor() {
-        super();
-        this.#name = Template.FOOTER;
-    }
-
-    get name() {
-        return this.#name;
-    }
-
-    get ui() {
-        return this.#ui;
-    }
-
-    connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SINGLETON), Text).then(html => {
-            this.innerHTML = html;
-            //this.#ui = this.querySelector('#' + util.css.siteElements.footer);
-            addToLoadedDOMs(this.#name, this);
-        });
-    }
-}
-
-class HeroTemplate extends HTMLElement {
-    #shadow;
-    #name;
-    #ui;
-    constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.HERO;
-    }
-
-    get shadow() {
-        return this.#shadow
-    }
-
-    get name() {
-        return this.#name;
+        const name = Template.FOOTER;
+        if (templateCount(name) < 1) {
+            super(name);
+        } else {
+            throw new Error('Footer singleton can only be instantiated once!');
+        }
     }
 
     get ui() {
@@ -158,36 +197,86 @@ class HeroTemplate extends HTMLElement {
     }
 
     #initialize(html) {
+        this.innerHTML = html;
+        this.removeComments(this);
+    }
+
+    connectedCallback() {
+        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
+            .then(html => {
+                this.#initialize(html);
+                //this.#ui = this.querySelector('#' + util.css.siteElements.footer);
+                this.addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    } 
+                );
+            });
+    }
+}
+
+class HeroTemplate extends HTMLTemplate {
+    #shadow;
+    #ui;
+    constructor() {
+        const name = Template.HERO;
+        if (templateCount(name) < 1) {
+            super(name);
+        } else {
+            throw new Error('Hero singleton can only be instantiated once!');
+        }
+    }
+
+    get shadow() {
+        return this.#shadow;
+    }
+
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+
         const heroContent = this.#shadow.host.innerHTML;
         this.#shadow.host.innerHTML = '';
         this.#shadow.innerHTML = html;
         this.#shadow.getElementById(util.css.SiteID.heroContent).innerHTML = heroContent;
+
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SINGLETON), Text).then(html => {
-            this.#initialize(html);
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
+            .then(html => {
+                this.#initialize(html);
+                this.addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    } 
+                );
+            });
     }
 }
 
-class LoadingScreenTemplate extends HTMLElement {
-    #name;
+class LoadingScreenTemplate extends HTMLTemplate {
     #shadow;
     #ui;
     constructor() {
-        super();
-        this.#name = Template.LOADING_SCREEN;
-        this.#shadow = this.attachShadow({ mode: 'open' });
+        const name = Template.LOADING_SCREEN;
+        if (templateCount(name) < 1) {
+            super(name);
+        } else {
+            throw new Error('Loading Screen singleton can only be instantiated once!');
+        }
     }
 
     get shadow() {
-        return this.#shadow
-    }
-
-    get name() {
-        return this.#name;
+        return this.#shadow;
     }
 
     get ui() {
@@ -195,9 +284,14 @@ class LoadingScreenTemplate extends HTMLElement {
     }
 
     #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+
         this.#shadow.innerHTML = html;
         if (this.dataset.animationHref != undefined) {
-            util.log("Using custom loading animation provided at " + this.dataset.animationHref);
+            util.log(
+                "Using custom loading animation provided at " + this.dataset.animationHref,
+                util.LogType.INFO,
+            );
             this.#ui = new ui.LoadingScreen(
                 this.#shadow.getElementById(util.css.SiteID.loadingscreen),
                 new lottiefiles.LottieContainer(
@@ -209,44 +303,54 @@ class LoadingScreenTemplate extends HTMLElement {
             this.#ui = new ui.LoadingScreen(this.#shadow.getElementById(util.css.SiteID.loadingscreen));
         }
         
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SINGLETON), Text).then(html => {
-            this.#initialize(html);
-            addToLoadedDOMs(
-                this.#name,
-                {
-                    template: this,
-                    ui: this.#ui,
-                },
-                 );
-            this.dispatchEvent(new Event(TemplateEvents.LOADING_SCREEN_READY, {
-                bubbles: true,
-                composed: true,
-            }));
-        });
+        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+                this.dispatchEvent(
+                    new Event(
+                        TemplateEvents.LOADING_SCREEN_READY,
+                        {
+                        bubbles: true,
+                        composed: true,
+                        },
+                    )
+                );
+            });
     }
 }
 
-class NavBarTemplate extends HTMLElement {
+class NavBarTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.NAVBAR;
+        const name = Template.NAVBAR;
+        if (templateCount(name) < 1) {
+            super(name);
+        } else {
+            throw new Error('Navigation Bar singleton can only be instantiated once!');
+        }
     }
 
     get shadow() {
-        return this.#shadow
+        return this.#shadow;
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
     }
 
-    #intiializeNavbarLabel() {
+    #initializeNavbarLabel() {
         let html = '';
         const navbarLabel = this.#shadow.getElementById(util.css.SiteID.navbarLabel);
 
@@ -295,8 +399,14 @@ class NavBarTemplate extends HTMLElement {
         navbarMenu.innerHTML = html
     }
 
-    #initialize() {
-        util.log(this.dataset, true);
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML += html;
+
+        util.log(
+            this.dataset,
+            util.LogType.DEBUG,
+        );
 
         // TO DO: Initialize Burger menu Button
         if (this.dataset.sidebarId != undefined) {
@@ -304,7 +414,7 @@ class NavBarTemplate extends HTMLElement {
             //navbarBurger.classList.remove(util.css.siteClasses.hidden);
         }
 
-        this.#intiializeNavbarLabel();
+        this.#initializeNavbarLabel();
         this.#populateNavbarMenu();
         
         // Initialize Navbar Progress Bar
@@ -312,61 +422,86 @@ class NavBarTemplate extends HTMLElement {
             const navbar = this.#shadow.getElementById(util.css.SiteID.navbar);
             navbar.innerHTML += '<'+ Template.PROGRESS_BAR + suffix + ' id="' + util.css.SiteID.navbarProgressBar + '"></' + Template.PROGRESS_BAR + suffix + '>\n';
         }
+
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SINGLETON), Text).then(html => {
-            this.#shadow.innerHTML += html;
-            this.#initialize();
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
-class SideBarTemplate extends HTMLElement {
+class SideBarTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.SIDEBAR;
+        const name = Template.SIDEBAR;
+        if (templateCount(name) < 1) {
+            super(name);
+        } else {
+            throw new Error('Side Bar singleton can only be instantiated once!');
+        }
     }
 
     get shadow() {
-        return this.#shadow
+        return this.#shadow;
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML = html;
+
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SINGLETON), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
 // Container Templates
-class CardTemplate extends HTMLElement {
+class CardTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.CARD;
+        super(Template.CARD);
     }
 
     get shadow() {
-        return this.#shadow
+        return this.#shadow;
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
     }
 
     #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+
         const cardhtml = this.#shadow.host.innerHTML;
         this.#shadow.host.innerHTML = '';
         this.#shadow.innerHTML = html;
@@ -391,186 +526,276 @@ class CardTemplate extends HTMLElement {
                 cardContent.classList.add(util.css.SiteClass.endcardContent);
                 break;
         }
+        
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.STANDARD), Text).then(html => {
-            this.#initialize(html);
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.STANDARD), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
-
-
-class CenterCardTemplate extends HTMLElement {
+class CenterCardTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.CENTER_CARD;
+        super(Template.CENTER_CARD);
     }
 
     get shadow() {
-        return this.#shadow
+        return this.#shadow;
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML = html;
+
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.STANDARD), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.STANDARD), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
-class ModalTemplate extends HTMLElement {
+class ModalTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.MODAL;
+        super(Template.MODAL);
     }
 
     get shadow() {
-        return this.#shadow
+        return this.#shadow;
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML = html;
+
+        this.removeComments(this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.STANDARD), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.STANDARD), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
 // Internal Components
-class DropdownTemplate extends HTMLElement {
+class DropdownTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.DROPDOWN;
+        super(Template.DROPDOWN);
     }
 
     get shadow() {
         return this.#shadow
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
     }
 
-    connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SUBCOMPONENT), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
-    }
-}
-
-class HorizontalBarTemplate extends HTMLElement {
-    #name;
-    constructor() {
-        super();
-        this.#name = Template.HORIZONTAL_BAR;
-    }
-
-    get name() {
-        return this.#name;
-    }
-
-    connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SUBCOMPONENT), Text).then(html => {
-            this.outerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
-    }
-}
-
-class ProgressBarTemplate extends HTMLElement {
-    #shadow;
-    #name;
-    constructor() {
-        super();
+    #initialize(html) {
         this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.PROGRESS_BAR;
+        this.#shadow.innerHTML = html;
+
+        this.removeComments(this.#shadow);
+    }
+
+    connectedCallback() {
+        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
+    }
+}
+
+class HorizontalBarTemplate extends HTMLTemplate {
+    #ui;
+    constructor() {
+        super(Template.HORIZONTAL_BAR);
+    }
+
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.outerHTML = html;
+
+        this.removeComments(this);
+    }
+
+    connectedCallback() {
+        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
+    }
+}
+
+class ProgressBarTemplate extends HTMLTemplate {
+    #shadow;
+    #ui;
+    constructor() {
+        super(Template.PROGRESS_BAR);
     }
 
     get shadow() {
         return this.#shadow
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
     }
 
-    connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SUBCOMPONENT), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML = html;
         
+        this.removeComments(this);
+    }
+
+    connectedCallback() {
+        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
+            .then(html => {
+                this.#initialize(html)
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
-class SlideshowTemplate extends HTMLElement {
+class SlideshowTemplate extends HTMLTemplate {
     #shadow;
-    #name;
+    #ui;
     constructor() {
-        super();
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#name = Template.SLIDESHOW;
+        super(Template.SLIDESHOW);
     }
 
     get shadow() {
         return this.#shadow
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow.innerHTML = html;
+
+        this.removeComments(this);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SUBCOMPONENT), Text).then(html => {
-            this.#shadow.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
-class VerticalBarTemplate extends HTMLElement {
-    #name;
+class VerticalBarTemplate extends HTMLTemplate {
+    #ui;
     constructor() {
-        super();
-        this.#name = Template.VERTICAL_BAR;
+        super(Template.VERTICAL_BAR);
     }
 
-    get name() {
-        return this.#name;
+    get ui() {
+        return this.#ui;
+    }
+
+    #initialize(html) {
+        this.innerHTML = html;
+
+        this.removeComments(this);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.#name, TemplateType.SUBCOMPONENT), Text).then(html => {
-            this.innerHTML = html;
-            addToLoadedDOMs(this.#name, this);
-        });
+        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
+            .then(html => {
+                this.#initialize(html);
+                addToLoadedDOMs(
+                    this.name,
+                    {
+                        template: this,
+                        ui: this.#ui,
+                    },
+                );
+            });
     }
 }
 
 const suffix = '-template';
 
-const DemplateDefinitions = Object.freeze({
+const TemplateDefinitions = Object.freeze({
     // Internal Components
     DROPDOWN: DropdownTemplate,
     HORIZONTAL_BAR: HorizontalBarTemplate,
@@ -596,7 +821,10 @@ export function loadTemplate(templateName, definition) {
 
 export function loadAllTemplates() {
     for (const template in Template) {
-        loadTemplate(Template[template] + suffix, DemplateDefinitions[template]);
+        loadTemplate(Template[template] + suffix, TemplateDefinitions[template]);
     }
-    util.log("Templates Loaded!");
+    util.log(
+        "Templates Loaded!",
+        util.LogType.INFO,
+    );
 }
