@@ -269,18 +269,23 @@ export const css = Object.freeze({
     }),
 });
 
+function canLog(verbosity) {
+    return (LOG_VERBOSITY > 0 && verbosity <= LOG_VERBOSITY) ||
+            (LOG_VERBOSITY == 0 && verbosity == LOG_VERBOSITY) ||
+            (LOG_VERBOSITY == LogType.VERBOSE);
+}
+
 /**
  * Outputs the provided message in the console when developer mode is active.
  * @param {object} message - The message to be sent to the console.
  * @param {LogType} [verbosity=LogType.DEFAULT] - The verbosity level of the message.
  *
 */
-export function log(message, verbosity = 0, traceLogs = false) {
+export function log(message, verbosity = LogType.DEFAULT, traceLogs = false) {
     if (isDev) {
-        if (LOG_VERBOSITY > 5) {
+        if (LOG_VERBOSITY >= LogType.VERBOSE) {
             console.trace(message);
-        } else if ((LOG_VERBOSITY > 0 && verbosity >= LOG_VERBOSITY) ||
-            (LOG_VERBOSITY == 0 && verbosity == LOG_VERBOSITY)) {
+        } else if (canLog(verbosity)) {
             if (LOG_TRACING || traceLogs) {
                 console.trace(message);
             } else {
@@ -293,15 +298,24 @@ export function log(message, verbosity = 0, traceLogs = false) {
 /**
  * Outputs the provided warning in the console when developer mode is active.
  * @param {object} message - The message to be sent to the console.
- * @param {LogType} [verbosity=LogType.DEFAULT] - The verbosity level of the message.
+ * @param {LogType} [verbosity=LogType.WARNING] - The verbosity level of the message.
  *
 */
-export function warn(message, verbosity = 0) {
-    if (isDev) {
-        if ((LOG_VERBOSITY > 0 && verbosity >= LOG_VERBOSITY) ||
-            (LOG_VERBOSITY == 0 && verbosity == LOG_VERBOSITY)) {
-            console.warn(message);
-        }
+export function warn(message, verbosity = LogType.WARNING) {
+    if (isDev && canLog(verbosity)) {
+        console.warn(message);
+    }
+}
+
+/**
+ * Outputs the provided error in the console when developer mode is active.
+ * @param {object} message - The message to be sent to the console.
+ * @param {LogType} [verbosity=LogType.ERROR] - The verbosity level of the message.
+ *
+*/
+export function error(message, verbosity = LogType.ERROR) {
+    if (isDev && canLog(verbosity)) {
+        console.error(message);
     }
 }
 
