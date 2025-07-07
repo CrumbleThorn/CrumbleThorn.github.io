@@ -8,7 +8,7 @@ import * as util from './modules/util.js';
 
 const scrollManager = new util.DirectionalScrollManager();
 
-const content = new ui.Content(document.getElementById('content'));
+const content = new ui.Content(document.getElementById(util.css.SiteID.content));
 let loadingScreen;
 
 function onDocumentLoaded() {
@@ -28,7 +28,7 @@ function onLoadComplete() {
         util.LogType.INFO,
     );
     setTimeout(() => {
-        if (Object.hasOwn(loadedDOMs, 'loadingscreen')) {
+        if (Object.hasOwn(loadedDOMs, templates.Template.LOADING_SCREEN)) {
             loadingScreen.toggle();
         }
         content.showContent();
