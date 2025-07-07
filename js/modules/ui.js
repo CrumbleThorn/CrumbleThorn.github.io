@@ -262,7 +262,7 @@ export class Hero {
             this.#elem = new anim.AnimatedElement(elem);
         }
         this.content = new anim.AnimatedElement(
-            loadedDOMs.hero[0].template.shadow.getElementById(util.css.SiteID.heroContent),
+            this.#elem.obj.querySelector('#' + util.css.SiteID.heroContent),
             false,
             new animate.Animation(
                 animate.animationClass.fadeInLeft,
