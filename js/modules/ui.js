@@ -130,23 +130,18 @@ export class SideBar {
 // TO DO: Use util.css instead of direct string assignments
 export class NavBar {
     #elem;
-    
     constructor(
         elem,
-        sidebar,
     ) {
         if (elem instanceof anim.AnimatedElement) {
             this.#elem = elem;
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
-        this.content = elem.obj.querySelector('.navbar-content');
-        this.menu = elem.obj.querySelector('.navbar-menu');
-        this.burger = elem.obj.querySelector('.navbar-burger');
-        this.logo = elem.obj.querySelector('.site-logo');
-        this.title = elem.obj.querySelector('.site-title');
-        this.links = elem.obj.querySelectorAll('.navbar-link');
-        this.sidebar = sidebar;
+        this.content = this.#elem.obj.querySelector('#' + util.css.SiteID.navbarContent);
+        this.burger = this.#elem.obj.querySelector('#' + util.css.SiteID.navbarBurger);
+        this.label = this.#elem.obj.querySelector('#' + util.css.SiteID.navbarLabel);
+        this.menu = this.#elem.obj.querySelector('#' + util.css.SiteID.navbarMenu);
 
         util.log(
             'Navigation Bar with id ' + this.#elem.obj.id + ' instantiated.',

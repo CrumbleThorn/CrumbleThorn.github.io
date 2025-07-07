@@ -309,21 +309,17 @@ function handleHero() {
 function handleNavbar() {
     if (Object.hasOwn(loadedDOMs, templates.Template.NAVBAR)) {
         util.log('Navbar Detected!');
-        navbar = new ui.NavBar(
-            new anim.AnimatedElement(
-                loadedDOMs[templates.Template.NAVBAR][0].template.shadow.getElementById(util.css.SiteID.navbar),
-                false,
-                new animate.Animation(
-                    animate.animationClass.slideInDown,
-                    animate.speedClass.faster,
-                ),
-                new animate.Animation(
-                    animate.animationClass.slideOutUp,
-                    animate.speedClass.faster,
-                ),
-            ),
-            undefined,
+        navbar = loadedDOMs[templates.Template.NAVBAR][0].template.ui;
+
+        navbar.elem.entryAnimation = new animate.Animation(
+            animate.animationClass.slideInDown,
+            animate.speedClass.faster,
         );
+        navbar.elem.exitAnimation = new animate.Animation(
+            animate.animationClass.slideOutUp,
+            animate.speedClass.faster,
+        );
+
         navbar.scrollDownTrigger = new anim.AnimationScrollTrigger(
             navbar.elem,
             anim.animationType.show,
