@@ -35,6 +35,13 @@ export const LogType = Object.freeze({
 const LOG_VERBOSITY = LogType.DEFAULT;
 
 /**
+ * Determines if the stack trace will be always displayed with the log regardless of the setting passed to the log() function.
+ * @constant
+ * @type {number}
+ */
+const LOG_TRACING = false;
+
+/**
  * The scroll events used by the DirectionalScrollManager.
  * @readonly
  * @enum {string}
@@ -268,10 +275,17 @@ export const css = Object.freeze({
  * @param {LogType} [verbosity=LogType.DEFAULT] - The verbosity level of the message.
  *
 */
-export function log(message, verbosity = 0) {
+export function log(message, verbosity = 0, traceLogs = false) {
     if (isDev) {
-        if (LOG_VERBOSITY >= verbosity) {
-            console.log(message);
+        if (LOG_VERBOSITY > 5) {
+            console.trace(message);
+        } else if ((LOG_VERBOSITY > 0 && verbosity >= LOG_VERBOSITY) ||
+            (LOG_VERBOSITY == 0 && verbosity == LOG_VERBOSITY)) {
+            if (LOG_TRACING || traceLogs) {
+                console.trace(message);
+            } else {
+                console.log(message);
+            }
         }
     }
 }
@@ -284,7 +298,8 @@ export function log(message, verbosity = 0) {
 */
 export function warn(message, verbosity = 0) {
     if (isDev) {
-        if (LOG_VERBOSITY >= verbosity) {
+        if ((LOG_VERBOSITY > 0 && verbosity >= LOG_VERBOSITY) ||
+            (LOG_VERBOSITY == 0 && verbosity == LOG_VERBOSITY)) {
             console.warn(message);
         }
     }
