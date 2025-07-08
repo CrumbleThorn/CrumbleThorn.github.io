@@ -21,7 +21,8 @@ function onDocumentLoaded() {
 }
 
 function loadLoadingScreen(event) {
-    loadingScreen = event.target.ui;
+    loadingScreen = event.target.ui.elem;
+    util.log(loadingScreen);
 }
 
 function onLoadComplete() {
