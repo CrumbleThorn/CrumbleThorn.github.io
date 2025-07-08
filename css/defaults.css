@@ -228,6 +228,10 @@ a:active {
 	user-select: none;
 }
 
+.nowrap {
+	white-space: nowrap;
+}
+
 .vivus-text {
     fill-opacity: 0;
     transition: fill-opacity 1s;
