@@ -227,8 +227,8 @@ function handleHero() {
             'Hero Detected!',
             util.LogType.INFO,
         );
-        hero = loadedDOMs[templates.Template.HERO][0].template.ui;
-        const heroShadow = loadedDOMs[templates.Template.HERO][0].template.shadow;
+        hero = loadedDOMs[templates.Template.HERO][0].ui;
+        const heroShadow = loadedDOMs[templates.Template.HERO][0].shadow;
         hero.heroButton = new anim.AnimatedElement(
             heroShadow.getElementById(PageElements.HERO_BUTTON),
             false,
@@ -319,7 +319,7 @@ function handleNavbar() {
             'Navbar Detected!',
             util.LogType.INFO,
         );
-        navbar = loadedDOMs[templates.Template.NAVBAR][0].template.ui;
+        navbar = loadedDOMs[templates.Template.NAVBAR][0].ui;
 
         navbar.elem.entryAnimation = new animate.Animation(
             animate.animationClass.slideInDown,
@@ -367,7 +367,7 @@ function handleNavbar() {
                 'Navbar Progress Bar Detected!',
                 util.LogType.INFO,
             );
-            const progressbar = loadedDOMs[templates.Template.PROGRESS_BAR].find((elem) => elem.template.shadow == navbar.progressbar.shadowRoot).ui;
+            const progressbar = loadedDOMs[templates.Template.PROGRESS_BAR].find((elem) => elem.shadow == navbar.progressbar.shadowRoot).ui;
             progressbar.start = start.getBoundingClientRect().top - window.innerHeight;
             progressbar.end = document.documentElement.scrollHeight;
         }
@@ -377,22 +377,12 @@ function handleNavbar() {
 // TO DO: Add exceptions for when pressing back to top
 function handleCards() {
     if (Object.hasOwn(loadedDOMs, templates.Template.CARD)) {
-        endCard = new ui.Card(
-            new anim.AnimatedElement(
-                loadedDOMs[templates.Template.CARD][4].template.shadow.querySelector('.' + util.css.SiteClass.card),
-            ),
-            anim.anchor.bottom,
-        );
+        endCard = loadedDOMs[templates.Template.CARD][4].ui;
         endSection = new anim.AnimatedElement(
             document.getElementById(PageElements.END_SECTION),
         );
 
-        musicCard = new ui.Card(
-            new anim.AnimatedElement(
-                loadedDOMs[templates.Template.CARD][3].template.shadow.querySelector('.' + util.css.SiteClass.card),
-            ),
-            anim.anchor.right,
-        );
+        musicCard = loadedDOMs[templates.Template.CARD][3].ui;
         musicSection = new anim.AnimatedElement(
             document.getElementById(PageElements.MUSIC_SECTION),
         );
@@ -453,12 +443,7 @@ function handleCards() {
             false,
         );
 
-        artCard = new ui.Card(
-            new anim.AnimatedElement(
-                loadedDOMs[templates.Template.CARD][2].template.shadow.querySelector('.' + util.css.SiteClass.card),
-            ),
-            anim.anchor.left,
-        );
+        artCard = loadedDOMs[templates.Template.CARD][2].ui;
         artSection = new anim.AnimatedElement(
             document.getElementById(PageElements.ART_SECTION),
         );
@@ -511,12 +496,7 @@ function handleCards() {
             false,
         );
 
-        devCard = new ui.Card(
-            new anim.AnimatedElement(
-                loadedDOMs[templates.Template.CARD][1].template.shadow.querySelector('.' + util.css.SiteClass.card),
-            ),
-            anim.anchor.right,
-        );
+        devCard = loadedDOMs[templates.Template.CARD][1].ui;
         devSection = new anim.AnimatedElement(
             document.getElementById(PageElements.DEV_SECTION),
         );
@@ -569,12 +549,7 @@ function handleCards() {
             false,
         );
 
-        gameCard = new ui.Card(
-            new anim.AnimatedElement(
-                loadedDOMs[templates.Template.CARD][0].template.shadow.querySelector('.' + util.css.SiteClass.card),
-            ),
-            anim.anchor.left,
-        );
+        gameCard = loadedDOMs[templates.Template.CARD][0].ui;
         gameSection = new anim.AnimatedElement(
             document.getElementById(PageElements.GAME_SECTION),
         );
