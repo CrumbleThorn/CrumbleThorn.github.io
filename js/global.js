@@ -8,6 +8,8 @@ import * as util from './modules/util.js';
 
 const scrollManager = new util.DirectionalScrollManager();
 
+window.dummyDelay = 500;
+
 const content = new ui.Content(document.getElementById(util.css.SiteID.content));
 let loadingScreen;
 
@@ -32,7 +34,7 @@ function onLoadComplete() {
             loadingScreen.toggle();
         }
         content.showContent();
-    }, 500);
+    }, dummyDelay);
 }
 
 window.addEventListener('DOMContentLoaded', onDocumentLoaded);

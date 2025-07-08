@@ -753,6 +753,6 @@ function onLoadComplete() {
                 false,
             );
         }
-    }, 500);
+    }, window.dummyDelay);
 }
 window.addEventListener('load', onLoadComplete);
