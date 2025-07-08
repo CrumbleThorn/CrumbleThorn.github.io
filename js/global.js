@@ -8,7 +8,7 @@ import * as util from './modules/util.js';
 
 const scrollManager = new util.DirectionalScrollManager();
 
-window.dummyDelay = 500;
+window.dummyDelay = 0;
 
 const content = new ui.Content(document.getElementById(util.css.SiteID.content));
 let loadingScreen;
@@ -22,7 +22,6 @@ function onDocumentLoaded() {
 
 function loadLoadingScreen(event) {
     loadingScreen = event.target.ui.elem;
-    util.log(loadingScreen);
 }
 
 function onLoadComplete() {
@@ -39,6 +38,6 @@ function onLoadComplete() {
 }
 
 window.addEventListener('DOMContentLoaded', onDocumentLoaded);
-window.addEventListener('loadingScreenReady', (event) => loadLoadingScreen(event));
-window.addEventListener('load', onLoadComplete);
+window.addEventListener(templates.TemplateEvents.LOADING_SCREEN_READY, (event) => loadLoadingScreen(event));
+window.addEventListener(templates.TemplateEvents.ALL_TEMPLATES_LOADED, onLoadComplete);
 window.addEventListener('resize', responsive.responsiveDesignChecker);

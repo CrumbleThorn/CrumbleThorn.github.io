@@ -4,12 +4,13 @@ import * as lottiefiles from './lottiefiles.js';
 import * as ui from './ui.js';
 import * as util from './util.js';
 
-// TO DO: Create TemplateManager class, replace this
+// TO DO: Create TemplateManager class, replace this so we can programmatically replace the loadedDOMs list when navigating
 // Instantiates global list if it doesn't exist yet
 if (!Object.hasOwn(window, 'loadedDOMS')) {
     window.loadedDOMs = {};
 }
 
+// NOTE: THESE NEED TO BE DEFINED IN ORDER STARTING FROM INTERNAL COMPONENTS
 export const Template = Object.freeze({
     // Internal Components
     DROPDOWN: 'dropdown',
@@ -45,31 +46,36 @@ const TemplateType = Object.freeze({
 });
 
 function addToLoadedDOMs(key, value) {
-        if (Object.hasOwn(loadedDOMs, key)) {
-            loadedDOMs[key].push(value);
+    if (Object.hasOwn(loadedDOMs, key)) {
+        const matchIndex = loadedDOMs[key].findIndex((elem) => elem.id == value.id);
+        if (matchIndex != -1) {
+            loadedDOMs[key][matchIndex] = value;
         } else {
-            loadedDOMs[key] = [value];
+            loadedDOMs[key].push(value);
         }
-        value.dispatchEvent(
-            new Event(TemplateEvents.TEMPLATE_LOADED,
-            {
-                bubbles: true,
-                composed: true,
-            },
-            )
-        );
+    } else {
+        loadedDOMs[key] = [value];
     }
+    value.dispatchEvent(
+        new Event(TemplateEvents.TEMPLATE_LOADED,
+        {
+            bubbles: true,
+            composed: true,
+        },
+        )
+    );
+}
 
 function templateCount(template) {
-        if(Object.hasOwn(window.loadedDOMs, template)) {
-            return Object.keys(window.loadedDOMs[template]).length;
-        }
-            else return 0;
+    if(Object.hasOwn(loadedDOMs, template)) {
+        return loadedDOMs[template].length;
     }
+        else return 0;
+}
 
 function constructURL(template, type) {
-        return 'components/' + type + template + '.html';
-    }
+    return 'components/' + type + template + '.html';
+}
 
 // TO DO: Check for Completeness
 // Base Template Class
@@ -81,21 +87,28 @@ class HTMLTemplate extends HTMLElement {
     #ui;
     constructor(name, type) {
         super();
+        if (HTMLTemplate.renderingList == undefined) {
+            HTMLTemplate.renderingList = 0;
+        }
+
         this.#name = name;
+        this.#type = type;
+
         if (this.id == '') {
             this.id = this.#name + '-' +  templateCount(this.#name);
         }
-        this.#type = type;
 
-        this.#ready = new Promise(resolve => {
-            this.#resolveReady = resolve;
-        });
-
-        // Reserve the entry in the LoadedDOMs list to prevent broken entries when reloading shadow DOMs
+        // Reserve an entry in the loadedDOMs list
         addToLoadedDOMs(
             this.#name,
             this,
         );
+
+        HTMLTemplate.renderingList++;
+
+        this.#ready = new Promise(resolve => {
+            this.#resolveReady = resolve;
+        });
     }
 
     get name() {
@@ -115,15 +128,29 @@ class HTMLTemplate extends HTMLElement {
     }
 
     async getHTML() {
-        return util.getResource(constructURL(this.#name, this.#type))
-            .then((response) => {
-                return response.text();
-            });
+        const response = await util.getResource(constructURL(this.#name, this.#type))
+        return response.text();
     }
 
     complete(ui, content) {
         this.#ui = ui;
         this.removeComments(content);
+        addToLoadedDOMs(
+            this.#name,
+            this,
+        );
+        HTMLTemplate.renderingList--;
+        if (HTMLTemplate.renderingList == 0) {
+            window.dispatchEvent(
+                new Event(
+                    TemplateEvents.ALL_TEMPLATES_LOADED,
+                    {
+                        bubbles: true,
+                        composed: true,
+                    }
+                )
+            );
+        }
         this.#resolveReady();
     }
 
@@ -729,12 +756,36 @@ export function loadTemplate(templateName, definition) {
     customElements.define(templateName, definition);
 }
 
-export function loadAllTemplates() {
-    for (const template in Template) {
-        loadTemplate(Template[template] + suffix, TemplateDefinitions[template]);
+
+// NOTE: Can probably be repurposed for recursive waiting
+// (additional custom elements may be instantiated by other elements once they're rendered)
+async function waitForReadyIn(node) {
+    const elements = node.querySelectorAll('*');
+
+    const promises = [];
+
+    for (const elem of elements) {
+        if (elem.tagName.includes('-') && typeof elem.ready === 'object') {
+        promises.push(elem.ready);
+        }
+
+        if (elem.shadowRoot != undefined) {
+        promises.push(waitForReadyIn(elem.shadowRoot));
+        }
     }
-    util.log(
-        "Templates Loaded!",
-        util.LogType.INFO,
-    );
+    
+    await Promise.all(promises);
+}
+
+export async function loadAllTemplates() {
+    const names = Object.values(Template);
+    const definitions = Object.values(TemplateDefinitions);
+
+    for (let i = 0; i < names.length; i++) {
+        loadTemplate(names[i] + TEMPLATE_SUFFIX, definitions[i]);
+    }
+
+    for (const template of Object.values(Template)) {
+        await customElements.whenDefined(template + TEMPLATE_SUFFIX);
+    }
 }

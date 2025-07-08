@@ -650,10 +650,10 @@ function onLoadComplete() {
                 'Slideshow Detected!',
                 util.LogType.INFO,
             );
-            loadedDOMs[templates.Template.SLIDESHOW][0].ui.play();
-            /* for (const slideshow in loadedDOMs[templates.Template.SLIDESHOW]) {
+
+            for (const slideshow of loadedDOMs[templates.Template.SLIDESHOW]) {
                 slideshow.ui.play();
-            } */
+            }
         }
 
         if (Object.hasOwn(loadedDOMs, templates.Template.SIDEBAR)) {
@@ -730,4 +730,4 @@ function onLoadComplete() {
         }
     }, window.dummyDelay);
 }
-window.addEventListener('load', onLoadComplete);
+window.addEventListener(templates.TemplateEvents.ALL_TEMPLATES_LOADED, onLoadComplete);
