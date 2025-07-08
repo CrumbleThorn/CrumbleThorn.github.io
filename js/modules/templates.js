@@ -488,38 +488,25 @@ class CardTemplate extends HTMLTemplate {
 
 class CenterCardTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.CENTER_CARD);
+        super(Template.CENTER_CARD, TemplateType.STANDARD);
     }
 
     get shadow() {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
         this.#shadow.innerHTML = html;
 
-        this.removeComments(this.#shadow);
+        this.complete(undefined, this.#shadow)
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.STANDARD), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
