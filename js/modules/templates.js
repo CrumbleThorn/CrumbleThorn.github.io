@@ -177,7 +177,6 @@ class BackgroundTemplate extends HTMLTemplate {
 
 // Singleton Templates
 class FooterTemplate extends HTMLTemplate {
-    #ui;
     constructor() {
         const name = Template.FOOTER;
         if (templateCount(name) < 1) {
@@ -187,27 +186,19 @@ class FooterTemplate extends HTMLTemplate {
         }
     }
 
-    get ui() {
-        return this.#ui;
-    }
+    async #initialize() {
+        const html = await this.getHTML();
 
-    #initialize(html) {
         this.innerHTML = html;
-        this.removeComments(this);
+
+        // TO DO: Make Footer Class
+        const footer = /* new ui.Footer(this); */ undefined;
+
+        this.complete(footer, this);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    } 
-                );
-            });
+        this.#initialize();
     }
 }
 
