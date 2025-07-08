@@ -297,11 +297,10 @@ class LoadingScreenTemplate extends HTMLTemplate {
 
 class NavBarTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
         const name = Template.NAVBAR;
         if (templateCount(name) < 1) {
-            super(name);
+            super(name, TemplateType.SINGLETON);
         } else {
             throw new Error('Navigation Bar singleton can only be instantiated once!');
         }
@@ -311,50 +310,46 @@ class NavBarTemplate extends HTMLTemplate {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initializeNavbarLabel() {
-        this.#ui.label.innerHTML = '';
+    #initializeNavbarLabel(navbar) {
+        navbar.label.innerHTML = '';
 
         if (this.dataset.logoSrc != undefined) {
-            this.#ui.label.innerHTML += '<img src="' + this.dataset.logoSrc +'" id="' + util.css.SiteID.navbarLogo + '">\n';
-            this.#ui.logo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
+            navbar.label.innerHTML += '<img src="' + this.dataset.logoSrc +'" id="' + util.css.SiteID.navbarLogo + '">\n';
+            navbar.logo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
         } else if (this.dataset.logoId != undefined) {
             const navbarLogo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
-            this.#ui.label.innerHTML += navbarLogo.outerHTML;
+            navbar.label.innerHTML += navbarLogo.outerHTML;
             navbarLogo.outerHTML = '';
-            this.#ui.logo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
+            navbar.logo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
         }
 
         if ((this.dataset.title != undefined || this.dataset.titleId != undefined) && (this.dataset.logoSrc != undefined || this.dataset.logoId != undefined)) {
-            this.#ui.label.innerHTML += '<'+ Template.VERTICAL_BAR + suffix + ' class="' + util.css.SiteClass.navbarLabelDivider + '"></' + Template.VERTICAL_BAR + suffix + '>\n';
+            navbar.label.innerHTML += '<'+ Template.VERTICAL_BAR + TEMPLATE_SUFFIX + ' class="' + util.css.SiteClass.navbarLabelDivider + '"></' + Template.VERTICAL_BAR + TEMPLATE_SUFFIX + '>\n';
         }
         
         if (this.dataset.title != undefined) {
-            this.#ui.label.innerHTML += '<div class="' + util.css.SiteFont.ubuntu + '" id="' + util.css.SiteID.navbarTitle + '">' + this.dataset.title + '</div>\n';
-            this.#ui.title = this.#shadow.getElementById(util.css.SiteID.navbarTitle);
+            navbar.label.innerHTML += '<div class="' + util.css.SiteFont.ubuntu + '" id="' + util.css.SiteID.navbarTitle + '">' + this.dataset.title + '</div>\n';
+            navbar.title = this.#shadow.getElementById(util.css.SiteID.navbarTitle);
         } else if (this.dataset.titleId != undefined) {
             const navbarTitle = this.#shadow.getElementById(util.css.SiteID.navbarTitle);
-            this.#ui.label.innerHTML += navbarTitle.outerHTML;
+            navbar.label.innerHTML += navbarTitle.outerHTML;
             navbarTitle.outerHTML = '';
         }
     }
 
-    #populateNavbarMenu() {
-        this.#ui.menu.innerHTML = '';
+    #populateNavbarMenu(navbar) {
+        navbar.menu.innerHTML = '';
         
         for (let ctr = 1; this.dataset['menuitem' + ctr.toString()] != undefined; ctr++) {
             if (ctr > 1) {
-                this.#ui.menu.innerHTML += '<'+ Template.VERTICAL_BAR + suffix + ' class="' + util.css.SiteClass.navbarLabelDivider + '"></' + Template.VERTICAL_BAR + suffix + '>\n';
+                navbar.menu.innerHTML += '<'+ Template.VERTICAL_BAR + TEMPLATE_SUFFIX + ' class="' + util.css.SiteClass.navbarLabelDivider + '"></' + Template.VERTICAL_BAR + TEMPLATE_SUFFIX + '>\n';
             }
             let linkDetails = this.dataset['menuitem' + ctr.toString()].split(' ');
 
             if (linkDetails.length == 1) {
-                this.#ui.menu.innerHTML += '<div class="' + util.css.SiteClass.navbarCurrent + " " + util.css.SiteFont.saira + " " + util.css.SiteFont.semibold + '">' + linkDetails[0] + '</div>\n';
+                navbar.menu.innerHTML += '<div class="' + util.css.SiteClass.navbarCurrent + ' ' + util.css.SiteFont.saira + ' ' + util.css.SiteFont.semibold + '">' + linkDetails[0] + '</div>\n';
             } else if (linkDetails.length == 2) {
-                this.#ui.menu.innerHTML += '<a class="' + util.css.SiteClass.navbarLink + " " + util.css.SiteFont.saira + " " + util.css.SiteFont.medium + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
+                navbar.menu.innerHTML += '<a class="' + util.css.SiteClass.navbarLink + ' ' + util.css.SiteFont.saira + ' ' + util.css.SiteFont.medium + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
             } else {
                 // TO DO: Implement Dropdown
             }
@@ -363,8 +358,9 @@ class NavBarTemplate extends HTMLTemplate {
         
     }
 
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
         this.#shadow.innerHTML += html;
 
         util.log(
@@ -372,7 +368,7 @@ class NavBarTemplate extends HTMLTemplate {
             util.LogType.DEBUG,
         );
 
-        this.#ui = new ui.NavBar(
+        const navbar = new ui.NavBar(
             new anim.AnimatedElement(
                 this.#shadow.getElementById(util.css.SiteID.navbar),
                 false,
@@ -381,33 +377,23 @@ class NavBarTemplate extends HTMLTemplate {
 
         // TO DO: Initialize Burger menu Button
         if (this.dataset.sidebarId != undefined) {
-            this.#ui.burger.classList.remove(util.css.SiteClass.hidden);
+            navbar.burger.classList.remove(util.css.SiteClass.hidden);
         }
 
-        this.#initializeNavbarLabel();
-        this.#populateNavbarMenu();
+        this.#initializeNavbarLabel(navbar);
+        this.#populateNavbarMenu(navbar);
         
         // Initialize Navbar Progress Bar
         if (this.dataset.progressbarStartId != undefined) {
-            this.#ui.elem.obj.innerHTML += '<'+ Template.PROGRESS_BAR + suffix + ' data-start-id="' + this.dataset.progressbarStartId + '" id="' + util.css.SiteID.navbarProgressBar + '"></' + Template.PROGRESS_BAR + suffix + '>\n';
-            this.#ui.progressbar = this.#shadow.getElementById(util.css.SiteID.navbarProgressBar);
+            navbar.elem.obj.innerHTML += '<'+ Template.PROGRESS_BAR + TEMPLATE_SUFFIX + ' data-start-id="' + this.dataset.progressbarStartId + '" id="' + util.css.SiteID.navbarProgressBar + '"></' + Template.PROGRESS_BAR + TEMPLATE_SUFFIX + '>\n';
+            navbar.progressbar = this.#shadow.getElementById(util.css.SiteID.navbarProgressBar);
         }
 
-        this.removeComments(this.#shadow);
+        this.complete(navbar, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
