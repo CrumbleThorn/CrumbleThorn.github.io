@@ -371,8 +371,10 @@ class NavBarTemplate extends HTMLTemplate {
         );
 
         this.#ui = new ui.NavBar(
-            this.#shadow.getElementById(util.css.SiteID.navbar),
-            false,
+            new anim.AnimatedElement(
+                this.#shadow.getElementById(util.css.SiteID.navbar),
+                false,
+            )
         );
 
         // TO DO: Initialize Burger menu Button
@@ -750,7 +752,10 @@ class SlideshowTemplate extends HTMLTemplate {
 
         const imageList = slideshowWindow.querySelectorAll('.' + util.css.TemplateID.slideshowImage);
 
-        //util.log(imageList);
+        util.log(
+            imageList,
+            util.LogType.DEBUG,
+        );
 
         const duration = this.dataset.duration;
         const transition = this.dataset.transition;
@@ -776,7 +781,6 @@ class SlideshowTemplate extends HTMLTemplate {
     }
 
     connectedCallback() {
-        console.trace('callback');
         util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
             .then(html => {
                 this.#initialize(html);
