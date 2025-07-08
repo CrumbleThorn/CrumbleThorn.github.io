@@ -1,4 +1,4 @@
-a::after {
+.navbar-link::after {
 	content: "";
 	position: absolute;
 	left: 0;
@@ -9,7 +9,7 @@ a::after {
 	transition: width 0.3s ease;
 }
 
-a:hover::after {
+.navbar-link:hover::after {
   	width: 100%;
 }
 
