@@ -228,8 +228,9 @@ function handleHero() {
             util.LogType.INFO,
         );
         hero = loadedDOMs[templates.Template.HERO][0].ui;
+        const heroShadow = loadedDOMs[templates.Template.HERO][0].template.shadow;
         hero.heroButton = new anim.AnimatedElement(
-            loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.HERO_BUTTON),
+            heroShadow.getElementById(PageElements.HERO_BUTTON),
             false,
             new animate.Animation(
                 animate.animationClass.fadeInUp,
@@ -238,7 +239,7 @@ function handleHero() {
             ),
         );
         hero.heroMenuText = new anim.AnimatedElement(
-            loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.HERO_MENU_TEXT),
+            heroShadow.getElementById(PageElements.HERO_MENU_TEXT),
             false,
             new animate.Animation(
                 animate.animationClass.fadeInUp,
@@ -247,7 +248,7 @@ function handleHero() {
             ),
         );
         hero.scrollDownText = new anim.AnimatedElement(
-            loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.SCROLL_DOWN_TEXT),
+            heroShadow.getElementById(PageElements.SCROLL_DOWN_TEXT),
             false,
             new animate.Animation(
                 animate.animationClass.fadeInUp,
@@ -263,7 +264,7 @@ function handleHero() {
             ),
         );
         hero.heroTitle = new anim.AnimatedElement(
-            loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.HERO_TITLE),
+            heroShadow.getElementById(PageElements.HERO_TITLE),
             false,
             new animate.Animation(
                 animate.animationClass.backInLeft,
@@ -271,7 +272,7 @@ function handleHero() {
                 ),
             );
         hero.heroSubtitle = new anim.AnimatedElement(
-            loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.HERO_SUBTITLE),
+            heroShadow.getElementById(PageElements.HERO_SUBTITLE),
             false,
             new animate.Animation(
                 animate.animationClass.backInLeft,
@@ -280,7 +281,7 @@ function handleHero() {
             ),
         );
         hero.heroImage = new anim.AnimatedElement(
-            loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.HERO_IMAGE),
+            heroShadow.getElementById(PageElements.HERO_IMAGE),
             false,
             new animate.Animation(
                 animate.animationClass.backInRight,
