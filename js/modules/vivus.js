@@ -20,8 +20,7 @@ export class VivusContainer {
                             this.#obj = instance.el;
                             util.log(
                                 'Vivus instance created on ' + id + ' with ' + options,
-                                util.LogType.INFO, 
-                                true,
+                                util.LogType.INFO,
                             );
                             resolve(this);
                         }

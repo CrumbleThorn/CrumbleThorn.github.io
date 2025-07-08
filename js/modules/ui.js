@@ -52,7 +52,6 @@ export class LoadingScreen {
         util.log(
             'Loading Screen with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -89,7 +88,6 @@ export class Content {
             util.log(
                 'Content has been loaded.',
                 util.LogType.INFO,
-                true,
             );
         }
     }
@@ -118,7 +116,6 @@ export class SideBar {
         util.log(
             'Side Bar with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -146,7 +143,6 @@ export class NavBar {
         util.log(
             'Navigation Bar with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -177,7 +173,6 @@ export class ProgressBar {
         util.log(
             'Progress Bar with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -274,7 +269,6 @@ export class Hero {
         util.log(
             'Hero with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -299,7 +293,6 @@ export class Card {
         util.log(
             'Card with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 }
@@ -318,7 +311,6 @@ export class BottomBar {
         util.log(
             'Bottom Bar with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -345,7 +337,6 @@ export class NavButton {
         util.log(
             'Navigation Button with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 }
@@ -381,7 +372,6 @@ export class Slideshow {
         util.log(
             'Slideshow with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 
@@ -414,7 +404,6 @@ export class Footer {
         util.log(
             'Footer with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
-            true,
         );
     }
 

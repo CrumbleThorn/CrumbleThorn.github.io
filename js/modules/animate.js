@@ -297,7 +297,10 @@ export const css = (obj, animation, override = false) =>
     
         // When the animation ends, we clean the classes and resolve the Promise
         function handleAnimationEnd(event) {
-            util.log(event, true);
+            util.log(
+                event,
+                util.LogType.DEBUG,
+            );
             event.stopPropagation();
             node.classList.remove(...animationClasses);
             resolve('Animation Ended!');
@@ -305,7 +308,10 @@ export const css = (obj, animation, override = false) =>
 
         // If the animation is interrupted, we reject the Promise
         function handleAnimationInterrupt(event) {
-            util.log(event, true);
+            util.log(
+                event,
+                util.LogType.DEBUG,
+            );
             node.classList.remove(...animationClasses);
             reject('Animation Interrupted!');
         }
