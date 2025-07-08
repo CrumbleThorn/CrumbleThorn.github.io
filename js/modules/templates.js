@@ -610,36 +610,31 @@ class ProgressBarTemplate extends HTMLTemplate {
 
 class SlideshowTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.SLIDESHOW);
+        super(Template.SLIDESHOW, TemplateType.SUBCOMPONENT);
     }
 
     get shadow() {
         return this.#shadow
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
         this.#shadow.innerHTML = html;
 
-        const slideshow = this.shadow.getElementById(util.css.TemplateID.slideshow);
+        const slideshowObj = this.shadow.getElementById(util.css.TemplateID.slideshow);
         const slideshowWindow = this.shadow.getElementById(util.css.TemplateID.slideshowWindow);
 
         if (this.dataset.dimensions != undefined) {
             const dimensions = this.dataset.dimensions.split(' ');
             if (dimensions.length == 1) {
-                slideshow.style.setProperty('width', dimensions[0]);
-                slideshow.style.setProperty('height', dimensions[0]);
+                slideshowObj.style.setProperty('width', dimensions[0]);
+                slideshowObj.style.setProperty('height', dimensions[0]);
             } else {
-                slideshow.style.setProperty('width', dimensions[0]);
-                slideshow.style.setProperty('height', dimensions[1]);
+                slideshowObj.style.setProperty('width', dimensions[0]);
+                slideshowObj.style.setProperty('height', dimensions[1]);
             }
         }
 
@@ -665,7 +660,7 @@ class SlideshowTemplate extends HTMLTemplate {
         const duration = this.dataset.duration;
         const transition = this.dataset.transition;
 
-        this.#ui = new ui.Slideshow(
+        const slideshow = new ui.Slideshow(
             this.shadow.getElementById(util.css.TemplateID.slideshowWindow),
             imageList,
             duration,
@@ -682,21 +677,11 @@ class SlideshowTemplate extends HTMLTemplate {
 
         } */
 
-        this.removeComments(this.#shadow);
+        this.complete(slideshow, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
