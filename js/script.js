@@ -227,7 +227,7 @@ function handleHero() {
             'Hero Detected!',
             util.LogType.INFO,
         );
-        hero = loadedDOMs[templates.Template.HERO][0].ui;
+        hero = loadedDOMs[templates.Template.HERO][0].template.ui;
         const heroShadow = loadedDOMs[templates.Template.HERO][0].template.shadow;
         hero.heroButton = new anim.AnimatedElement(
             heroShadow.getElementById(PageElements.HERO_BUTTON),
