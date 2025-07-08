@@ -30,14 +30,17 @@ export const Template = Object.freeze({
     MODAL: 'modal',
 });
 
-const TemplateEvents = Object.freeze({
+const TEMPLATE_SUFFIX = '-template';
+
+export const TemplateEvents = Object.freeze({
     TEMPLATE_LOADED: 'templateLoaded',
     LOADING_SCREEN_READY: 'loadingScreenReady',
+    ALL_TEMPLATES_LOADED: 'allTemplatesLoaded',
 })
 
 const TemplateType = Object.freeze({
-    SINGLETON: 'singletons',
-    SUBCOMPONENT: 'subcomponents',
+    SINGLETON: 'singletons/',
+    SUBCOMPONENT: 'subcomponents/',
     STANDARD: '',
 });
 
@@ -69,19 +72,29 @@ function templateCount(template) {
     }
 
 function constructURL(template, type) {
-        return 'components/' + type + '/' + template + '.html';
+        return 'components/' + type + template + '.html';
     }
 
 // TO DO: base all templates to this template class
 // Base Template Class
 class HTMLTemplate extends HTMLElement {
     #name;
+    #ready;
+    #resolveReady;
+    #type;
+    #ui;
     constructor(name, type) {
         super();
         this.#name = name;
         if (this.id == '') {
             this.id = this.#name + '-' +  templateCount(this.#name);
         }
+        this.#type = type;
+
+        this.#ready = new Promise(resolve => {
+            this.#resolveReady = resolve;
+        });
+
         // Reserve the entry in the LoadedDOMs list to prevent broken entries when reloading shadow DOMs
         addToLoadedDOMs(
             this.#name,
@@ -93,6 +106,34 @@ class HTMLTemplate extends HTMLElement {
 
     get name() {
         return this.#name;
+    }
+
+    get type() {
+        return this.#type;
+    }
+
+    get ui() {
+        return this.#ui;
+    }
+
+    async getHTML() {
+        return util.getResource(constructURL(this.#name, this.#type))
+            .then((response) => {
+                return response.text();
+            });
+    }
+
+    complete(ui, content) {
+        this.#ui = ui;
+        this.removeComments(content);
+        addToLoadedDOMs(
+            this.name,
+            {
+                template: this,
+                ui: this.#ui,
+            } 
+        );
+        this.#resolveReady();
     }
 
     removeComments(elem, comments = []) {
