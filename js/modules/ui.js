@@ -373,7 +373,10 @@ export class Slideshow {
         this.#transition = transition;
         this.#currentIndex = 0;
 
-        util.log(this.#images);
+        util.log(
+            this.#images,
+            util.LogType.DEBUG,
+        );
 
         util.log(
             'Slideshow with id ' + this.#elem.obj.id + ' instantiated.',

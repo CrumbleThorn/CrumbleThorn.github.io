@@ -161,7 +161,7 @@ export class AnimatedElement {
                     }));
                 });
             } else {
-                util.warn('WARNING: Object ' + this.#obj.id + ' is already active, skipping animation');
+                util.warn('WARNING: Object ' + this.#obj.id + ' is already active, skipping animation...');
             }
         } else {
             util.warn('WARNING: entryAnimation is undefined, nothing will be animated!');
@@ -198,7 +198,7 @@ export class AnimatedElement {
                     }));
                 });
             } else {
-                util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation');
+                util.warn('WARNING: Object ' + this.#obj.id + ' is not active, skipping animation...');
             }
         } else {
             util.warn('WARNING: highlightAnimation is undefined, nothing will be animated!');
@@ -245,7 +245,7 @@ export class AnimatedElement {
                     }));
                 });
             } else {
-                util.warn('WARNING: Object ' + this.#obj.id + ' is already inactive, skipping animation');
+                util.warn('WARNING: Object ' + this.#obj.id + ' is already inactive, skipping animation...');
             }
         } else {
             util.warn('WARNING: exitAnimation is undefined, nothing will be animated!');

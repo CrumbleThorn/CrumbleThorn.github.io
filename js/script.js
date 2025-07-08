@@ -211,7 +211,10 @@ class TitleBar {
 
     handle(event) {
         if (event.detail.origin == this.titleTrigger) {
-            util.log('Hero Section Scroll Down Triggered');
+            util.log(
+                'Hero Section Scroll Down Triggered',
+                util.LogType.DEBUG,
+            );
             this.scrollToMain();
         }
     }
@@ -220,7 +223,10 @@ class TitleBar {
 // TO DO: Move to Hero UI Class
 function handleHero() {
     if (Object.hasOwn(loadedDOMs, templates.Template.HERO)) {
-        util.log('Hero Detected!');
+        util.log(
+            'Hero Detected!',
+            util.LogType.INFO,
+        );
         hero = new ui.Hero(loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(util.css.SiteID.hero));
         hero.heroButton = new anim.AnimatedElement(
             loadedDOMs[templates.Template.HERO][0].template.shadow.getElementById(PageElements.HERO_BUTTON),
@@ -308,7 +314,10 @@ function handleHero() {
 
 function handleNavbar() {
     if (Object.hasOwn(loadedDOMs, templates.Template.NAVBAR)) {
-        util.log('Navbar Detected!');
+        util.log(
+            'Navbar Detected!',
+            util.LogType.INFO,
+        );
         navbar = loadedDOMs[templates.Template.NAVBAR][0].template.ui;
 
         navbar.elem.entryAnimation = new animate.Animation(
@@ -353,7 +362,10 @@ function handleNavbar() {
         );
 
         if (navbar.progressbar != undefined) {
-            util.log('Navbar Progress Bar Detected!');
+            util.log(
+                'Navbar Progress Bar Detected!',
+                util.LogType.INFO,
+            );
             const progressbar = loadedDOMs[templates.Template.PROGRESS_BAR].find((elem) => elem.template.shadow == navbar.progressbar.shadowRoot).ui;
             progressbar.start = start.getBoundingClientRect().top - window.innerHeight;
             progressbar.end = document.documentElement.scrollHeight;
@@ -400,7 +412,10 @@ function handleCards() {
         );
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
             if (event.detail.origin == endSection.scrollUpTrigger) {
-                util.log('End Section Scroll Up Triggered');
+                util.log(
+                    'End Section Scroll Up Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.playVivus();
                 util.scrollTo(musicSection.obj, 28 * vh);
             }
@@ -448,11 +463,17 @@ function handleCards() {
         );
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
             if (event.detail.origin == musicSection.scrollDownTrigger) {
-                util.log('Music Section Scroll Down Triggered');
+                util.log(
+                    'Music Section Scroll Down Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.rewindVivus();
                 window.scrollTo(0, document.body.scrollHeight);
             } else if (event.detail.origin == musicSection.scrollUpTrigger) {
-                util.log('Music Section Scroll Up Triggered');
+                util.log(
+                    'Music Section Scroll Up Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.transitionVivus(titlebar.vivusArt);
                 util.scrollTo(artSection.obj, 28 * vh);
             }
@@ -500,11 +521,17 @@ function handleCards() {
         );
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
             if (event.detail.origin == artSection.scrollDownTrigger) {
-                util.log('Art Section Scroll Down Triggered');
+                util.log(
+                    'Art Section Scroll Down Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.transitionVivus(titlebar.vivusMusic);
                 util.scrollTo(musicSection.obj, 28 * vh);
             } else if (event.detail.origin == artSection.scrollUpTrigger) {
-                util.log('Art Section Scroll Up Triggered');
+                util.log(
+                    'Art Section Scroll Up Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.transitionVivus(titlebar.vivusDev);
                 util.scrollTo(devSection.obj, 28 * vh);
             }
@@ -552,11 +579,17 @@ function handleCards() {
         );
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
             if (event.detail.origin == devSection.scrollDownTrigger) {
-                util.log('Dev Section Scroll Down Triggered');
+                util.log(
+                    'Dev Section Scroll Down Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.transitionVivus(titlebar.vivusArt);
                 util.scrollTo(artSection.obj, 28 * vh);
             } else if (event.detail.origin == devSection.scrollUpTrigger) {
-                util.log('Dev Section Scroll Up Triggered');
+                util.log(
+                    'Dev Section Scroll Up Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.transitionVivus(titlebar.vivusGame);
                 util.scrollTo(gameSection.obj, 28 * vh);
             }
@@ -594,11 +627,17 @@ function handleCards() {
         );
         window.addEventListener(anim.animationEvents.scrollTriggered, (event) => {
             if (event.detail.origin == gameSection.scrollDownTrigger) {
-                util.log('Game Section Scroll Down Triggered');
+                util.log(
+                    'Game Section Scroll Down Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.transitionVivus(titlebar.vivusDev);
                 util.scrollTo(devSection.obj, 28 * vh);
             } else if (event.detail.origin == gameSection.scrollUpTrigger) {
-                util.log('Game Section Scroll Up Triggered');
+                util.log(
+                    'Game Section Scroll Up Triggered',
+                    util.LogType.DEBUG,
+                );
                 titlebar.resetVivus();
                 util.scrollToTop();
             }
@@ -615,7 +654,10 @@ function onLoadComplete() {
 
         titlebar = document.getElementById(PageElements.TITLE_BAR);
         if (titlebar) {
-            util.log('Title Bar Detected!');
+            util.log(
+                'Title Bar Detected!',
+                util.LogType.INFO,
+            );
             titlebar = new TitleBar(titlebar);
         }
 
@@ -628,7 +670,10 @@ function onLoadComplete() {
         });
 
         if (Object.hasOwn(loadedDOMs, templates.Template.SLIDESHOW)) {
-            util.log('Slideshow Detected!');
+            util.log(
+                'Slideshow Detected!',
+                util.LogType.INFO,
+            );
             loadedDOMs[templates.Template.SLIDESHOW][0].ui.play();
             /* for (const slideshow in loadedDOMs[templates.Template.SLIDESHOW]) {
                 slideshow.ui.play();
@@ -636,7 +681,10 @@ function onLoadComplete() {
         }
 
         if (Object.hasOwn(loadedDOMs, templates.Template.SIDEBAR)) {
-            util.log('Side Bar Detected!');
+            util.log(
+                'Side Bar Detected!',
+                util.LogType.INFO,
+            );
             const sidebar = new ui.SideBar(
                 new anim.AnimatedElement(
                     loadedDOMs.sidebar[0].template.shadow.getElementById(util.css.SiteID.sidebar),
@@ -654,7 +702,10 @@ function onLoadComplete() {
         }
 
         if (Object.hasOwn(loadedDOMs, templates.Template.HORIZONTAL_BAR)) {
-            util.log('Bottom Bar Detected!');
+            util.log(
+                'Bottom Bar Detected!',
+                util.LogType.INFO,
+            );
             const bottombar = new ui.BottomBar(
                 new anim.AnimatedElement(
                     document.getElementById(util.css.SiteID.bottombar),

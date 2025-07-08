@@ -42,6 +42,13 @@ const LOG_VERBOSITY = LogType.DEFAULT;
 const LOG_TRACING = false;
 
 /**
+ * Prevents warnings from being displayed if set to true.
+ * @constant
+ * @type {number}
+ */
+const SUPRESS_WARNINGS = true;
+
+/**
  * The scroll events used by the DirectionalScrollManager.
  * @readonly
  * @enum {string}
@@ -303,7 +310,7 @@ export function log(message, verbosity = LogType.DEFAULT, traceLogs = false) {
  *
 */
 export function warn(message, verbosity = LogType.WARNING) {
-    if (isDev && canLog(verbosity)) {
+    if (isDev && canLog(verbosity) && !SUPRESS_WARNINGS) {
         console.warn(message);
     }
 }

@@ -248,7 +248,10 @@ export const css = (obj, animation, override = false) =>
         const node = obj;
         
         if (typeof(animation.speed) == 'number') {
-            util.log('Set Animation Speed to ' + `${animation.speed / 1000}s`, true);
+            util.log(
+                'Set Animation Speed to ' + `${animation.speed / 1000}s`,
+                util.LogType.INFO,
+            );
             node.style.setProperty('--animate-duration', `${animation.speed / 1000}s`);
             animationClasses.push(`${prefix}${animationClass.animated}`);
         } else {
@@ -257,7 +260,10 @@ export const css = (obj, animation, override = false) =>
         }
 
         if (typeof(animation.delay) == 'number') {
-            util.log('Set Animation Delay to ' + `${animation.delay / 1000}s`, true);
+            util.log(
+                'Set Animation Delay to ' + `${animation.delay / 1000}s`,
+                util.LogType.INFO,
+            );
             node.style.setProperty('--animate-delay', `${animation.delay / 1000}s`);
             animationClasses.push(`${prefix}${delayClass.delay_1s}`);
         } else {
@@ -266,7 +272,10 @@ export const css = (obj, animation, override = false) =>
         }
         
         if (typeof(animation.repeat) == 'number') {
-            util.log('Set Animation Repeat to ' + animation.repeat, true);
+            util.log(
+                'Set Animation Repeat to ' + animation.repeat,
+                util.LogType.INFO,
+            );
             node.style.setProperty('--animate-repeat', animation.repeat);
         } else {
             node.style.removeProperty('--animate-repeat'); // Remove property if it exists
@@ -280,7 +289,10 @@ export const css = (obj, animation, override = false) =>
             }));
         }
 
-        util.log("Playing animation for " + obj.id);
+        util.log(
+            "Playing animation for " + obj.id,
+            util.LogType.INFO,
+        );
         node.classList.add(...animationClasses);
     
         // When the animation ends, we clean the classes and resolve the Promise
