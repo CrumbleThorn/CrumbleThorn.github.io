@@ -240,11 +240,10 @@ class HeroTemplate extends HTMLTemplate {
 
 class LoadingScreenTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
         const name = Template.LOADING_SCREEN;
         if (templateCount(name) < 1) {
-            super(name);
+            super(name, TemplateType.SINGLETON);
         } else {
             throw new Error('Loading Screen singleton can only be instantiated once!');
         }
@@ -254,20 +253,19 @@ class LoadingScreenTemplate extends HTMLTemplate {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
-
+        const html = await this.getHTML();
         this.#shadow.innerHTML = html;
+        
+        let loadingscreen;
+
         if (this.dataset.animationHref != undefined) {
             util.log(
                 'Using custom loading animation provided at ' + this.dataset.animationHref,
                 util.LogType.INFO,
             );
-            this.#ui = new ui.LoadingScreen(
+            loadingscreen = new ui.LoadingScreen(
                 this.#shadow.getElementById(util.css.SiteID.loadingscreen),
                 new lottiefiles.LottieContainer(
                     this.#shadow.getElementById(util.css.SiteID.loadingAnimation),
@@ -275,23 +273,15 @@ class LoadingScreenTemplate extends HTMLTemplate {
                 ),
             );
         } else {
-            this.#ui = new ui.LoadingScreen(this.#shadow.getElementById(util.css.SiteID.loadingscreen));
+            loadingscreen = new ui.LoadingScreen(this.#shadow.getElementById(util.css.SiteID.loadingscreen));
         }
-        
-        this.removeComments(this.#shadow);
+
+        this.complete(loadingscreen, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
+        this.#initialize()
+            .then(() => {
                 this.dispatchEvent(
                     new Event(
                         TemplateEvents.LOADING_SCREEN_READY,
