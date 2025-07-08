@@ -553,33 +553,22 @@ class DropdownTemplate extends HTMLTemplate {
 }
 
 class HorizontalBarTemplate extends HTMLTemplate {
-    #ui;
     constructor() {
-        super(Template.HORIZONTAL_BAR);
+        super(Template.HORIZONTAL_BAR, TemplateType.SUBCOMPONENT);
     }
 
-    get ui() {
-        return this.#ui;
-    }
+    async #initialize() {
+        const html = await this.getHTML();
 
-    #initialize(html) {
         this.outerHTML = html;
 
-        this.removeComments(this);
+        const bar = undefined;
+
+        this.complete(bar, this);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
