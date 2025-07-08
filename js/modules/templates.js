@@ -264,7 +264,7 @@ class LoadingScreenTemplate extends HTMLTemplate {
         this.#shadow.innerHTML = html;
         if (this.dataset.animationHref != undefined) {
             util.log(
-                "Using custom loading animation provided at " + this.dataset.animationHref,
+                'Using custom loading animation provided at ' + this.dataset.animationHref,
                 util.LogType.INFO,
             );
             this.#ui = new ui.LoadingScreen(
@@ -296,8 +296,8 @@ class LoadingScreenTemplate extends HTMLTemplate {
                     new Event(
                         TemplateEvents.LOADING_SCREEN_READY,
                         {
-                        bubbles: true,
-                        composed: true,
+                            bubbles: true,
+                            composed: true,
                         },
                     )
                 );
