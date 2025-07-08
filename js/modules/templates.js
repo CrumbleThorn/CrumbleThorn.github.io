@@ -204,11 +204,10 @@ class FooterTemplate extends HTMLTemplate {
 
 class HeroTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
         const name = Template.HERO;
         if (templateCount(name) < 1) {
-            super(name);
+            super(name, TemplateType.SINGLETON);
         } else {
             throw new Error('Hero singleton can only be instantiated once!');
         }
@@ -218,33 +217,24 @@ class HeroTemplate extends HTMLTemplate {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
 
         const heroContent = this.#shadow.host.innerHTML;
+
         this.#shadow.host.innerHTML = '';
         this.#shadow.innerHTML = html;
-        this.#shadow.getElementById(util.css.SiteID.heroContent).innerHTML = heroContent;
 
-        this.removeComments(this.#shadow);
+        const hero = new ui.Hero(this.#shadow.getElementById(util.css.SiteID.hero));
+
+        hero.content.obj.innerHTML = heroContent;
+
+        this.complete(hero, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    } 
-                );
-            });
+        this.#initialize();
     }
 }
 
