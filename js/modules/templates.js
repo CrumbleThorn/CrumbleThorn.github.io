@@ -838,8 +838,6 @@ class VerticalBarTemplate extends HTMLTemplate {
     }
 }
 
-const suffix = '-template';
-
 const TemplateDefinitions = Object.freeze({
     // Internal Components
     DROPDOWN: DropdownTemplate,
