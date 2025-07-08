@@ -332,7 +332,7 @@ class NavBarTemplate extends HTMLTemplate {
         navbar.label.innerHTML = '';
 
         if (this.dataset.logoSrc != undefined) {
-            navbar.label.innerHTML += '<img src="' + this.dataset.logoSrc +'" id="' + util.css.SiteID.navbarLogo + '">\n';
+            navbar.label.innerHTML += '<img src="' + this.dataset.logoSrc + '" class="' + util.css.SiteClass.unselectable + '" id="' + util.css.SiteID.navbarLogo + '">\n';
             navbar.logo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
         } else if (this.dataset.logoId != undefined) {
             const navbarLogo = this.#shadow.getElementById(util.css.SiteID.navbarLogo);
@@ -346,7 +346,7 @@ class NavBarTemplate extends HTMLTemplate {
         }
         
         if (this.dataset.title != undefined) {
-            navbar.label.innerHTML += '<div class="' + util.css.SiteFont.ubuntu + '" id="' + util.css.SiteID.navbarTitle + '">' + this.dataset.title + '</div>\n';
+            navbar.label.innerHTML += '<div class="' + util.css.SiteFont.ubuntu + ' ' + util.css.SiteClass.unselectable + '" id="' + util.css.SiteID.navbarTitle + '">' + this.dataset.title + '</div>\n';
             navbar.title = this.#shadow.getElementById(util.css.SiteID.navbarTitle);
         } else if (this.dataset.titleId != undefined) {
             const navbarTitle = this.#shadow.getElementById(util.css.SiteID.navbarTitle);
@@ -365,9 +365,9 @@ class NavBarTemplate extends HTMLTemplate {
             let linkDetails = this.dataset['menuitem' + ctr.toString()].split(' ');
 
             if (linkDetails.length == 1) {
-                navbar.menu.innerHTML += '<div class="' + util.css.SiteClass.navbarCurrent + ' ' + util.css.SiteFont.saira + ' ' + util.css.SiteFont.semibold + '">' + linkDetails[0] + '</div>\n';
+                navbar.menu.innerHTML += '<div class="' + util.css.SiteClass.navbarCurrent + ' ' + util.css.SiteFont.saira + ' ' + util.css.SiteFont.semibold + ' ' + util.css.SiteClass.unselectable + '">' + linkDetails[0] + '</div>\n';
             } else if (linkDetails.length == 2) {
-                navbar.menu.innerHTML += '<a class="' + util.css.SiteClass.navbarLink + ' ' + util.css.SiteFont.saira + ' ' + util.css.SiteFont.medium + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
+                navbar.menu.innerHTML += '<a class="' + util.css.SiteClass.navbarLink + ' ' + util.css.SiteFont.saira + ' ' + util.css.SiteFont.medium + ' ' + util.css.SiteClass.unselectable + '" href="' + linkDetails[1] + '">' + linkDetails[0] + '</a>\n';
             } else {
                 // TO DO: Implement Dropdown
             }
@@ -670,6 +670,7 @@ class SlideshowTemplate extends HTMLTemplate {
             for (let i = 0; i < urls.length; i++) {
                 slideshowWindow.innerHTML += '<img class="'
                     + util.css.TemplateID.slideshowImage
+                    + ' ' + util.css.SiteClass.unselectable
                     + (i<1 ? '' : ' ' + util.css.SiteClass.hidden)
                     + '" src="'
                     + urls[i]
