@@ -574,48 +574,37 @@ class HorizontalBarTemplate extends HTMLTemplate {
 
 class ProgressBarTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.PROGRESS_BAR);
+        super(Template.PROGRESS_BAR, TemplateType.SUBCOMPONENT);
     }
 
     get shadow() {
         return this.#shadow
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
         this.#shadow.innerHTML = html;
 
+        let progressbar;
+
         if (this.dataset.startId != undefined) {
-            this.#ui = new ui.ScrollProgressBar(
+            progressbar = new ui.ScrollProgressBar(
                 this.#shadow.getElementById(util.css.TemplateID.progressbarContainer),
             )
         } else {
-            this.#ui = new ui.ProgressBar(
+            progressbar = new ui.ProgressBar(
                 this.#shadow.getElementById(util.css.TemplateID.progressbarContainer),
             )
         }
 
-        this.removeComments(this);
+        this.complete(progressbar, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
