@@ -149,39 +149,29 @@ class HTMLTemplate extends HTMLElement {
 
 class BackgroundTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.BACKGROUND);
+        super(Template.BACKGROUND, TemplateType.STANDARD);
+    }
+
+    async #initialize() {
+        this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
+        this.#shadow.innerHTML = html;
+
+        // TO DO: Make Background Class
+        const background = /* new ui.Background(this); */ undefined;
+
+        this.complete(background, this.#shadow);
     }
 
     get shadow() {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
-        this.#shadow = this.attachShadow({ mode: 'open' });
-        this.#shadow.innerHTML = html;
-        this.removeComments(this.#shadow);
-    }
-
     // TO DO: Make Background Class so we can programmatically cycle between backgrounds
     connectedCallback() {
-        // TO DO: Change from singleton to subcomponent
-        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    } 
-                );
-            });
+        this.#initialize();
     }
 }
 
