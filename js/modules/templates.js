@@ -528,38 +528,27 @@ class ModalTemplate extends HTMLTemplate {
 // Internal Components
 class DropdownTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.DROPDOWN);
+        super(Template.DROPDOWN, TemplateType.SUBCOMPONENT);
     }
 
     get shadow() {
         return this.#shadow
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
         this.#shadow.innerHTML = html;
 
-        this.removeComments(this.#shadow);
+        const dropdown = undefined;
+
+        this.complete(dropdown, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
