@@ -1,8 +1,8 @@
-.card {
+#card {
 
 }
 
-.card-content {
+#card-content {
     display: flex;
     flex-direction: column;
     align-items: center;

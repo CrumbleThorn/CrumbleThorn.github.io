@@ -279,6 +279,7 @@ export class Hero {
 
 export class Card {
     #elem;
+    #side;
     constructor(
         elem,
         side,
@@ -288,12 +289,25 @@ export class Card {
         } else if (elem instanceof Element) {
             this.#elem = new anim.AnimatedElement(elem);
         }
-        this.side = side;
+
+        this.content = new anim.AnimatedElement(
+            this.#elem.obj.querySelector('#' + util.css.TemplateID.cardContent),
+        );
+
+        this.#side = side;
 
         util.log(
             'Card with id ' + this.#elem.obj.id + ' instantiated.',
             util.LogType.INFO,
         );
+    }
+
+    get side() {
+        return this.#side;
+    }
+
+    get elem() {
+        return this.#elem;
     }
 }
 
