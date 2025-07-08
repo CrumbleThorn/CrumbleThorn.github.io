@@ -46,15 +46,11 @@ const TemplateType = Object.freeze({
 
 function addToLoadedDOMs(key, value) {
         if (Object.hasOwn(loadedDOMs, key)) {
-            const match = loadedDOMs[key].find(item => item.template.id == value.template.id);
-            if (match)
-                Object.assign(match, value);
-            else
-                loadedDOMs[key].push(value);
+            loadedDOMs[key].push(value);
         } else {
             loadedDOMs[key] = [value];
         }
-        value.template.dispatchEvent(
+        value.dispatchEvent(
             new Event(TemplateEvents.TEMPLATE_LOADED,
             {
                 bubbles: true,
@@ -98,9 +94,7 @@ class HTMLTemplate extends HTMLElement {
         // Reserve the entry in the LoadedDOMs list to prevent broken entries when reloading shadow DOMs
         addToLoadedDOMs(
             this.#name,
-            {
-                template: this
-            },
+            this,
         );
     }
 
@@ -150,6 +144,10 @@ class BackgroundTemplate extends HTMLTemplate {
         super(Template.BACKGROUND, TemplateType.STANDARD);
     }
 
+    get shadow() {
+        return this.#shadow;
+    }
+
     async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
         const html = await this.getHTML();
@@ -160,10 +158,6 @@ class BackgroundTemplate extends HTMLTemplate {
         const background = /* new ui.Background(this); */ undefined;
 
         this.complete(background, this.#shadow);
-    }
-
-    get shadow() {
-        return this.#shadow;
     }
 
     // TO DO: Make Background Class so we can programmatically cycle between backgrounds
