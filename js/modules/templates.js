@@ -428,65 +428,57 @@ class SideBarTemplate extends HTMLTemplate {
     }
 }
 
-// Container Templates
+// Standard Templates
 class CardTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.CARD);
+        super(Template.CARD, TemplateType.STANDARD);
     }
 
     get shadow() {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
 
+        // Take contents of custom element first
         const cardhtml = this.#shadow.host.innerHTML;
         this.#shadow.host.innerHTML = '';
+        // Then apply the Template
         this.#shadow.innerHTML = html;
-        const cardContent = this.#shadow.querySelector('.' + util.css.SiteClass.cardContent);
-        cardContent.innerHTML = cardhtml;
 
-        const card = this.#shadow.querySelector('.' + util.css.SiteClass.card);
+        const card = new ui.Card(
+            this.#shadow.getElementById(util.css.TemplateID.card),
+            this.dataset.side,
+        );
+
+        // And THEN put the original contents into the card
+        card.content.obj.innerHTML = cardhtml;
 
         switch(this.dataset.side) {
             case 'left':
-                card.classList.add(util.css.SiteClass.sidecard, util.css.SiteClass.sidecardLeft);
-                cardContent.classList.add(util.css.SiteClass.cardContentLeft);
+                card.elem.obj.classList.add(util.css.SiteClass.sidecard, util.css.SiteClass.sidecardLeft);
+                card.content.obj.classList.add(util.css.SiteClass.cardContentLeft);
                 break;
             case 'right':
-                card.classList.add(util.css.SiteClass.sidecard, util.css.SiteClass.sidecardRight);
-                cardContent.classList.add(util.css.SiteClass.cardContentRight);
+                card.elem.obj.classList.add(util.css.SiteClass.sidecard, util.css.SiteClass.sidecardRight);
+                card.content.obj.classList.add(util.css.SiteClass.cardContentRight);
                 break;
             case 'top':
                 break;
             case 'bottom':
-                card.classList.add(util.css.SiteClass.endcard);
-                cardContent.classList.add(util.css.SiteClass.endcardContent);
+                card.elem.obj.classList.add(util.css.SiteClass.endcard);
+                card.content.obj.classList.add(util.css.SiteClass.endcardContent);
                 break;
         }
         
-        this.removeComments(this.#shadow);
+        this.complete(card, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.STANDARD), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
