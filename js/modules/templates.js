@@ -686,33 +686,22 @@ class SlideshowTemplate extends HTMLTemplate {
 }
 
 class VerticalBarTemplate extends HTMLTemplate {
-    #ui;
     constructor() {
-        super(Template.VERTICAL_BAR);
+        super(Template.VERTICAL_BAR, TemplateType.SUBCOMPONENT);
     }
 
-    get ui() {
-        return this.#ui;
-    }
+    async #initialize() {
+        const html = await this.getHTML();
 
-    #initialize(html) {
         this.innerHTML = html;
 
-        this.removeComments(this);
+        const bar = undefined;
+
+        this.complete(bar, this);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SUBCOMPONENT), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
