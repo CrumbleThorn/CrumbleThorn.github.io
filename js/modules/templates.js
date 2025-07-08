@@ -399,11 +399,10 @@ class NavBarTemplate extends HTMLTemplate {
 
 class SideBarTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
         const name = Template.SIDEBAR;
         if (templateCount(name) < 1) {
-            super(name);
+            super(name, TemplateType.SINGLETON);
         } else {
             throw new Error('Side Bar singleton can only be instantiated once!');
         }
@@ -413,29 +412,19 @@ class SideBarTemplate extends HTMLTemplate {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
         this.#shadow.innerHTML = html;
 
-        this.removeComments(this.#shadow);
+        const sidebar = /* new ui.SideBar(this) */ undefined;
+
+        this.complete(sidebar, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.SINGLETON), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
