@@ -121,7 +121,7 @@ class HTMLTemplate extends HTMLElement {
     }
 
     async getHTML() {
-        return util.getResource(constructURL(this.#name))
+        return util.getResource(constructURL(this.#name, this.#type))
             .then((response) => {
                 return response.text();
             });
