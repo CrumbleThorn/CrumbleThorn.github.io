@@ -268,12 +268,15 @@ export const css = Object.freeze({
         // Progress Bar IDs
         progressbarContainer: 'progressbar-container',
         progressbar: 'progressbar',
-        // Slideshow Classes
+        // Slideshow IDs
         slideshow: 'slideshow',
         slideshowWindow: 'slideshow-window',
         slideshowImage: 'slideshow-image',
         slideshowControls: 'slideshow-controls',
         slideshowProgressbar: 'slideshow-progressbar',
+        // Side Card IDs
+        card: 'card',
+        cardContent: 'card-content',
     }),
 });
 
@@ -372,7 +375,7 @@ export function scrollTo(element, offsetY = 0, offsetX = 0) {
  * @returns {Promise}
  * @throws {Error} - Will throw an error if the resource was not successfully retrieved.
 */
-export function getResource(url, type = Text) {
+export async function getResource(url, type) {
     return fetch(url)
         .then(response => {
             if (response.status === 200) {
@@ -389,6 +392,8 @@ export function getResource(url, type = Text) {
                         return response.json();
                     case Text:
                         return response.text();
+                    default:
+                        return response;
                 }
             } else {
                 return Promise.reject(new Error(`Failed to load ${url} with status ${response.status}`));
