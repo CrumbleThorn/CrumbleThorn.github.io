@@ -75,7 +75,7 @@ function constructURL(template, type) {
         return 'components/' + type + template + '.html';
     }
 
-// TO DO: base all templates to this template class
+// TO DO: Check for Completeness
 // Base Template Class
 class HTMLTemplate extends HTMLElement {
     #name;
@@ -495,7 +495,9 @@ class CenterCardTemplate extends HTMLTemplate {
 
         this.#shadow.innerHTML = html;
 
-        this.complete(undefined, this.#shadow)
+        const card = undefined;
+
+        this.complete(card, this.#shadow)
     }
 
     connectedCallback() {
@@ -505,38 +507,27 @@ class CenterCardTemplate extends HTMLTemplate {
 
 class ModalTemplate extends HTMLTemplate {
     #shadow;
-    #ui;
     constructor() {
-        super(Template.MODAL);
+        super(Template.MODAL, TemplateType.STANDARD);
     }
 
     get shadow() {
         return this.#shadow;
     }
 
-    get ui() {
-        return this.#ui;
-    }
-
-    #initialize(html) {
+    async #initialize() {
         this.#shadow = this.attachShadow({ mode: 'open' });
+        const html = await this.getHTML();
+
         this.#shadow.innerHTML = html;
 
-        this.removeComments(this.#shadow);
+        const modal = undefined;
+
+        this.complete(modal, this.#shadow);
     }
 
     connectedCallback() {
-        util.getResource(constructURL(this.name, TemplateType.STANDARD), Text)
-            .then(html => {
-                this.#initialize(html);
-                addToLoadedDOMs(
-                    this.name,
-                    {
-                        template: this,
-                        ui: this.#ui,
-                    },
-                );
-            });
+        this.#initialize();
     }
 }
 
