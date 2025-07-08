@@ -130,13 +130,6 @@ class HTMLTemplate extends HTMLElement {
     complete(ui, content) {
         this.#ui = ui;
         this.removeComments(content);
-        addToLoadedDOMs(
-            this.name,
-            {
-                template: this,
-                ui: this.#ui,
-            } 
-        );
         this.#resolveReady();
     }
 
