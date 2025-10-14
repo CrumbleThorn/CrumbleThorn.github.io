@@ -2,7 +2,6 @@ import * as util from './util.js';
 import * as animate from './animate.js';
 
 // Animation Type Constants
-//TO DO: Add reset function for removing looping animations
 export const animationType = {
     show: 'show',
     hide: 'hide',
@@ -28,24 +27,24 @@ export const anchor = {
     vertical: {
         top: 'top',
         bottom: 'bottom',
-        },
+    },
     horizontal: {
         left: 'left',
         right: 'right',
-        },
+    },
 };
 
 // Mouse Event Trigger Type Constants
 export const mouseEventTriggerType = {
-    onMouseDown: 'onmousedown',
-    onMouseUp: 'onmouseup',
-    onMouseClick: 'onclick',
-    onMouseDoubleClick: 'ondblclick', 
-    onMouseAuxClick: 'onauxclick',
-    onMouseOver: 'onmouseover',
-    onMouseOut: 'onmouseout',
-    onMouseEnter: 'onmouseenter',
-    onMouseExit: 'onmouseleave',
+    onMouseDown: 'mousedown',
+    onMouseUp: 'mouseup',
+    onMouseClick: 'click',
+    onMouseDoubleClick: 'dblclick',
+    onMouseAuxClick: 'auxclick',
+    onMouseOver: 'mouseover',
+    onMouseOut: 'mouseout',
+    onMouseEnter: 'mouseenter',
+    onMouseExit: 'mouseleave',
 };
 
 export const animationEvents = {
@@ -57,6 +56,7 @@ export const animationEvents = {
     hideAnimationInterrupted: 'hideAnimationInterrupted',
     animationTriggered: 'animationTriggered',
     scrollTriggered: 'scrollTriggered',
+    triggerFired: 'triggerFired',
 }
 
 export class AnimatedElement {
@@ -67,6 +67,7 @@ export class AnimatedElement {
     #exitAnimation;
     #highlightAnimation;
     #isAnimating;
+    #triggerListeners;
 
     constructor(obj,
                 active = true,
@@ -83,6 +84,8 @@ export class AnimatedElement {
         this.#exitAnimation = exit;
         this.#highlightAnimation = highlight;
         this.#isAnimating = false;
+        this.#triggerListeners = new Map();
+        
         if (!this.#active) {
             this.#obj.classList.add(util.css.SiteClass.hidden);
         }
@@ -116,8 +119,8 @@ export class AnimatedElement {
         this.#highlightAnimation = animation;
     }
 
-    get highlightAnimation() {
-        return this.#highlightAnimation;
+    get exitAnimation() {
+        return this.#exitAnimation;
     }
 
     set exitAnimation(animation) {
@@ -126,6 +129,68 @@ export class AnimatedElement {
 
     get isAnimating() {
         return this.#isAnimating;
+    }
+
+    /**
+     * Listen to a trigger and perform animation when trigger fires
+     * @param {Trigger} trigger - The trigger to listen to
+     * @param {string} animation - The animation type to perform
+     * @param {boolean} override - Whether to override current animation
+     */
+    listenToTrigger(trigger, animation = animationType.toggle, override = false) {
+        if (!Object.values(animationType).includes(animation)) {
+            throw new TypeError(animation + ' is not a valid Animation type!');
+        }
+
+        const listener = (event) => {
+            this.#handleTrigger(animation, override);
+        };
+
+        // Store the listener so we can remove it later if needed
+        if (!this.#triggerListeners.has(trigger)) {
+            this.#triggerListeners.set(trigger, []);
+        }
+        this.#triggerListeners.get(trigger).push({ animation, listener });
+
+        // Listen to the trigger's fired event
+        trigger.addEventListener(animationEvents.triggerFired, listener);
+    }
+
+    /**
+     * Stop listening to a specific trigger
+     * @param {Trigger} trigger - The trigger to stop listening to
+     */
+    stopListeningToTrigger(trigger) {
+        const listeners = this.#triggerListeners.get(trigger);
+        if (listeners) {
+            listeners.forEach(({ listener }) => {
+                trigger.removeEventListener(animationEvents.triggerFired, listener);
+            });
+            this.#triggerListeners.delete(trigger);
+        }
+    }
+
+    #handleTrigger(animation, override) {
+        switch(animation) {
+            case animationType.show:
+                this.show(override);
+                break;
+            case animationType.hide:
+                this.hide(override);
+                break;
+            case animationType.highlight:
+                this.highlight(override);
+                break;
+            case animationType.toggle:
+                this.toggle(override);
+                break;
+        }
+        
+        this.#obj.dispatchEvent(new CustomEvent(animationEvents.animationTriggered, {
+            detail: { origin: this, animation: animation },
+            bubbles: true,
+            composed: true,
+        }));
     }
 
     show(override = false) {
@@ -165,7 +230,6 @@ export class AnimatedElement {
             }
         } else {
             util.warn('WARNING: entryAnimation is undefined, nothing will be animated!');
-            //throw new ReferenceError("entryAnimation is undefined!");
         }
     }
 
@@ -202,11 +266,9 @@ export class AnimatedElement {
             }
         } else {
             util.warn('WARNING: highlightAnimation is undefined, nothing will be animated!');
-            //throw new ReferenceError("highlightAnimation is undefined!");
         }
     }
 
-    // Use this function to cleanly stop infinite animations
     stopHighlighting() {
         this.#obj.classList.add(animate.repeatClass.repeat_1);
         this.#obj.classList.remove(animate.repeatClass.infinite);
@@ -249,11 +311,8 @@ export class AnimatedElement {
             }
         } else {
             util.warn('WARNING: exitAnimation is undefined, nothing will be animated!');
-            //throw new ReferenceError("exitAnimation is undefined!");
         }
     }
-
-    //TO DO: Add reset function for removing looping animations
 
     toggle(override = false) {
         if (this.#isAnimating == false || override == true) {
@@ -266,21 +325,17 @@ export class AnimatedElement {
     }
 }
 
-// TO DO: Send Trigger Events so Triggers can listen to other Triggers 
-export class AnimationTrigger {
-    #elem;
-    #typeOfAnimation;
+/**
+ * Base Trigger class that fires events
+ */
+export class Trigger extends EventTarget {
     #triggerLimit;
-    #override;
     #timesTriggered;
+    #enabled;
 
-    constructor(elem,
-                typeOfAnimation = toggle,
-                triggerLimit = 1,
-                override = false,
-                ) {
-        this.#elem = elem;
-        this.#typeOfAnimation = this.#checkAnimationType(typeOfAnimation);
+    constructor(triggerLimit = 0, enabled = true) {
+        super();
+        
         if (typeof(triggerLimit) == 'number') {
             if (triggerLimit >= 0) {
                 this.#triggerLimit = triggerLimit;
@@ -290,20 +345,9 @@ export class AnimationTrigger {
         } else {
             throw new TypeError(triggerLimit + ' is not a valid number!');
         }
-        if (typeof(override) == 'boolean') {
-            this.#override = override;
-        } else {
-            throw new TypeError(override + ' is not a boolean value!');
-        }
+        
         this.#timesTriggered = 0;
-    }
-
-    get elem() {
-        return this.#elem;
-    }
-
-    get typeOfAnimation() {
-        return this.#typeOfAnimation;
+        this.#enabled = enabled;
     }
 
     get triggerLimit() {
@@ -314,45 +358,49 @@ export class AnimationTrigger {
         return this.#timesTriggered;
     }
 
-    #checkAnimationType(typeOfAnimation) {
-        if (Object.values(animationType).includes(typeOfAnimation)) {
-            return typeOfAnimation;
+    get enabled() {
+        return this.#enabled;
+    }
+
+    set enabled(value) {
+        this.#enabled = value;
+    }
+
+    fire(detail = {}) {
+        if (!this.#enabled) {
+            return false;
+        }
+
+        if (this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
+            this.#timesTriggered += 1;
+            
+            this.dispatchEvent(new CustomEvent(animationEvents.triggerFired, {
+                detail: { ...detail, trigger: this, timesTriggered: this.#timesTriggered },
+                bubbles: true,
+                composed: true,
+            }));
+
+            // Disable trigger if limit reached
+            if (this.#triggerLimit > 0 && this.#timesTriggered >= this.#triggerLimit) {
+                this.#enabled = false;
+            }
+
+            return true;
         } else {
-            throw new TypeError(typeOfAnimation +  ' is not a valid Animation type!');
+            util.warn("Trigger has already been fired the maximum times, skipping...");
+            return false;
         }
     }
 
-    trigger() {
-        if (this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
-            switch(this.#typeOfAnimation) {
-                case animationType.show:
-                    this.#elem.show(this.#override);
-                    break;
-                case animationType.hide:
-                    this.#elem.hide(this.#override);
-                    break;
-                case animationType.highlight:
-                    this.#elem.highlight(this.#override);
-                    break;
-                case animationType.toggle:
-                    this.#elem.toggle(this.#override);
-                    break;
-                //TO DO: Add reset function for removing looping animations
-            }
-            this.#elem.obj.dispatchEvent(new CustomEvent(animationEvents.animationTriggered, {
-                    detail: {origin: this},
-                    bubbles: true,
-                    composed: true,
-                }));
-            this.#timesTriggered += 1;
-        } else {
-            util.warn(this.#typeOfAnimation + " Trigger for " + this.#elem.obj.id + " has already been triggered the maximum times, skipping...");
-        }
+    reset() {
+        this.#timesTriggered = 0;
+        this.#enabled = true;
     }
 }
 
 export class ScrollTriggerElement {
     #obj;
+    
     constructor (obj,
                  anchorY = anchor.top,
                  offsetY = 0,
@@ -395,8 +443,10 @@ export class ScrollTriggerElement {
     }
 }
 
-// TO DO: Expand to handle horizontal scrolling
-export class AnimationScrollTrigger extends AnimationTrigger {
+/**
+ * ScrollTrigger that fires when scroll conditions are met
+ */
+export class ScrollTrigger extends Trigger {
     #triggerElem;
     #triggerPoint;
     #triggerType;
@@ -404,18 +454,18 @@ export class AnimationScrollTrigger extends AnimationTrigger {
     #triggered;
     #point1;
     #point2;
+    #scrollHandler;
+    #directionHandler;
 
-    constructor(elem,
-                animationType = toggle,
-                triggerElem = new ScrollTriggerElement(elem.obj),
+    constructor(triggerElem,
                 triggerPoint = new ScrollTriggerElement(window, anchor.bottom),
                 triggerType = scrollTriggerType.onScrollDown,
                 triggerLimit = 1,
-                reversible = false, // Use this flag if you want the Trigger to check for the reverse value once triggered
-                override = false,
-                active = true,
+                reversible = false,
+                enabled = true,
                 ) {
-        super(elem, animationType, triggerLimit, override);
+        super(triggerLimit, enabled);
+        
         this.#triggerElem = triggerElem;
         this.#triggerPoint = triggerPoint;
         this.#triggerType = this.#checkTriggerType(triggerType);
@@ -425,14 +475,23 @@ export class AnimationScrollTrigger extends AnimationTrigger {
         } else {
             throw new TypeError(reversible + ' is not a boolean value!');
         }
-        this.#triggered = !active;
-        // Initialization so the values are not undefined
+        
+        this.#triggered = false;
+        
+        // Initialize values
         this.calculate();
-        window.addEventListener(scrollTriggerType.onScroll, () => {this.calculate()});
+        
+        // Create bound handlers for proper cleanup
+        this.#scrollHandler = () => this.calculate();
+        this.#directionHandler = () => this.handle();
+        
+        // Set up event listeners
+        window.addEventListener(scrollTriggerType.onScroll, this.#scrollHandler);
+        
         if (reversible) {
-            window.addEventListener(scrollTriggerType.onScroll, () => {this.handle()});
+            window.addEventListener(scrollTriggerType.onScroll, this.#directionHandler);
         } else {
-            window.addEventListener(triggerType, () => {this.handle()});
+            window.addEventListener(triggerType, this.#directionHandler);
         }
     }
 
@@ -458,50 +517,105 @@ export class AnimationScrollTrigger extends AnimationTrigger {
                 this.#point1 = this.#triggerPoint.computeY();
                 this.#point2 = this.#triggerElem.computeY();
                 break;
+            // Add horizontal scroll cases here
         }
     }
 
     handle() {
+        if (!this.enabled) return;
+
         if (this.#point1 < this.#point2) {
             if (!this.#triggered) {
-                this.trigger();
                 this.#triggered = true;
+                const fired = this.fire({ 
+                    direction: 'forward',
+                    triggerType: this.#triggerType 
+                });
                 
-                // TO DO: Update listener removal (It doesn't work because of the update)
-                // Remove listener once trigger limit has been reached for efficiency
-                if (this.timesTriggered == this.triggerLimit) {
-                    window.removeEventListener(scrollTriggerType.onScroll, () => {this.handle()});
+                // Clean up listeners if limit reached
+                if (!this.enabled) {
+                    this.cleanup();
                 }
-                this.elem.obj.dispatchEvent(new CustomEvent(animationEvents.scrollTriggered, {
-                    detail: {   origin: this,
-                                direction: 'forward'
-                            },
-                    bubbles: true,
-                    composed: true,
-                }));
             }
         } else if (this.#triggered) {
             this.#triggered = false;
             if (this.#reversible) {
-                this.trigger();
+                const fired = this.fire({ 
+                    direction: 'reverse',
+                    triggerType: this.#triggerType 
+                });
                 
-                // Remove listener once trigger limit has been reached for efficiency
-                if (this.timesTriggered == this.triggerLimit) {
-                    window.removeEventListener(scrollTriggerType.onScroll, () => {this.handle()});
+                // Clean up listeners if limit reached
+                if (!this.enabled) {
+                    this.cleanup();
                 }
-                this.elem.obj.dispatchEvent(new CustomEvent(animationEvents.scrollTriggered, {
-                    detail: {   origin: this,
-                                direction: 'reverse'
-                            },
-                    bubbles: true,
-                    composed: true,
-                }));
             }
+        }
+    }
+
+    cleanup() {
+        window.removeEventListener(scrollTriggerType.onScroll, this.#scrollHandler);
+        
+        if (this.#reversible) {
+            window.removeEventListener(scrollTriggerType.onScroll, this.#directionHandler);
+        } else {
+            window.removeEventListener(this.#triggerType, this.#directionHandler);
         }
     }
 }
 
-// TO DO: Implement
-export class AnimationEventTrigger extends AnimationTrigger {
+/**
+ * MouseEventTrigger that fires on mouse events
+ */
+export class MouseEventTrigger extends Trigger {
+    #targetElement;
+    #eventType;
+    #eventHandler;
 
+    constructor(targetElement,
+                eventType = mouseEventTriggerType.onMouseClick,
+                triggerLimit = 0,
+                enabled = true) {
+        super(triggerLimit, enabled);
+        
+        this.#targetElement = targetElement;
+        this.#eventType = this.#checkEventType(eventType);
+        
+        // Create bound handler for proper cleanup
+        this.#eventHandler = (event) => this.handle(event);
+        
+        // Set up event listener
+        this.#targetElement.addEventListener(this.#eventType, this.#eventHandler);
+    }
+
+    #checkEventType(eventType) {
+        if (Object.values(mouseEventTriggerType).includes(eventType)) {
+            return eventType;
+        } else {
+            throw new TypeError(eventType + ' is not a valid Mouse Event Trigger type!');
+        }
+    }
+
+    handle(event) {
+        if (!this.enabled) return;
+
+        const fired = this.fire({
+            eventType: this.#eventType,
+            mouseEvent: event
+        });
+
+        // Clean up listener if limit reached
+        if (!this.enabled) {
+            this.cleanup();
+        }
+    }
+
+    cleanup() {
+        this.#targetElement.removeEventListener(this.#eventType, this.#eventHandler);
+    }
+}
+
+// Helper function to connect triggers to animated elements
+export function connectTriggerToElement(trigger, animatedElement, animation = animationType.toggle, override = false) {
+    animatedElement.listenToTrigger(trigger, animation, override);
 }
