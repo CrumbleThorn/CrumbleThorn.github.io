@@ -52,6 +52,7 @@ let vw = window.innerWidth / 100;
 let hero;
 let titlebar;
 let navbar;
+let bottombar;
 let gameSection;
 let gameCard;
 let devSection;
@@ -62,7 +63,7 @@ let musicSection;
 let musicCard;
 let endCard;
 let endSection;
-let bottombar;
+let footer;
 
 const content = new ui.Content(document.getElementById(util.css.SiteID.content));
 
@@ -258,6 +259,7 @@ function intiializeHero() {
                         hero.scrollDownText.highlight();
                         document.body.classList.remove(util.css.SiteClass.noScroll);
                         removeEventListener(anim.animationEvents.showAnimationComplete, hero.scrollDownText.obj);
+                        util.log("Hero Entrance Animation Completed!", util.LogType.INFO);
                     }
                 }, );
             }
@@ -356,6 +358,7 @@ function initializeSideBar() {
             'Side Bar Detected!',
             util.LogType.INFO,
         );
+        // TODO: Move to templates.js in the future
         const sidebar = new ui.SideBar(
             new anim.AnimatedElement(
                 loadedDOMs.sidebar[0].template.shadow.getElementById(util.css.SiteID.sidebar),
@@ -379,6 +382,7 @@ function initializeHorizontalBar() {
             'Bottom Bar Detected!',
             util.LogType.INFO,
         );
+        // TODO: Move to templates.js in the future
         bottombar = new ui.BottomBar(
             new anim.AnimatedElement(
                 document.getElementById(util.css.SiteID.bottombar),
@@ -391,6 +395,21 @@ function initializeHorizontalBar() {
                     animate.animationClass.slideOutDown,
                     animate.speedClass.faster,
                 ),
+            )
+        );
+    }
+}
+
+function initializeFooter() {
+    if (Object.hasOwn(loadedDOMs, templates.Template.FOOTER)) {
+        util.log(
+            'Footer Detected!',
+            util.LogType.INFO,
+        );
+        // TODO: Move to templates.js in the future
+        footer = new ui.Footer(
+            new anim.AnimatedElement(
+                document.getElementById(util.css.SiteID.footer),
             )
         );
     }
@@ -413,146 +432,209 @@ function handleTriggers(event) {
                     'Hero Button Clicked!',
                     util.LogType.DEBUG,
                 );
-                scrollToMain();
-
                 titlebar.scrollDownTrigger.active = false;
-                scrollToTopTrigger.active = true;
-                gameSection.scrollUpTrigger.active = true;
-                gameSection.scrollDownTrigger.active = true;
+
+                scrollToMain();
+            
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    scrollToTopTrigger.active = true;
+                    gameSection.scrollUpTrigger.active = true;
+                    gameSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case titlebar.scrollDownTrigger:
                 util.log(
                     'Hero Section Scroll Down Triggered!',
                     util.LogType.DEBUG,
                 );
+                titlebar.scrollDownTrigger.active = false;
+
                 scrollToMain();
 
-                titlebar.scrollDownTrigger.active = false;
-                scrollToTopTrigger.active = true;
-                gameSection.scrollUpTrigger.active = true;
-                gameSection.scrollDownTrigger.active = true;
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    scrollToTopTrigger.active = true;
+                    gameSection.scrollUpTrigger.active = true;
+                    gameSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case scrollToTopTrigger:
                 util.log(
                     'Hero Section Scroll Up Triggered!',
                     util.LogType.DEBUG,
                 );
+                scrollToTopTrigger.active = false;
+                
+                // All other triggers must be reset when scrolling back to top
+                gameSection.scrollUpTrigger.active = false;
+                gameSection.scrollDownTrigger.active = false;
+                devSection.scrollUpTrigger.active = false;
+                devSection.scrollDownTrigger.active = false;
+                artSection.scrollUpTrigger.active = false;
+                artSection.scrollDownTrigger.active = false;
+                musicSection.scrollUpTrigger.active = false;
+                musicSection.scrollDownTrigger.active = false;
+                footer.scrollUpTrigger.active = false;
+
                 util.scrollToTop();
 
-                titlebar.scrollDownTrigger.active = true;
-                scrollToTopTrigger.active = false;
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    titlebar.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case gameSection.scrollUpTrigger:
                 util.log(
                     'Game Section Scroll Up Triggered',
                     util.LogType.DEBUG,
                 );
-                titlebar.resetVivus();
-                util.scrollToTop();
-                titlebar.scrollDownTrigger.active = true;
                 scrollToTopTrigger.active = false;
                 gameSection.scrollUpTrigger.active = false;
                 gameSection.scrollDownTrigger.active = false;
+
+                titlebar.resetVivus();
+                util.scrollToTop();
+
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    titlebar.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case gameSection.scrollDownTrigger:
                 util.log(
                     'Game Section Scroll Down Triggered',
                     util.LogType.DEBUG,
                 );
-                titlebar.transitionVivus(titlebar.vivusDev);
-                util.scrollTo(devSection.obj, 28 * vh);
                 gameSection.scrollUpTrigger.active = false;
                 gameSection.scrollDownTrigger.active = false;
-                devSection.scrollUpTrigger.active = true;
-                devSection.scrollDownTrigger.active = true;
+
+                titlebar.transitionVivus(titlebar.vivusDev);
+                util.scrollTo(devSection.obj, 28 * vh);
+
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    devSection.scrollUpTrigger.active = true;
+                    devSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
+
                 break;
             case devSection.scrollUpTrigger:
                 util.log(
                     'Dev Section Scroll Up Triggered',
                     util.LogType.DEBUG,
                 );
+                devSection.scrollUpTrigger.active = false;
+                devSection.scrollDownTrigger.active = false;
+
                 titlebar.transitionVivus(titlebar.vivusGame);
                 util.scrollTo(gameSection.obj, 28 * vh);
 
-                devSection.scrollUpTrigger.active = false;
-                devSection.scrollDownTrigger.active = false;
-                gameSection.scrollUpTrigger.active = true;
-                gameSection.scrollDownTrigger.active = true;
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    gameSection.scrollUpTrigger.active = true;
+                    gameSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case devSection.scrollDownTrigger:
                 util.log(
                     'Dev Section Scroll Down Triggered',
                     util.LogType.DEBUG,
                 );
+                devSection.scrollUpTrigger.active = false;
+                devSection.scrollDownTrigger.active = false;
+
                 titlebar.transitionVivus(titlebar.vivusArt);
                 util.scrollTo(artSection.obj, 28 * vh);
 
-                devSection.scrollUpTrigger.active = false;
-                devSection.scrollDownTrigger.active = false;
-                artSection.scrollUpTrigger.active = true;
-                artSection.scrollDownTrigger.active = true;
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    artSection.scrollUpTrigger.active = true;
+                    artSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case artSection.scrollUpTrigger:
                 util.log(
                     'Art Section Scroll Up Triggered',
                     util.LogType.DEBUG,
                 );
-                titlebar.transitionVivus(titlebar.vivusDev);
-                util.scrollTo(devSection.obj, 28 * vh);
-
                 artSection.scrollUpTrigger.active = false;
                 artSection.scrollDownTrigger.active = false;
-                devSection.scrollUpTrigger.active = true;
-                devSection.scrollDownTrigger.active = true;
+
+                titlebar.transitionVivus(titlebar.vivusArt);
+                util.scrollTo(devSection.obj, 28 * vh);
+
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    devSection.scrollUpTrigger.active = true;
+                    devSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case artSection.scrollDownTrigger: 
                 util.log(
                     'Art Section Scroll Down Triggered',
                     util.LogType.DEBUG,
                 );
+                artSection.scrollUpTrigger.active = false;
+                artSection.scrollDownTrigger.active = false;
+
                 titlebar.transitionVivus(titlebar.vivusMusic);
                 util.scrollTo(musicSection.obj, 28 * vh);
 
-                artSection.scrollUpTrigger.active = false;
-                artSection.scrollDownTrigger.active = false;
-                musicSection.scrollUpTrigger.active = true;
-                musicSection.scrollDownTrigger.active = true;
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    musicSection.scrollUpTrigger.active = true;
+                    musicSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case musicSection.scrollUpTrigger:
                 util.log(
                     'Music Section Scroll Up Triggered',
                     util.LogType.DEBUG,
                 );
+                musicSection.scrollUpTrigger.active = false;
+                musicSection.scrollDownTrigger.active = false;
+
                 titlebar.transitionVivus(titlebar.vivusArt);
                 util.scrollTo(artSection.obj, 28 * vh);
 
-                musicSection.scrollUpTrigger.active = false;
-                musicSection.scrollDownTrigger.active = false;
-                artSection.scrollUpTrigger.active = true;
-                artSection.scrollDownTrigger.active = true;
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    artSection.scrollUpTrigger.active = true;
+                    artSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             case musicSection.scrollDownTrigger:
                 util.log(
                     'Music Section Scroll Down Triggered',
                     util.LogType.DEBUG,
                 );
-                titlebar.rewindVivus();
-                window.scrollTo(0, document.body.scrollHeight);
-
                 musicSection.scrollUpTrigger.active = false;
                 musicSection.scrollDownTrigger.active = false;
-                endSection.scrollUpTrigger.active = true;
+
+                titlebar.rewindVivus();
+                util.scrollTo(footer.elem.obj);
+
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    footer.scrollUpTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
-            case endSection.scrollUpTrigger:
+            case footer.scrollUpTrigger:
                 util.log(
                     'End Section Scroll Up Triggered',
                     util.LogType.DEBUG,
                 );
+                footer.scrollUpTrigger.active = false;
+
                 titlebar.playVivus();
                 util.scrollTo(musicSection.obj, 28 * vh);
-                endSection.scrollUpTrigger.active = false;
-                musicSection.scrollUpTrigger.active = true;
-                musicSection.scrollDownTrigger.active = true;
+
+                window.addEventListener('scrollend', function onScrollEnd() {
+                    musicSection.scrollUpTrigger.active = true;
+                    musicSection.scrollDownTrigger.active = true;
+                    window.removeEventListener('scrollend', onScrollEnd);
+                });
                 break;
             default:
                 break;
@@ -569,6 +651,8 @@ function initializeTriggers() {
     titlebar.scrollDownTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             titlebar.obj,
+            undefined,
+            1,
         ),
         undefined,
         undefined,
@@ -595,7 +679,6 @@ function initializeTriggers() {
         true,
     )
 
-    // Scroll Back to Hero
     gameSection.scrollUpTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             gameSection.obj,
@@ -608,6 +691,8 @@ function initializeTriggers() {
         undefined,
         false,
     );
+
+    // Scroll Back to Hero
     gameSection.listenToTrigger(
         gameSection.scrollUpTrigger,
         anim.animationType.hide,
@@ -635,23 +720,24 @@ function initializeTriggers() {
         true,
     );
     
+    gameSection.scrollDownTrigger = new anim.ScrollTrigger(
+        new anim.ScrollTriggerElement(
+            devSection.obj,
+        ),
+        undefined,
+        undefined,
+        0,
+        undefined,
+        false,
+    );
 
     // Scroll to Dev Section
-    gameSection.scrollDownTrigger = new anim.ScrollTrigger(
-            new anim.ScrollTriggerElement(
-                devSection.obj,
-            ),
-            undefined,
-            undefined,
-            0,
-        );
     gameSection.listenToTrigger(
         gameSection.scrollDownTrigger,
         anim.animationType.show,
         true,
     );
-
-    // Scroll to Game Section
+    
     devSection.scrollUpTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             devSection.obj,
@@ -664,13 +750,14 @@ function initializeTriggers() {
         undefined,
         false,
     );
+
+    // Scroll to Game Section
     devSection.listenToTrigger(
         devSection.scrollUpTrigger,
         anim.animationType.hide,
         true,
     );
 
-    // Scroll to Art Section
     devSection.scrollDownTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             artSection.obj,
@@ -678,29 +765,17 @@ function initializeTriggers() {
         undefined,
         undefined,
         0,
+        undefined,
+        false,
     );
+
+    // Scroll to Art Section
     devSection.listenToTrigger(
         devSection.scrollDownTrigger,
         anim.animationType.show,
         true,
     );
-
-    // Scroll to Dev Section
-    artSection.scrollDownTrigger = new anim.ScrollTrigger(
-        new anim.ScrollTriggerElement(
-            musicSection.obj,
-        ),
-        undefined,
-        undefined,
-        0,
-    );
-    artSection.listenToTrigger(
-        artSection.scrollDownTrigger,
-        anim.animationType.show,
-        true,
-    );
-
-    // Scroll to Music Section
+    
     artSection.scrollUpTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             artSection.obj,
@@ -713,13 +788,32 @@ function initializeTriggers() {
         undefined,
         false,
     );
+
+    // Scroll to Dev Section
     artSection.listenToTrigger(
         artSection.scrollUpTrigger,
         anim.animationType.hide,
         true,
     );
 
-    // Scroll to Art Section
+    artSection.scrollDownTrigger = new anim.ScrollTrigger(
+        new anim.ScrollTriggerElement(
+            musicSection.obj,
+        ),
+        undefined,
+        undefined,
+        0,
+        undefined,
+        false,
+    );
+
+    // Scroll to Music Section
+    artSection.listenToTrigger(
+        artSection.scrollDownTrigger,
+        anim.animationType.show,
+        true,
+    );
+
     musicSection.scrollUpTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             musicSection.obj,
@@ -732,13 +826,15 @@ function initializeTriggers() {
         undefined,
         false,
     );
+    
+    // Scroll to Art Section
     musicSection.listenToTrigger(
         musicSection.scrollUpTrigger,
         anim.animationType.hide,
         true,
     );
 
-    // Scroll to End Section
+    
     musicSection.scrollDownTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
             endSection.obj,
@@ -746,28 +842,48 @@ function initializeTriggers() {
         undefined,
         undefined,
         0,
+        undefined,
+        false,
     );
+
+    // Scroll to End Section
     musicSection.listenToTrigger(
         musicSection.scrollDownTrigger,
         anim.animationType.show,
         true,
     );
 
-    // Scroll to Music Section    
-    endSection.scrollUpTrigger = new anim.ScrollTrigger(
+    // Show Footer
+    footer.elem.listenToTrigger(
+        musicSection.scrollDownTrigger,
+        anim.animationType.show,
+        true,
+    );
+
+    
+    footer.scrollUpTrigger = new anim.ScrollTrigger(
         new anim.ScrollTriggerElement(
-            endSection.obj,
+            footer.elem.obj,
+            anim.anchor.bottom,
+            -1,
         ),
-        new anim.ScrollTriggerElement(
-            window,
-        ),
+        undefined,
         anim.scrollTriggerType.onScrollUp,
         0,
         undefined,
         false,
     );
+    
+    // Scroll to Music Section
+    footer.elem.listenToTrigger(
+        footer.scrollUpTrigger,
+        anim.animationType.hide,
+        true,
+    );
+
+    // Hide Footer
     endSection.listenToTrigger(
-        endSection.scrollUpTrigger,
+        footer.scrollUpTrigger,
         anim.animationType.hide,
         true,
     );
@@ -792,7 +908,7 @@ function initializeTriggers() {
 
 function onLoadComplete() {
     // Reset scroll progress on reload
-    util.scrollToTop();
+    util.scrollToTop(false);
     setTimeout(() => {
         intiializeHero();
         initializeTitleBar();
@@ -801,6 +917,7 @@ function onLoadComplete() {
         initializeSlideshows();
         initializeSideBar();
         initializeHorizontalBar();
+        initializeFooter();
         initializeTriggers();
     }, window.dummyDelay);
 }

@@ -347,12 +347,55 @@ export function isLowResolution() {
     return window.innerWidth < 800;
 }
 
+function preventScroll(event) {
+    event.preventDefault();
+}
+
+function preventKeyScroll(event) {
+    const keys = ['Space', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'];
+    if (keys.includes(event.code)) {
+        event.preventDefault();
+    }
+}
+
+function preventMiddleClick(event) {
+    if (event.button === 1) {
+        event.preventDefault();
+    }
+}
+
+function lockScrolling() {
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('keydown', preventKeyScroll, { passive: false });
+    window.addEventListener('mousedown', preventMiddleClick, { passive: false });
+}
+
+function unlockScrollingAfterAutoScroll() {
+    console.log("AutoScroll Finished!");
+    window.removeEventListener('wheel', preventScroll);
+    window.removeEventListener('touchmove', preventScroll);
+    window.removeEventListener('keydown', preventKeyScroll);
+    window.removeEventListener('mousedown', preventMiddleClick);
+    window.removeEventListener('scrollend', unlockScrollingAfterAutoScroll);
+}
+
+function scrollLockingHelper() {
+    lockScrolling();
+    window.addEventListener('scrollend', unlockScrollingAfterAutoScroll)
+}
+
 /**
  * Scrolls to the very top of the web page.
+ * @param {boolean} [preventUserScrolling=true] - disables user scrolling while the page automatically scrolls to the selected element.
 */
-export function scrollToTop() {
+export function scrollToTop(preventUserScrolling = true) {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
+
+    if (preventUserScrolling) {
+        scrollLockingHelper();
+    }
 }
 
 /**
@@ -361,10 +404,16 @@ export function scrollToTop() {
  * @param {Element} element - The element to scroll to.
  * @param {number} [offsetX=0] - Horizontal offset from the left of the element.
  * @param {number} [offsetY=0] - Vertical offset from the top of the element.
+ * @param {boolean} [preventUserScrolling=true] - disables user scrolling while the page automatically scrolls to the selected element.
  *
 */
-export function scrollTo(element, offsetY = 0, offsetX = 0) {
+export function scrollTo(element, offsetY = 0, offsetX = 0, preventUserScrolling = true) {
     window.scrollTo(element.getBoundingClientRect().left + window.scrollX + offsetX, element.getBoundingClientRect().top + window.scrollY + offsetY);
+
+    if (preventUserScrolling) {
+        scrollLockingHelper();
+    }
+
 }
 
 /**
