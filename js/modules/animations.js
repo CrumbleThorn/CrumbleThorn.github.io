@@ -16,6 +16,7 @@ export const scrollTriggerType = {
     onScrollUp: 'scrollUp',
     onScrollLeft: 'scrollLeft',
     onScrollRight: 'scrollRight',
+    onScrollEnd: 'scrollend',
 }
 
 // Scroll Trigger Anchor Constants
@@ -76,7 +77,7 @@ export class AnimatedElement {
                 highlight,
                 ) {
         if (obj.style.display == util.css.Display.none) {
-            throw RangeError("Default Display cannot be set to \'none\'!")
+            throw RangeError('Default Display cannot be set to \'none\'!')
         }
         this.#obj = obj;
         this.#active = active;
@@ -129,6 +130,10 @@ export class AnimatedElement {
 
     get isAnimating() {
         return this.#isAnimating;
+    }
+
+    get triggerListeners() {
+        return this.#triggerListeners;
     }
 
     /**
@@ -340,7 +345,7 @@ export class Trigger extends EventTarget {
             if (triggerLimit >= 0) {
                 this.#triggerLimit = triggerLimit;
             } else {
-                throw new RangeError("Trigger Limit must be 0 or higher!");
+                throw new RangeError('Trigger Limit must be 0 or higher!');
             }
         } else {
             throw new TypeError(triggerLimit + ' is not a valid number!');
@@ -394,7 +399,7 @@ export class Trigger extends EventTarget {
 
             return true;
         } else {
-            util.warn("Trigger has already been fired the maximum times, skipping...");
+            util.warn('Trigger has already been fired the maximum times, skipping...');
             return false;
         }
     }
@@ -419,13 +424,13 @@ export class ScrollTriggerElement {
         if (Object.values(anchor.vertical).includes(anchorY)) {
             this.anchorY = anchorY;
         } else {
-            throw new TypeError(anchorY + " is not a valid Vertical Anchor!")
+            throw new TypeError(anchorY + ' is not a valid Vertical Anchor!')
         }
         this.offsetY = offsetY;
         if (Object.values(anchor.horizontal).includes(anchorX)) {
             this.anchorX = anchorX;
         } else {
-            throw new TypeError(anchorX + " is not a valid Horizontal Anchor!")
+            throw new TypeError(anchorX + ' is not a valid Horizontal Anchor!')
         }
         this.offsetX = offsetX;
     }

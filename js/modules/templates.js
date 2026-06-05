@@ -210,6 +210,8 @@ class FooterTemplate extends HTMLTemplate {
         this.innerHTML = html;
 
         // TO DO: Make Footer Class
+        // This currently cannot be initialized here because the method used in other templates requires a shadow DOM
+        // Figure it out later once the website is built 
         const footer = /* new ui.Footer(this); */ undefined;
 
         this.complete(footer, this);
