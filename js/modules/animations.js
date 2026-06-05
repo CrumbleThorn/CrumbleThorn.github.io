@@ -331,9 +331,9 @@ export class AnimatedElement {
 export class Trigger extends EventTarget {
     #triggerLimit;
     #timesTriggered;
-    #enabled;
+    #active;
 
-    constructor(triggerLimit = 0, enabled = true) {
+    constructor(triggerLimit = 0, active = true) {
         super();
         
         if (typeof(triggerLimit) == 'number') {
@@ -347,7 +347,7 @@ export class Trigger extends EventTarget {
         }
         
         this.#timesTriggered = 0;
-        this.#enabled = enabled;
+        this.#active = active;
     }
 
     get triggerLimit() {
@@ -358,31 +358,38 @@ export class Trigger extends EventTarget {
         return this.#timesTriggered;
     }
 
-    get enabled() {
-        return this.#enabled;
+    get active() {
+        return this.#active;
     }
 
-    set enabled(value) {
-        this.#enabled = value;
+    set active(value) {
+        this.#active = value;
     }
 
     fire(detail = {}) {
-        if (!this.#enabled) {
+        if (!this.#active) {
             return false;
         }
 
         if (this.#triggerLimit == 0 || this.#timesTriggered < this.#triggerLimit) {
             this.#timesTriggered += 1;
             
-            this.dispatchEvent(new CustomEvent(animationEvents.triggerFired, {
-                detail: { ...detail, trigger: this, timesTriggered: this.#timesTriggered },
+            const triggerEvent = new CustomEvent(animationEvents.triggerFired, {
+                detail: { 
+                    ...detail,
+                    trigger: this,
+                    timesTriggered: this.#timesTriggered,
+                },
                 bubbles: true,
                 composed: true,
-            }));
+            });
+
+            this.dispatchEvent(triggerEvent);
+            document.dispatchEvent(triggerEvent);
 
             // Disable trigger if limit reached
             if (this.#triggerLimit > 0 && this.#timesTriggered >= this.#triggerLimit) {
-                this.#enabled = false;
+                this.#active = false;
             }
 
             return true;
@@ -394,10 +401,11 @@ export class Trigger extends EventTarget {
 
     reset() {
         this.#timesTriggered = 0;
-        this.#enabled = true;
+        this.#active = true;
     }
 }
 
+// TODO: add way to reuse ScrollTriggerElements when referenced multiple times to avoid unnecessary computations
 export class ScrollTriggerElement {
     #obj;
     
@@ -462,9 +470,9 @@ export class ScrollTrigger extends Trigger {
                 triggerType = scrollTriggerType.onScrollDown,
                 triggerLimit = 1,
                 reversible = false,
-                enabled = true,
+                active = true,
                 ) {
-        super(triggerLimit, enabled);
+        super(triggerLimit, active);
         
         this.#triggerElem = triggerElem;
         this.#triggerPoint = triggerPoint;
@@ -522,7 +530,7 @@ export class ScrollTrigger extends Trigger {
     }
 
     handle() {
-        if (!this.enabled) return;
+        if (!this.active) return;
 
         if (this.#point1 < this.#point2) {
             if (!this.#triggered) {
@@ -533,7 +541,7 @@ export class ScrollTrigger extends Trigger {
                 });
                 
                 // Clean up listeners if limit reached
-                if (!this.enabled) {
+                if (this.triggerLimit > 0 && this.timesTriggered >= this.triggerLimit) {
                     this.cleanup();
                 }
             }
@@ -546,7 +554,7 @@ export class ScrollTrigger extends Trigger {
                 });
                 
                 // Clean up listeners if limit reached
-                if (!this.enabled) {
+                if (this.triggerLimit > 0 && this.timesTriggered >= this.triggerLimit) {
                     this.cleanup();
                 }
             }
@@ -575,8 +583,8 @@ export class MouseEventTrigger extends Trigger {
     constructor(targetElement,
                 eventType = mouseEventTriggerType.onMouseClick,
                 triggerLimit = 0,
-                enabled = true) {
-        super(triggerLimit, enabled);
+                active = true) {
+        super(triggerLimit, active);
         
         this.#targetElement = targetElement;
         this.#eventType = this.#checkEventType(eventType);
@@ -597,7 +605,7 @@ export class MouseEventTrigger extends Trigger {
     }
 
     handle(event) {
-        if (!this.enabled) return;
+        if (!this.active) return;
 
         const fired = this.fire({
             eventType: this.#eventType,
@@ -605,7 +613,7 @@ export class MouseEventTrigger extends Trigger {
         });
 
         // Clean up listener if limit reached
-        if (!this.enabled) {
+        if (this.triggerLimit > 0 && this.timesTriggered >= this.triggerLimit) {
             this.cleanup();
         }
     }

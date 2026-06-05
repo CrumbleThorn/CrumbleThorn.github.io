@@ -30,21 +30,21 @@ export class LoadingScreen {
             throw new TypeError(elem + ' is not a valid Loading Screen!');
         }
 
+        /*
         if (animation instanceof lottiefiles.LottieContainer) {
             this.#animation = animation;
         } else {
             this.#animation = new lottiefiles.LottieContainer(
                 this.#elem.obj.querySelector('#' + util.css.SiteID.loadingAnimation),
-                'data/json/loading.json',
+                'data/lottie/loading.lottie',
             );
         }
+        */
         
-        this.#trigger = new anim.AnimationTrigger(
-            this.#elem,
-            anim.animationType.toggle,
-            0,
-            true
-        );
+        this.#trigger = new anim.Trigger();
+
+        this.#elem.listenToTrigger(this.#trigger);
+
         if(this.#elem.active) {
             document.body.classList.add(util.css.SiteClass.noScroll);
         }
@@ -73,7 +73,7 @@ export class LoadingScreen {
         } else {
             document.body.classList.remove(util.css.SiteClass.noScroll);
         }
-        this.#trigger.trigger();
+        this.#trigger.fire();
     }
 }
 
