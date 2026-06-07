@@ -6,37 +6,63 @@
 #card-content {
     display: flex;
     align-items: center;
-    gap: 5%;
 
     width: 100%;
     height: 100%;
 }
 
 .card-section {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+
+    gap: 0.5rem;
+    
+    width: 45%;
+    height: 100%;
+}
+
+.card-section-left {
+    padding-right: clamp(20px, 4cqi, 5%);
+}
+
+.card-section-right {
+    padding-left: clamp(20px, 4cqi, 5%);
+}
+
+.card-title {
+    width: 100%;
+    height:fit-content;
+
+    font-size: clamp(16px, 10cqi, 4rem);
+}
+
+.card-slideshow {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55%;
+    height: 100%;
+}
+
+.card-text {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
 
-    gap: 5%;
-
-    width: 100%;
-
-    max-width: 30vw;
-    height: 60%;
-    padding-top: 7%;
-    padding-bottom: 23%;
+    gap: 1rem;
 }
 
-.card-title {
-    font-size: 4rem;
-}
-
-.card-text {
-    font-size: 2rem;
+.card-paragraph {
+    flex-grow: 1;
+    font-size: clamp(10px, 6cqi, 1.75rem);
     white-space: normal;
     text-wrap: pretty;
-
 }
 
 .card-link {
@@ -44,7 +70,7 @@
     height: fit-content;
 
     position: relative;
-    font-size: 2rem;
+    font-size: clamp(14px, 8cqi, 2rem);
 }
 
 .card-link::after {
@@ -81,6 +107,7 @@
     justify-content: right;
 
     left: -20px;
+    padding-left: calc(5vh + 20px);
     align-self: flex-start;
 }
 
@@ -89,6 +116,7 @@
     justify-content: left;
 
     right: -20px;
+    padding-right: calc(5vh + 20px);
     align-self: flex-end;
 }
 
@@ -146,13 +174,92 @@
 }
 
 .endcard-content {
+    display: flex;
     flex-direction: column;
 
     width: 100%;
     height: 100%;
 
-    background-color: var(--cilly-accentgray);
+    gap: 2.5%;
 
     font-size: 24px;
     text-align: center;
+}
+
+.endcard-content-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.endcard-title {
+    width: 100%;
+    height: fit-content;
+
+    font-size: clamp(16px, 10cqi, 4rem);
+}
+
+.endcard-subtitle {
+    width: 100%;
+    height: fit-content;
+
+    font-size: clamp(14px, 8cqi, 2rem);
+}
+
+.endcard-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 50%;
+    height: 100%;
+    margin: 0 2.5%;
+
+    gap: 2.5%;
+}
+
+.endcard-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width:100%;
+    height:100%;
+
+    gap: 2.5%;
+}
+
+.textbox {
+    width: 100%;
+
+    resize: none;
+}
+
+.social-media-list {
+    width: 100%;
+    min-height: 20%;
+    display: flex;
+
+    background-color: var(--cilly-royalpurple);
+}
+
+.placeholder-div {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-height: 40%;
+
+    gap: 1rem;
+}
+
+.placeholder-title-div {
+    width: 50%;
+    min-height: 1rem;
+    background-color: var(--cilly-accentgray);
+}
+
+.placeholder-text-div {
+    width: 90%;
+    min-height: 0.5rem;
+    background-color: var(--cilly-accentgray);
 }

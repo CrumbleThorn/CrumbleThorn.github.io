@@ -1,3 +1,7 @@
+html {
+    scrollbar-width: none;
+}
+
 .title-bar {
     display: flex;
     align-self: flex-start;
